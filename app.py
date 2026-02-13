@@ -2,12 +2,16 @@
 Visit Value Index (VVI) Application - Enterprise Edition
 Bramhall Consulting, LLC
 
+VERSION: 2.1 - Complete 16-Scenario Library
+Last Updated: February 13, 2026
+
 Upgraded architecture:
 - API-first design with local fallback
 - Modular code structure
 - Enhanced error handling
 - Performance optimizations
 - Production-ready deployment
+- COMPLETE 16-scenario library built-in (S01-S16)
 """
 
 from __future__ import annotations
@@ -198,7 +202,7 @@ class VVIAPIClient:
         }
         scenario_id = scenario_map.get((rf_tier, lf_tier), "S16")
         
-        # Full scenario library with detailed actions
+        # Full scenario library with detailed actions (ALL 16 SCENARIOS)
         scenario_library = {
             "S01": {
                 "name": "Excellent Revenue / Excellent Labor",
@@ -298,39 +302,463 @@ class VVIAPIClient:
                     "key_risks": ["Drift into Critical labor", "Rising burnout", "Access declining"]
                 }
             },
-            "S16": {
-                "name": "Critical Revenue / Critical Labor",
-                "risk_level": "Critical",
-                "focus_areas": ["Crisis stabilization", "Revenue capture", "Labor realignment"],
+            "S04": {
+                "name": "Excellent Revenue / Critical Labor",
+                "risk_level": "High",
+                "focus_areas": ["Emergency labor correction", "Protect revenue gains", "Prevent burnout cascade"],
                 "actions": {
                     "do_tomorrow": [
-                        "Crisis huddle: safety, flow, revenue integrity.",
-                        "Immediate staffing vs. schedule review; correct misalignments.",
-                        "Quick POS/registration and chart-closure check."
+                        "Emergency labor review meeting with operations and HR.",
+                        "Immediate staffing audit: are we carrying ghost positions or excessive overtime?",
+                        "Freeze all discretionary hiring and overtime until analysis complete."
                     ],
                     "next_7_days": [
-                        "Daily stabilization huddles (staffing, throughput, revenue).",
-                        "Tighten overtime approvals; track daily.",
-                        "Rapid diagnostic on throughput bottlenecks.",
-                        "Sample audit of coding, charges, denials by provider."
+                        "Conduct full workflow analysis to identify waste and duplication.",
+                        "Review all staffing templates and adjust to match actual demand.",
+                        "Identify tasks that can be eliminated, automated, or reassigned.",
+                        "Daily check-ins on labor metrics and overtime."
                     ],
                     "next_30_60_days": [
-                        "Redesign staffing templates to match volume.",
-                        "Rebuild core workflows (intake, rooming, checkout).",
-                        "Provider documentation/coding training with feedback.",
-                        "Weekly ops + revenue steering meetings."
+                        "Redesign workflows to reduce labor intensity while maintaining quality.",
+                        "Implement strict overtime controls with daily approval.",
+                        "Cross-train staff to create flexibility and reduce reliance on premium labor.",
+                        "Consider temporary productivity consultants if internal capacity lacking."
                     ],
                     "next_60_90_days": [
-                        "12-week recovery roadmap (Operations + HR).",
-                        "Remove non-value-added tasks.",
-                        "Daily huddles, weekly KPI review.",
-                        "Rebuild culture through recognition and wins."
+                        "Target 10-15% labor cost reduction to restore sustainability.",
+                        "Formalize new staffing standards and daily huddle discipline.",
+                        "Monitor staff engagement closely to prevent attrition.",
+                        "Develop formal retention plan for key clinical and support staff."
+                    ]
+                },
+                "expected_impact": {
+                    "vvi_improvement": "10-18%",
+                    "timeline": "3-6 months",
+                    "key_risks": ["Revenue drops if access suffers", "Staff turnover accelerates", "Quality and safety incidents"]
+                }
+            },
+            "S05": {
+                "name": "Stable Revenue / Excellent Labor",
+                "risk_level": "Low",
+                "focus_areas": ["Revenue opportunity capture", "Sustain labor discipline", "Grow margin"],
+                "actions": {
+                    "do_tomorrow": [
+                        "Brief revenue huddle: celebrate labor discipline, focus on revenue opportunity.",
+                        "Review yesterday's charge capture and coding accuracy.",
+                        "Ask providers what administrative burden is slowing them down."
+                    ],
+                    "next_7_days": [
+                        "Conduct focused revenue cycle review: coding, charge capture, denials.",
+                        "Identify low-hanging fruit for E&M level optimization.",
+                        "Review payer mix and identify any contract negotiation opportunities.",
+                        "Spot-check documentation completeness for highest-volume CPTs."
+                    ],
+                    "next_30_60_days": [
+                        "Launch provider documentation and coding training with real examples.",
+                        "Implement real-time charge capture audit and feedback loop.",
+                        "Explore ancillary service expansion if capacity and demand support it.",
+                        "Formalize monthly revenue KPI review with providers."
+                    ],
+                    "next_60_90_days": [
+                        "Target 3-7% revenue per visit improvement through better capture.",
+                        "Develop provider scorecards with transparent wRVU and quality metrics.",
+                        "Consider volume growth strategies if labor efficiency can support it."
+                    ]
+                },
+                "expected_impact": {
+                    "vvi_improvement": "4-8%",
+                    "timeline": "60-90 days",
+                    "key_risks": ["Provider resistance to documentation changes", "Coding compliance risk", "Payer audit exposure"]
+                }
+            },
+            "S06": {
+                "name": "Stable Revenue / Stable Labor",
+                "risk_level": "Low",
+                "focus_areas": ["Incremental gains", "Prevent complacency", "Build momentum"],
+                "actions": {
+                    "do_tomorrow": [
+                        "Balanced huddle recognizing stability and identifying one opportunity area.",
+                        "Quick check on yesterday's metrics: any early warning signs?",
+                        "Ask team: what's one thing we could do better this week?"
+                    ],
+                    "next_7_days": [
+                        "Light operational review to identify 1-2 quick wins.",
+                        "Spot-check both revenue (coding, charge capture) and labor (schedule fit, overtime).",
+                        "Gather staff input on friction points or improvement ideas.",
+                        "Confirm KPI dashboards are visible and reviewed weekly."
+                    ],
+                    "next_30_60_days": [
+                        "Pick one improvement lever (revenue or labor) and execute a focused initiative.",
+                        "Formalize a continuous improvement cadence (monthly reviews, quarterly goals).",
+                        "Share best practices with peer clinics if in a system.",
+                        "Invest in staff development or cross-training to build resilience."
+                    ],
+                    "next_60_90_days": [
+                        "Target 2-5% VVI improvement through disciplined optimization.",
+                        "Develop clear succession and coverage plans for key roles.",
+                        "Consider piloting new service lines or access innovations if stable."
+                    ]
+                },
+                "expected_impact": {
+                    "vvi_improvement": "2-5%",
+                    "timeline": "90+ days",
+                    "key_risks": ["Complacency", "Gradual drift in either direction", "Missed growth opportunities"]
+                }
+            },
+            "S07": {
+                "name": "Stable Revenue / At Risk Labor",
+                "risk_level": "Medium",
+                "focus_areas": ["Labor cost correction", "Protect revenue stability", "Improve throughput"],
+                "actions": {
+                    "do_tomorrow": [
+                        "Focused labor huddle: acknowledge revenue is holding, name labor as priority.",
+                        "Review yesterday's staffing, overtime, and premium labor usage.",
+                        "Ask staff where time is being wasted or duplicated."
+                    ],
+                    "next_7_days": [
+                        "Conduct workflow time-study on a typical busy session.",
+                        "Map all clinical and administrative tasks; identify redundancy.",
+                        "Review staffing templates against actual patient volume by day/hour.",
+                        "Analyze overtime trends and identify root causes."
+                    ],
+                    "next_30_60_days": [
+                        "Optimize staffing templates to match demand more precisely.",
+                        "Streamline 2-3 highest-friction workflows (e.g., rooming, checkout, prior auth).",
+                        "Implement tighter overtime approval and tracking process.",
+                        "Cross-train staff to create flex capacity without adding FTEs."
+                    ],
+                    "next_60_90_days": [
+                        "Target 5-8% labor cost reduction through efficiency (not layoffs if possible).",
+                        "Formalize daily labor huddles and weekly KPI review.",
+                        "Monitor staff morale and engagement to prevent attrition."
+                    ]
+                },
+                "expected_impact": {
+                    "vvi_improvement": "6-10%",
+                    "timeline": "60-120 days",
+                    "key_risks": ["Labor continues to drift into Critical", "Staff burnout", "Revenue slips if access declines"]
+                }
+            },
+            "S08": {
+                "name": "Stable Revenue / Critical Labor",
+                "risk_level": "High",
+                "focus_areas": ["Emergency labor intervention", "Revenue protection", "Operational reset"],
+                "actions": {
+                    "do_tomorrow": [
+                        "Crisis huddle: revenue is stable but labor is unsustainable.",
+                        "Immediate staffing and overtime audit.",
+                        "Freeze all discretionary spending and hiring."
+                    ],
+                    "next_7_days": [
+                        "Daily labor review meetings with operations and finance.",
+                        "Conduct rapid diagnostic: where is labor cost coming from?",
+                        "Implement strict overtime controls with VP-level approval.",
+                        "Begin provider discussions on documentation to protect revenue during labor changes."
+                    ],
+                    "next_30_60_days": [
+                        "Redesign staffing model and templates to match volume.",
+                        "Eliminate low-value tasks and administrative waste.",
+                        "Rebuild core workflows for maximum efficiency.",
+                        "Implement daily labor huddles and weekly trend reviews."
+                    ],
+                    "next_60_90_days": [
+                        "Execute 12-15% labor cost reduction plan.",
+                        "Formalize new operating standards and performance expectations.",
+                        "Monitor staff engagement and retention closely.",
+                        "Prevent revenue from slipping during labor transformation."
+                    ]
+                },
+                "expected_impact": {
+                    "vvi_improvement": "12-20%",
+                    "timeline": "3-6 months",
+                    "key_risks": ["Staff turnover", "Revenue decline", "Quality incidents", "Negative margin"]
+                }
+            },
+            "S09": {
+                "name": "At Risk Revenue / Excellent Labor",
+                "risk_level": "Medium",
+                "focus_areas": ["Revenue recovery", "Maintain labor discipline", "Charge capture"],
+                "actions": {
+                    "do_tomorrow": [
+                        "Revenue-focused huddle: celebrate labor efficiency, focus on revenue gaps.",
+                        "Audit yesterday's charge capture and coding.",
+                        "Ask providers: are we capturing all billable services?"
+                    ],
+                    "next_7_days": [
+                        "Conduct comprehensive revenue cycle diagnostic.",
+                        "Review coding levels, charge capture, and denial patterns.",
+                        "Analyze payer mix and contract performance.",
+                        "Provider documentation audit on top 10 CPT codes."
+                    ],
+                    "next_30_60_days": [
+                        "Launch intensive provider coding and documentation training.",
+                        "Implement real-time charge capture monitoring and feedback.",
+                        "Optimize E&M levels and ancillary service billing.",
+                        "Address top denial reasons and appeal backlog.",
+                        "Review contracts and identify renegotiation opportunities."
+                    ],
+                    "next_60_90_days": [
+                        "Target 5-10% revenue per visit improvement.",
+                        "Formalize provider scorecards with financial transparency.",
+                        "Consider service line expansion if capacity supports it.",
+                        "Maintain labor discipline while growing revenue."
+                    ]
+                },
+                "expected_impact": {
+                    "vvi_improvement": "7-12%",
+                    "timeline": "60-120 days",
+                    "key_risks": ["Revenue continues to slide", "Provider resistance", "Compliance issues"]
+                }
+            },
+            "S10": {
+                "name": "At Risk Revenue / Stable Labor",
+                "risk_level": "Medium",
+                "focus_areas": ["Revenue prioritization", "Labor efficiency maintenance", "Balanced recovery"],
+                "actions": {
+                    "do_tomorrow": [
+                        "Dual-focus huddle: revenue needs attention, labor is okay.",
+                        "Yesterday's revenue audit: charge capture, coding, collections.",
+                        "Quick labor check to ensure no drift while fixing revenue."
+                    ],
+                    "next_7_days": [
+                        "Revenue cycle deep-dive: identify top 3 revenue leakage points.",
+                        "Provider documentation spot-checks.",
+                        "Review labor metrics to ensure stability during revenue push.",
+                        "Analyze denial patterns and payer mix."
+                    ],
+                    "next_30_60_days": [
+                        "Execute revenue improvement plan (coding training, charge capture tech).",
+                        "Maintain labor discipline with ongoing efficiency monitoring.",
+                        "Address billing workflow gaps.",
+                        "Provider engagement on financial performance."
+                    ],
+                    "next_60_90_days": [
+                        "Target 4-8% VVI improvement primarily through revenue gains.",
+                        "Balance revenue growth with labor cost control.",
+                        "Prevent labor from drifting while focused on revenue."
+                    ]
+                },
+                "expected_impact": {
+                    "vvi_improvement": "5-9%",
+                    "timeline": "90+ days",
+                    "key_risks": ["Revenue slides further", "Labor drifts during revenue focus", "Provider burnout"]
+                }
+            },
+            "S11": {
+                "name": "At Risk Revenue / At Risk Labor",
+                "risk_level": "High",
+                "focus_areas": ["Dual stabilization", "Prevent further decline", "Triage priorities"],
+                "actions": {
+                    "do_tomorrow": [
+                        "Dual-threat huddle: both revenue and labor need attention.",
+                        "Quick assessment: which is worse and needs immediate focus?",
+                        "Yesterday's metrics review for both dimensions."
+                    ],
+                    "next_7_days": [
+                        "Triage decision: stabilize revenue first or labor first based on severity.",
+                        "Daily dual-metric huddles (revenue and labor).",
+                        "Rapid diagnostics on both revenue cycle and labor efficiency.",
+                        "Identify quick wins that improve both (e.g., better scheduling reduces labor and increases revenue)."
+                    ],
+                    "next_30_60_days": [
+                        "Execute parallel improvement plans with clear ownership.",
+                        "Revenue: coding training, charge capture, denials.",
+                        "Labor: staffing templates, workflow efficiency, overtime control.",
+                        "Weekly steering committee to monitor both tracks."
+                    ],
+                    "next_60_90_days": [
+                        "Target 8-15% combined VVI improvement.",
+                        "Prevent slide into Critical on either dimension.",
+                        "Build sustainable operating discipline for both revenue and labor."
+                    ]
+                },
+                "expected_impact": {
+                    "vvi_improvement": "8-15%",
+                    "timeline": "3-6 months",
+                    "key_risks": ["One or both slide to Critical", "Team overwhelm", "Competing priorities"]
+                }
+            },
+            "S12": {
+                "name": "At Risk Revenue / Critical Labor",
+                "risk_level": "Critical",
+                "focus_areas": ["Labor crisis mode", "Revenue triage", "Operational stabilization"],
+                "actions": {
+                    "do_tomorrow": [
+                        "Crisis huddle: labor is critical, revenue is at risk.",
+                        "Immediate labor intervention takes priority.",
+                        "Protect revenue from further decline during labor reset."
+                    ],
+                    "next_7_days": [
+                        "Daily crisis management meetings.",
+                        "Emergency labor cost reduction plan.",
+                        "Revenue protection plan (maintain coding quality during turbulence).",
+                        "Communicate clearly with staff and providers about situation."
+                    ],
+                    "next_30_60_days": [
+                        "Execute labor transformation (redesign staffing, workflows).",
+                        "Stabilize revenue cycle basics (charge capture, denials).",
+                        "Prevent further decline on both dimensions.",
+                        "Weekly leadership reviews with clear accountability."
+                    ],
+                    "next_60_90_days": [
+                        "Bring labor back to Stable (10-15% reduction).",
+                        "Prevent revenue from sliding to Critical.",
+                        "Build foundation for future recovery.",
+                        "Address staff morale and retention."
                     ]
                 },
                 "expected_impact": {
                     "vvi_improvement": "15-25%",
                     "timeline": "6-12 months",
-                    "key_risks": ["Sustained negative margin", "High turnover", "Safety risk", "Reputational damage"]
+                    "key_risks": ["Financial viability threatened", "Staff exodus", "Quality and safety events"]
+                }
+            },
+            "S13": {
+                "name": "Critical Revenue / Excellent Labor",
+                "risk_level": "High",
+                "focus_areas": ["Revenue emergency", "Protect labor excellence", "Financial viability"],
+                "actions": {
+                    "do_tomorrow": [
+                        "Revenue crisis huddle with leadership.",
+                        "Immediate revenue cycle audit.",
+                        "Maintain labor discipline while addressing revenue crisis."
+                    ],
+                    "next_7_days": [
+                        "Daily revenue recovery meetings.",
+                        "Emergency coding and documentation intervention.",
+                        "Charge capture technology deployment if needed.",
+                        "Denial management acceleration.",
+                        "Contract review for immediate renegotiation opportunities."
+                    ],
+                    "next_30_60_days": [
+                        "Intensive provider documentation training and coaching.",
+                        "Real-time charge capture audits with daily feedback.",
+                        "Revenue cycle process redesign.",
+                        "Consider service line adjustments or payer mix changes.",
+                        "Maintain labor efficiency throughout revenue transformation."
+                    ],
+                    "next_60_90_days": [
+                        "Target 12-20% revenue per visit improvement.",
+                        "Restore financial sustainability.",
+                        "Prevent labor from drifting during revenue crisis.",
+                        "Build long-term revenue discipline."
+                    ]
+                },
+                "expected_impact": {
+                    "vvi_improvement": "15-25%",
+                    "timeline": "6-12 months",
+                    "key_risks": ["Clinic closure consideration", "Provider departures", "Access reduction"]
+                }
+            },
+            "S14": {
+                "name": "Critical Revenue / Stable Labor",
+                "risk_level": "High",
+                "focus_areas": ["Revenue emergency response", "Labor stability", "Financial rescue"],
+                "actions": {
+                    "do_tomorrow": [
+                        "Revenue crisis declaration with full leadership team.",
+                        "Yesterday's revenue audit with fine-tooth comb.",
+                        "Protect labor stability during revenue emergency."
+                    ],
+                    "next_7_days": [
+                        "Daily revenue recovery war room.",
+                        "Emergency provider coding education.",
+                        "Charge capture technology and process fixes.",
+                        "Billing and collections acceleration.",
+                        "Monitor labor to prevent drift during crisis focus."
+                    ],
+                    "next_30_60_days": [
+                        "Complete revenue cycle transformation.",
+                        "Provider financial performance transparency and accountability.",
+                        "Payer contract optimization.",
+                        "Service line profitability analysis.",
+                        "Maintain labor cost discipline."
+                    ],
+                    "next_60_90_days": [
+                        "Achieve 15-25% revenue improvement to restore viability.",
+                        "Build sustainable revenue capture culture.",
+                        "Prevent labor from becoming a new problem area."
+                    ]
+                },
+                "expected_impact": {
+                    "vvi_improvement": "18-28%",
+                    "timeline": "6-12 months",
+                    "key_risks": ["Financial insolvency", "Clinic closure", "Provider mass exodus"]
+                }
+            },
+            "S15": {
+                "name": "Critical Revenue / At Risk Labor",
+                "risk_level": "Critical",
+                "focus_areas": ["Dual emergency", "Triage and stabilize", "Survival mode"],
+                "actions": {
+                    "do_tomorrow": [
+                        "Full crisis mode: both revenue and labor critical/at-risk.",
+                        "Emergency leadership meeting to assess viability.",
+                        "Immediate triage: which crisis is more severe?"
+                    ],
+                    "next_7_days": [
+                        "Daily crisis management with clear decision authority.",
+                        "Simultaneous emergency action on revenue and labor.",
+                        "Revenue: charge capture, coding, collections.",
+                        "Labor: overtime freeze, staffing adjustments.",
+                        "Transparent communication with all stakeholders."
+                    ],
+                    "next_30_60_days": [
+                        "Execute parallel recovery plans with weekly milestones.",
+                        "Revenue transformation (coding, billing, contracts).",
+                        "Labor optimization (staffing, workflows, efficiency).",
+                        "Consider service line closures or consolidation if needed.",
+                        "Monthly board/leadership review of recovery progress."
+                    ],
+                    "next_60_90_days": [
+                        "Achieve minimum 20% VVI improvement to restore viability.",
+                        "Build sustainable operating model.",
+                        "Address staff morale and retention aggressively.",
+                        "Prepare contingency plans if recovery insufficient."
+                    ]
+                },
+                "expected_impact": {
+                    "vvi_improvement": "20-35%",
+                    "timeline": "9-18 months",
+                    "key_risks": ["Clinic closure", "Service line elimination", "Mass staff/provider turnover", "Safety events"]
+                }
+            },
+            "S16": {
+                "name": "Critical Revenue / Critical Labor",
+                "risk_level": "Critical",
+                "focus_areas": ["Survival", "Complete operational reset", "Viability assessment"],
+                "actions": {
+                    "do_tomorrow": [
+                        "Emergency executive session: assess whether clinic is salvageable.",
+                        "If continuing: declare full crisis mode with daily war room.",
+                        "Immediate actions on both revenue and labor fronts."
+                    ],
+                    "next_7_days": [
+                        "Daily executive crisis meetings with board/system visibility.",
+                        "Emergency revenue actions: coding blitz, charge capture, collections acceleration.",
+                        "Emergency labor actions: staffing cuts, overtime freeze, workflow triage.",
+                        "Transparent communication plan for staff, providers, patients.",
+                        "Assess whether temporary external support (consultants, interim leaders) needed."
+                    ],
+                    "next_30_60_days": [
+                        "Execute comprehensive transformation of both revenue and labor.",
+                        "Revenue: Complete billing cycle redesign, provider retraining, contract renegotiation.",
+                        "Labor: Staffing model rebuild, workflow elimination/redesign, productivity standards.",
+                        "Consider service consolidation, hours reduction, or other structural changes.",
+                        "Weekly progress reviews with clear go/no-go decision points."
+                    ],
+                    "next_60_90_days": [
+                        "Achieve minimum 25-40% VVI improvement or make closure decision.",
+                        "Rebuild sustainable operating foundation if recovery succeeds.",
+                        "Address deep cultural and operational issues that led to crisis.",
+                        "Develop rigorous ongoing monitoring to prevent recurrence.",
+                        "If closure decided: manage compassionate wind-down for staff and patients."
+                    ]
+                },
+                "expected_impact": {
+                    "vvi_improvement": "25-40% if salvageable",
+                    "timeline": "12-24 months or closure",
+                    "key_risks": ["Clinic closure", "Complete staff loss", "Patient safety events", "Reputational damage", "Legal/regulatory issues"]
                 }
             }
         }
@@ -1014,7 +1442,7 @@ st.markdown("---")
 st.markdown(
     """
     <div style="text-align:center; color:#777; font-size:0.85rem; padding:2rem 0 1rem 0;">
-        <p><b>Visit Value Index™ (VVI)</b></p>
+        <p><b>Visit Value Index™ (VVI)</b> | Version 2.1 - Complete 16 Scenarios</p>
         <p>Bramhall Consulting, LLC | © 2024</p>
         <p style="margin-top:0.5rem;">
             <a href="https://bramhallconsulting.org" target="_blank" style="color:#b08c3e; text-decoration:none;">
