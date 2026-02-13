@@ -149,7 +149,6 @@ class VVIAPIClient:
         nrpv_target: float, lcv_target: float
     ) -> Dict[str, Any]:
         """Local VVI calculation (fallback)"""
-        from vvi_calculator import calculate_vvi_local
         result = calculate_vvi_local(
             net_revenue, visit_volume, labor_cost,
             nrpv_target, lcv_target
