@@ -198,35 +198,161 @@ class VVIAPIClient:
         }
         scenario_id = scenario_map.get((rf_tier, lf_tier), "S16")
         
-        # Simplified scenario data for local mode
-        scenario_names = {
-            "S01": "Excellent Revenue / Excellent Labor",
-            "S16": "Critical Revenue / Critical Labor"
+        # Full scenario library with detailed actions
+        scenario_library = {
+            "S01": {
+                "name": "Excellent Revenue / Excellent Labor",
+                "risk_level": "Low",
+                "focus_areas": ["Sustain excellence", "Prevent drift", "Scale best practices"],
+                "actions": {
+                    "do_tomorrow": [
+                        "Brief huddle to recognize performance and reinforce 'what good looks like.'",
+                        "Verify yesterday's charts are closed and POS collections reconciled.",
+                        "Ask staff where today's biggest risk to flow might be and mitigate early."
+                    ],
+                    "next_7_days": [
+                        "Run a simple time-study on a busy session to confirm throughput remains tight.",
+                        "Spot-check coding and POS for any early signs of revenue leakage.",
+                        "Check schedule templates against actual demand to confirm continued fit."
+                    ],
+                    "next_30_60_days": [
+                        "Document this clinic's playbook (staffing, workflows, huddle routines).",
+                        "Use this site as a peer-teaching location for under-performing clinics.",
+                        "Refresh stay interviews or engagement touchpoints with key staff."
+                    ],
+                    "next_60_90_days": [
+                        "Review succession plans for front-line leaders and key roles.",
+                        "Stress-test capacity for modest volume growth without harming VVI.",
+                        "Refine KPIs and dashboards to keep leading indicators visible."
+                    ]
+                },
+                "expected_impact": {
+                    "vvi_improvement": "Sustain at 100+",
+                    "timeline": "Ongoing",
+                    "key_risks": ["Complacency leading to drift", "Hidden burnout", "Key-person risk"]
+                }
+            },
+            "S02": {
+                "name": "Excellent Revenue / Stable Labor",
+                "risk_level": "Low",
+                "focus_areas": ["Gentle labor optimization", "Protect revenue", "Incremental efficiency"],
+                "actions": {
+                    "do_tomorrow": [
+                        "5-minute huddle celebrating strong revenue; share today's flow priorities.",
+                        "Check yesterday's POS collections and registration accuracy.",
+                        "Ask leaders where they see wasted steps or downtime in the day."
+                    ],
+                    "next_7_days": [
+                        "Complete a light throughput review on a busy clinic session.",
+                        "Identify 1-2 tasks that can be streamlined or re-sequenced.",
+                        "Review overtime and schedule patterns for small inefficiencies."
+                    ],
+                    "next_30_60_days": [
+                        "Tune staffing templates using recent volume and no-show patterns.",
+                        "Cross-train select staff to flex across roles during peaks.",
+                        "Standardize best practices into simple checklists."
+                    ],
+                    "next_60_90_days": [
+                        "Target modest labor efficiency lift (2-4% LCV improvement).",
+                        "Formalize quarterly review of staffing and throughput metrics.",
+                        "Share efficiency wins across peer clinics."
+                    ]
+                },
+                "expected_impact": {
+                    "vvi_improvement": "3-6%",
+                    "timeline": "60-90 days",
+                    "key_risks": ["Over-tightening labor", "Ignoring inefficiencies", "Under-investing in engagement"]
+                }
+            },
+            "S03": {
+                "name": "Excellent Revenue / At Risk Labor",
+                "risk_level": "Medium",
+                "focus_areas": ["Correct labor drift", "Protect revenue base", "Throughput restoration"],
+                "actions": {
+                    "do_tomorrow": [
+                        "Stability huddle naming this as early-warning labor trend.",
+                        "Review yesterday's overtime and float/PRN usage.",
+                        "Ask staff to identify top 2 time-wasters in their day."
+                    ],
+                    "next_7_days": [
+                        "Conduct simple time-study on one busy session.",
+                        "Map MA/front-desk tasks to identify duplication.",
+                        "Review staffing templates vs. actual volume by hour/day.",
+                        "Spot-check chart closure timeliness and rework."
+                    ],
+                    "next_30_60_days": [
+                        "Refine staffing templates to match demand more closely.",
+                        "Clarify roles to reduce drift and handoff confusion.",
+                        "Streamline 1-2 high-friction workflows.",
+                        "Introduce basic labor KPI review into weekly huddles."
+                    ],
+                    "next_60_90_days": [
+                        "Set modest labor efficiency target (4-8% LCV improvement).",
+                        "Invest in cross-training for flexibility.",
+                        "Reassess burnout through pulse checks or stay interviews."
+                    ]
+                },
+                "expected_impact": {
+                    "vvi_improvement": "5-9%",
+                    "timeline": "60-90 days",
+                    "key_risks": ["Drift into Critical labor", "Rising burnout", "Access declining"]
+                }
+            },
+            "S16": {
+                "name": "Critical Revenue / Critical Labor",
+                "risk_level": "Critical",
+                "focus_areas": ["Crisis stabilization", "Revenue capture", "Labor realignment"],
+                "actions": {
+                    "do_tomorrow": [
+                        "Crisis huddle: safety, flow, revenue integrity.",
+                        "Immediate staffing vs. schedule review; correct misalignments.",
+                        "Quick POS/registration and chart-closure check."
+                    ],
+                    "next_7_days": [
+                        "Daily stabilization huddles (staffing, throughput, revenue).",
+                        "Tighten overtime approvals; track daily.",
+                        "Rapid diagnostic on throughput bottlenecks.",
+                        "Sample audit of coding, charges, denials by provider."
+                    ],
+                    "next_30_60_days": [
+                        "Redesign staffing templates to match volume.",
+                        "Rebuild core workflows (intake, rooming, checkout).",
+                        "Provider documentation/coding training with feedback.",
+                        "Weekly ops + revenue steering meetings."
+                    ],
+                    "next_60_90_days": [
+                        "12-week recovery roadmap (Operations + HR).",
+                        "Remove non-value-added tasks.",
+                        "Daily huddles, weekly KPI review.",
+                        "Rebuild culture through recognition and wins."
+                    ]
+                },
+                "expected_impact": {
+                    "vvi_improvement": "15-25%",
+                    "timeline": "6-12 months",
+                    "key_risks": ["Sustained negative margin", "High turnover", "Safety risk", "Reputational damage"]
+                }
+            }
         }
         
-        # Basic actions (simplified for local mode)
-        actions = {
-            "do_tomorrow": [
-                "Review daily operations and identify immediate priorities.",
-                "Verify key metrics and data accuracy.",
-                "Brief team on focus areas."
-            ],
-            "next_7_days": [
-                "Conduct detailed performance review.",
-                "Identify quick-win opportunities.",
-                "Schedule follow-up assessment."
-            ],
-            "next_30_60_days": [
-                "Implement systematic improvements.",
-                "Monitor progress weekly.",
-                "Adjust strategies based on results."
-            ],
-            "next_60_90_days": [
-                "Formalize new processes.",
-                "Train staff on best practices.",
-                "Plan next assessment cycle."
-            ]
-        }
+        # Get scenario details - use scenario-specific if available, otherwise use similar tier
+        scenario_data = scenario_library.get(scenario_id)
+        if not scenario_data:
+            # Fallback logic for scenarios not explicitly defined
+            if "Excellent" in rf_tier and "Excellent" in lf_tier:
+                scenario_data = scenario_library["S01"]
+            elif "Critical" in rf_tier or "Critical" in lf_tier:
+                scenario_data = scenario_library["S16"]
+            elif "Excellent" in rf_tier:
+                scenario_data = scenario_library["S02"]
+            else:
+                scenario_data = scenario_library["S03"]
+        
+        actions = scenario_data["actions"]
+        scenario_name = scenario_data["name"]
+        risk_level = scenario_data["risk_level"]
+        focus_areas = scenario_data["focus_areas"]
+        expected_impact = scenario_data["expected_impact"]
         
         return {
             "clinic_id": clinic_id,
@@ -249,16 +375,12 @@ class VVIAPIClient:
             },
             "scenario": {
                 "id": scenario_id,
-                "name": scenario_names.get(scenario_id, f"Scenario {scenario_id}"),
-                "risk_level": "Low" if "Excellent" in scenario_id else "Critical" if "Critical" in scenario_id else "Medium",
-                "focus_areas": ["Operational excellence", "Performance monitoring"]
+                "name": scenario_name,
+                "risk_level": risk_level,
+                "focus_areas": focus_areas
             },
             "actions": actions,
-            "expected_impact": {
-                "vvi_improvement": "Varies by scenario",
-                "timeline": "60-90 days",
-                "key_risks": ["Performance drift", "Resource constraints"]
-            },
+            "expected_impact": expected_impact,
             "source": "local"
         }
 
