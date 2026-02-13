@@ -2,7 +2,7 @@
 Visit Value Index (VVI) Application - Enterprise Edition
 Bramhall Consulting, LLC
 
-VERSION: 2.2 - Complete 16-Scenario Library (Bug Fix)
+VERSION: 2.3 - Cache Fix + Complete 16 Scenarios
 Last Updated: February 13, 2026
 
 Upgraded architecture:
@@ -12,7 +12,7 @@ Upgraded architecture:
 - Performance optimizations
 - Production-ready deployment
 - COMPLETE 16-scenario library built-in (S01-S16)
-- Fixed: Removed unnecessary fallback logic
+- Fixed: Cache refresh to ensure latest scenarios load
 """
 
 from __future__ import annotations
@@ -763,13 +763,13 @@ class VVIAPIClient:
                 }
             }
         }
-        
         # Get scenario details - all 16 scenarios are defined
         scenario_data = scenario_library.get(scenario_id)
         
-        # This should never happen now, but safety check
+        # Debug: Show which scenario was retrieved (temporary - remove after verification)
         if not scenario_data:
-            raise ValueError(f"Scenario {scenario_id} not found in library. This is a bug!")
+            error_msg = f"ERROR: Scenario {scenario_id} not found! Available scenarios: {list(scenario_library.keys())}"
+            raise ValueError(error_msg)
         
         actions = scenario_data["actions"]
         scenario_name = scenario_data["name"]
@@ -812,9 +812,9 @@ class VVIAPIClient:
 # Initialize VVI Client
 # ============================================================
 
-@st.cache_resource
+@st.cache_data(ttl=60)  # Cache for only 60 seconds to ensure fresh data
 def get_vvi_client():
-    """Initialize VVI client (cached)"""
+    """Initialize VVI client (cached for 60 seconds)"""
     return VVIAPIClient()
 
 vvi_client = get_vvi_client()
@@ -1437,7 +1437,7 @@ st.markdown("---")
 st.markdown(
     """
     <div style="text-align:center; color:#777; font-size:0.85rem; padding:2rem 0 1rem 0;">
-        <p><b>Visit Value Index™ (VVI)</b> | Version 2.2</p>
+        <p><b>Visit Value Index™ (VVI)</b> | Version 2.3 ✨</p>
         <p>Bramhall Consulting, LLC | © 2024</p>
         <p style="margin-top:0.5rem;">
             <a href="https://bramhallconsulting.org" target="_blank" style="color:#b08c3e; text-decoration:none;">
