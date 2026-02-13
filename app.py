@@ -149,39 +149,36 @@ class VVIAPIClient:
         nrpv_target: float, lcv_target: float
     ) -> Dict[str, Any]:
         """Local VVI calculation (fallback)"""
-        result = calculate_vvi_local(
-            net_revenue, visit_volume, labor_cost,
-            nrpv_target, lcv_target
-        )
-        result["clinic_id"] = clinic_id
-        result["period"] = period
-        result["calculated_at"] = datetime.utcnow().isoformat() + "Z"
-        result["source"] = "local"
-        return result
-
-
-# ============================================================
-# Local VVI Calculator (Fallback)
-# ============================================================
-
-class VVICalculatorLocal:
-    """Local VVI calculation for offline/fallback mode"""
-    
-    TIER_ORDER = ["Critical", "At Risk", "Stable", "Excellent"]
-    
-    @staticmethod
-    def tier_from_score(score: float) -> str:
-        if score >= 100:
-            return "Excellent"
-        if 95 <= score < 100:
-            return "Stable"
-        if 90 <= score < 95:
-            return "At Risk"
-        return "Critical"
-    
-    @staticmethod
-    def get_scenario_id(rf_tier: str, lf_tier: str) -> str:
-        """Map RF/LF tiers to scenario ID"""
+        # Calculate metrics
+        nrpv = net_revenue / visit_volume
+        lcv = labor_cost / visit_volume
+        swb_pct = (labor_cost / net_revenue) * 100
+        
+        # Calculate scores
+        rf_raw = nrpv / nrpv_target
+        lf_raw = lcv_target / lcv
+        rf_score = rf_raw * 100
+        lf_score = lf_raw * 100
+        
+        vvi_raw = nrpv / lcv
+        vvi_target = nrpv_target / lcv_target
+        vvi_score = (vvi_raw / vvi_target) * 100
+        
+        # Determine tiers
+        def tier_from_score(score):
+            if score >= 100:
+                return "Excellent"
+            if 95 <= score < 100:
+                return "Stable"
+            if 90 <= score < 95:
+                return "At Risk"
+            return "Critical"
+        
+        vvi_tier = tier_from_score(vvi_score)
+        rf_tier = tier_from_score(rf_score)
+        lf_tier = tier_from_score(lf_score)
+        
+        # Get scenario ID
         scenario_map = {
             ("Excellent", "Excellent"): "S01",
             ("Excellent", "Stable"): "S02",
@@ -200,139 +197,71 @@ class VVICalculatorLocal:
             ("Critical", "At Risk"): "S15",
             ("Critical", "Critical"): "S16",
         }
-        return scenario_map.get((rf_tier, lf_tier), "S16")
-
-
-def calculate_vvi_local(
-    net_revenue: float, visit_volume: int, labor_cost: float,
-    nrpv_target: float = 140.0, lcv_target: float = 85.0
-) -> Dict[str, Any]:
-    """
-    Local VVI calculation (matches API output structure)
-    """
-    # Calculate metrics
-    nrpv = net_revenue / visit_volume
-    lcv = labor_cost / visit_volume
-    swb_pct = (labor_cost / net_revenue) * 100
-    
-    # Calculate scores
-    rf_raw = nrpv / nrpv_target
-    lf_raw = lcv_target / lcv
-    rf_score = rf_raw * 100
-    lf_score = lf_raw * 100
-    
-    vvi_raw = nrpv / lcv
-    vvi_target = nrpv_target / lcv_target
-    vvi_score = (vvi_raw / vvi_target) * 100
-    
-    # Determine tiers
-    calc = VVICalculatorLocal()
-    vvi_tier = calc.tier_from_score(vvi_score)
-    rf_tier = calc.tier_from_score(rf_score)
-    lf_tier = calc.tier_from_score(lf_score)
-    
-    # Get scenario
-    scenario_id = calc.get_scenario_id(rf_tier, lf_tier)
-    
-    # Simplified scenario data (subset for local mode)
-    scenario_data = {
-        "S01": {
-            "name": "Excellent Revenue / Excellent Labor",
-            "risk_level": "Low",
-            "focus_areas": ["Sustain excellence", "Prevent drift"],
-            "actions": {
-                "do_tomorrow": [
-                    "Brief huddle to recognize performance.",
-                    "Verify charts closed and POS reconciled.",
-                    "Identify today's biggest flow risk."
-                ],
-                "next_7_days": [
-                    "Run throughput time-study.",
-                    "Spot-check coding and POS.",
-                    "Validate schedule templates."
-                ],
-                "next_30_60_days": [
-                    "Document clinic playbook.",
-                    "Use as peer-teaching location.",
-                    "Refresh stay interviews."
-                ],
-                "next_60_90_days": [
-                    "Review succession plans.",
-                    "Stress-test capacity.",
-                    "Refine KPI dashboards."
-                ]
-            },
-            "expected_impact": {
-                "vvi_improvement": "Sustain at 100+",
-                "timeline": "Ongoing",
-                "key_risks": ["Complacency", "Hidden burnout", "Key-person risk"]
-            }
-        },
-        "S16": {
-            "name": "Critical Revenue / Critical Labor",
-            "risk_level": "Critical",
-            "focus_areas": ["Crisis stabilization", "Revenue capture", "Labor realignment"],
-            "actions": {
-                "do_tomorrow": [
-                    "Crisis huddle: safety, flow, revenue.",
-                    "Review staffing vs. schedule.",
-                    "POS/registration compliance check."
-                ],
-                "next_7_days": [
-                    "Daily stabilization huddles.",
-                    "Tighten overtime approvals.",
-                    "Rapid throughput diagnostic.",
-                    "Coding/charge audit by provider."
-                ],
-                "next_30_60_days": [
-                    "Redesign staffing templates.",
-                    "Rebuild core workflows.",
-                    "Provider coding training.",
-                    "Weekly ops steering meetings."
-                ],
-                "next_60_90_days": [
-                    "12-week recovery roadmap.",
-                    "Remove non-value tasks.",
-                    "Institutionalize reliability cadence.",
-                    "Rebuild culture via recognition."
-                ]
-            },
-            "expected_impact": {
-                "vvi_improvement": "15-25%",
-                "timeline": "6-12 months",
-                "key_risks": ["Negative margin", "High turnover", "Safety risk"]
-            }
+        scenario_id = scenario_map.get((rf_tier, lf_tier), "S16")
+        
+        # Simplified scenario data for local mode
+        scenario_names = {
+            "S01": "Excellent Revenue / Excellent Labor",
+            "S16": "Critical Revenue / Critical Labor"
         }
-    }
-    
-    # Get scenario details or fallback to S16
-    scenario = scenario_data.get(scenario_id, scenario_data["S16"])
-    
-    return {
-        "metrics": {
-            "nrpv": round(nrpv, 2),
-            "lcv": round(lcv, 2),
-            "swb_pct": round(swb_pct, 1)
-        },
-        "scores": {
-            "vvi": round(vvi_score, 1),
-            "rf": round(rf_score, 1),
-            "lf": round(lf_score, 1)
-        },
-        "tiers": {
-            "vvi": vvi_tier,
-            "rf": rf_tier,
-            "lf": lf_tier
-        },
-        "scenario": {
-            "id": scenario_id,
-            "name": scenario["name"],
-            "risk_level": scenario["risk_level"],
-            "focus_areas": scenario["focus_areas"]
-        },
-        "actions": scenario["actions"],
-        "expected_impact": scenario["expected_impact"]
-    }
+        
+        # Basic actions (simplified for local mode)
+        actions = {
+            "do_tomorrow": [
+                "Review daily operations and identify immediate priorities.",
+                "Verify key metrics and data accuracy.",
+                "Brief team on focus areas."
+            ],
+            "next_7_days": [
+                "Conduct detailed performance review.",
+                "Identify quick-win opportunities.",
+                "Schedule follow-up assessment."
+            ],
+            "next_30_60_days": [
+                "Implement systematic improvements.",
+                "Monitor progress weekly.",
+                "Adjust strategies based on results."
+            ],
+            "next_60_90_days": [
+                "Formalize new processes.",
+                "Train staff on best practices.",
+                "Plan next assessment cycle."
+            ]
+        }
+        
+        return {
+            "clinic_id": clinic_id,
+            "period": period,
+            "calculated_at": datetime.utcnow().isoformat() + "Z",
+            "metrics": {
+                "nrpv": round(nrpv, 2),
+                "lcv": round(lcv, 2),
+                "swb_pct": round(swb_pct, 1)
+            },
+            "scores": {
+                "vvi": round(vvi_score, 1),
+                "rf": round(rf_score, 1),
+                "lf": round(lf_score, 1)
+            },
+            "tiers": {
+                "vvi": vvi_tier,
+                "rf": rf_tier,
+                "lf": lf_tier
+            },
+            "scenario": {
+                "id": scenario_id,
+                "name": scenario_names.get(scenario_id, f"Scenario {scenario_id}"),
+                "risk_level": "Low" if "Excellent" in scenario_id else "Critical" if "Critical" in scenario_id else "Medium",
+                "focus_areas": ["Operational excellence", "Performance monitoring"]
+            },
+            "actions": actions,
+            "expected_impact": {
+                "vvi_improvement": "Varies by scenario",
+                "timeline": "60-90 days",
+                "key_risks": ["Performance drift", "Resource constraints"]
+            },
+            "source": "local"
+        }
 
 
 # ============================================================
