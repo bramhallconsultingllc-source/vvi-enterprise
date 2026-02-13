@@ -2,7 +2,7 @@
 Visit Value Index (VVI) Application - Enterprise Edition
 Bramhall Consulting, LLC
 
-VERSION: 2.1 - Complete 16-Scenario Library
+VERSION: 2.2 - Complete 16-Scenario Library (Bug Fix)
 Last Updated: February 13, 2026
 
 Upgraded architecture:
@@ -12,6 +12,7 @@ Upgraded architecture:
 - Performance optimizations
 - Production-ready deployment
 - COMPLETE 16-scenario library built-in (S01-S16)
+- Fixed: Removed unnecessary fallback logic
 """
 
 from __future__ import annotations
@@ -763,18 +764,12 @@ class VVIAPIClient:
             }
         }
         
-        # Get scenario details - use scenario-specific if available, otherwise use similar tier
+        # Get scenario details - all 16 scenarios are defined
         scenario_data = scenario_library.get(scenario_id)
+        
+        # This should never happen now, but safety check
         if not scenario_data:
-            # Fallback logic for scenarios not explicitly defined
-            if "Excellent" in rf_tier and "Excellent" in lf_tier:
-                scenario_data = scenario_library["S01"]
-            elif "Critical" in rf_tier or "Critical" in lf_tier:
-                scenario_data = scenario_library["S16"]
-            elif "Excellent" in rf_tier:
-                scenario_data = scenario_library["S02"]
-            else:
-                scenario_data = scenario_library["S03"]
+            raise ValueError(f"Scenario {scenario_id} not found in library. This is a bug!")
         
         actions = scenario_data["actions"]
         scenario_name = scenario_data["name"]
@@ -1442,7 +1437,7 @@ st.markdown("---")
 st.markdown(
     """
     <div style="text-align:center; color:#777; font-size:0.85rem; padding:2rem 0 1rem 0;">
-        <p><b>Visit Value Index™ (VVI)</b> | Version 2.1 - Complete 16 Scenarios</p>
+        <p><b>Visit Value Index™ (VVI)</b> | Version 2.2</p>
         <p>Bramhall Consulting, LLC | © 2024</p>
         <p style="margin-top:0.5rem;">
             <a href="https://bramhallconsulting.org" target="_blank" style="color:#b08c3e; text-decoration:none;">
