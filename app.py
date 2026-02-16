@@ -2,7 +2,7 @@
 Visit Value Index (VVI) Application - Enterprise Edition
 Bramhall Consulting, LLC
 
-VERSION: 2.8 - Urgent Care Tailored Actions
+VERSION: 2.9 - Root Cause Analysis Added
 Last Updated: February 16, 2026
 
 Upgraded architecture:
@@ -13,6 +13,7 @@ Upgraded architecture:
 - Production-ready deployment
 - COMPLETE 16-scenario library built-in (S01-S16)
 - Executive narratives for each scenario
+- ROOT CAUSE ANALYSIS for diagnostic insight
 - McKinsey-caliber visual design
 - URGENT CARE-SPECIFIC prescriptive actions with UC demand patterns, workflows, and metrics
 """
@@ -211,6 +212,14 @@ class VVIAPIClient:
                 "name": "Excellent Revenue / Excellent Labor",
                 "risk_level": "Low",
                 "executive_narrative": "Outstanding performance across both revenue and labor dimensions. This clinic is operating at or above benchmark on all key metrics, demonstrating strong clinical productivity, efficient workflows, and disciplined cost management. The primary focus is sustaining this excellence and preventing gradual drift.",
+                "root_causes": [
+                    "Strong operational discipline with daily performance basics (chart closure, POS collection, workflow adherence)",
+                    "Staffing appropriately matched to urgent care demand patterns (Monday heavy, Friday light, peak hour surge capacity)",
+                    "Efficient workflows with minimal waste (fast rooming, provider charting discipline, streamlined checkout)",
+                    "Effective coding and charge capture practices (appropriate E&M levels, procedure documentation, same-shift billing)",
+                    "Good provider productivity during peak hours (4-5 patients/hour) without sacrificing quality",
+                    "Cross-trained staff creating flexibility without reliance on premium labor or excessive overtime"
+                ],
                 "focus_areas": ["Sustain excellence", "Prevent drift", "Scale best practices"],
                 "actions": {
                     "do_tomorrow": [
@@ -244,6 +253,12 @@ class VVIAPIClient:
                 "name": "Excellent Revenue / Stable Labor",
                 "risk_level": "Low",
                 "executive_narrative": "Strong revenue performance with labor costs tracking slightly above optimal levels. Revenue capture and clinical productivity are excellent, but there are opportunities for modest labor efficiency gains. The focus is on gentle optimization without disrupting the revenue engine or compromising quality.",
+                "root_causes": [
+                    "Minor staffing inefficiencies during off-peak hours (Friday mornings, mid-day lulls on Tuesday-Thursday)",
+                    "Possible workflow friction points adding 10-15% unnecessary labor time per patient encounter",
+                    "Limited staff cross-training creating inflexibility and requiring extra coverage",
+                    "Small amount of unnecessary overtime (5-8% of total hours) from poor scheduling coordination"
+                ],
                 "focus_areas": ["Gentle labor optimization", "Protect revenue", "Incremental efficiency"],
                 "actions": {
                     "do_tomorrow": [
@@ -277,6 +292,13 @@ class VVIAPIClient:
                 "name": "Excellent Revenue / At Risk Labor",
                 "risk_level": "Medium",
                 "executive_narrative": "Excellent revenue performance is being undermined by emerging labor cost issues. While clinical productivity and revenue capture remain strong, labor efficiency is trending in the wrong direction—indicating workflow inefficiencies, overstaffing, or excessive premium labor usage. Corrective action is needed now to prevent further deterioration.",
+                "root_causes": [
+                    "Labor cost drift from gradual overstaffing as patient volume patterns shifted but templates didn't adjust",
+                    "Increasing overtime usage (8-12% of hours) suggesting poor scheduling or inadequate staffing flexibility",
+                    "Growing reliance on premium labor (PRN, agency) to cover gaps instead of cross-training core staff",
+                    "Workflow inefficiencies creeping in (task duplication, unnecessary steps) adding 15-20% labor time per encounter",
+                    "Possible role confusion or task bloat with staff taking on low-value activities"
+                ],
                 "focus_areas": ["Correct labor drift", "Protect revenue base", "Throughput restoration"],
                 "actions": {
                     "do_tomorrow": [
@@ -312,6 +334,14 @@ class VVIAPIClient:
                 "name": "Excellent Revenue / Critical Labor",
                 "risk_level": "High",
                 "executive_narrative": "This is the most margin-damaging combination: strong revenue performance overshadowed by severe labor inefficiency. Labor costs are substantially outpacing targets, eroding profitability and masking operational instability. Immediate intervention is required to prevent deeper workforce issues such as turnover, burnout, or schedule failures.",
+                "root_causes": [
+                    "Staffing misaligned with urgent care demand curve (overstaffing Friday mornings and off-peak hours while potentially understaffing Monday/Sunday 4-7pm peaks)",
+                    "Flat staffing templates treating all days equally instead of flexing 30-40% between Monday (highest) and Friday (lowest)",
+                    "Excessive overtime or reliance on premium labor (PRN/agency staff) due to poor scheduling or inadequate cross-training",
+                    "Workflow inefficiencies during peak hours causing throughput collapse and requiring more staff than necessary",
+                    "Poor scheduling flexibility using rigid 8-hour blocks instead of flex shifts (4-hour, 6-hour, split shifts) matched to patient arrival patterns",
+                    "Role drift and task bloat with staff performing low-value activities that don't contribute to patient care or revenue"
+                ],
                 "focus_areas": ["Emergency labor correction", "Protect revenue gains", "Prevent burnout cascade"],
                 "actions": {
                     "do_tomorrow": [
@@ -348,6 +378,14 @@ class VVIAPIClient:
                 "name": "Stable Revenue / Excellent Labor",
                 "risk_level": "Low",
                 "executive_narrative": "Outstanding labor efficiency with revenue performance meeting but not exceeding benchmarks. This clinic has mastered operational discipline and workforce productivity, creating a strong foundation for revenue growth. The opportunity lies in better charge capture, coding optimization, or strategic service line expansion without compromising labor excellence.",
+                "root_causes": [
+                    "Provider documentation and coding practices are good but conservative—likely under-coding E&M levels by 1 level on 20-30% of visits",
+                    "Missed revenue opportunities from procedures not consistently captured (minor procedures, splinting, nebulizers, extended visits)",
+                    "Charge capture workflow gaps allowing some billable services to fall through cracks (X-rays ordered but not billed, labs not linked to visit)",
+                    "Limited occupational health penetration or sports medicine services that could increase revenue per visit",
+                    "Possible payer mix challenges with higher proportion of lower-reimbursing contracts",
+                    "Strong operations but conservative billing practices leaving money on table"
+                ],
                 "focus_areas": ["Revenue opportunity capture", "Sustain labor discipline", "Grow margin"],
                 "actions": {
                     "do_tomorrow": [
@@ -383,6 +421,13 @@ class VVIAPIClient:
                 "name": "Stable Revenue / Stable Labor",
                 "risk_level": "Low",
                 "executive_narrative": "Solid, sustainable performance across both dimensions with room for improvement in both areas. This clinic is neither in crisis nor optimized—it's in the comfortable middle. The risk is complacency and gradual drift. The opportunity is to pick one improvement lever and execute a focused initiative to move toward excellence.",
+                "root_causes": [
+                    "Generally adequate but not optimized performance—no major problems but no excellence either",
+                    "Possible complacency from 'good enough' mindset preventing push toward top-tier performance",
+                    "Minor inefficiencies on both revenue (some under-coding, occasional missed charges) and labor (slight overstaffing during off-peak)",
+                    "Lack of focused improvement initiatives—operating on autopilot without systematic optimization efforts",
+                    "Workflow and staffing templates that haven't been reviewed or updated in 6-12+ months as patterns shifted"
+                ],
                 "focus_areas": ["Incremental gains", "Prevent complacency", "Build momentum"],
                 "actions": {
                     "do_tomorrow": [
@@ -418,6 +463,13 @@ class VVIAPIClient:
                 "name": "Stable Revenue / At Risk Labor",
                 "risk_level": "Medium",
                 "executive_narrative": "Revenue performance is holding steady, but labor costs are trending upward and approaching unsustainable levels. Workflow inefficiencies, overstaffing patterns, or excessive overtime are eroding margins. The clinic needs focused labor cost correction while protecting the revenue base and avoiding disruptions that could harm access or quality.",
+                "root_causes": [
+                    "Labor costs creeping up from gradual overstaffing during off-peak periods without corresponding revenue growth",
+                    "Overtime increasing to 8-12% of total hours from poor scheduling, staff callouts, or inadequate flex staffing",
+                    "Workflow inefficiencies slowing throughput and requiring more staff than necessary to handle same patient volume",
+                    "Possible task creep with staff taking on activities that don't add value or could be eliminated/automated",
+                    "Lack of labor monitoring allowing costs to drift upward without early intervention"
+                ],
                 "focus_areas": ["Labor cost correction", "Protect revenue stability", "Improve throughput"],
                 "actions": {
                     "do_tomorrow": [
@@ -453,6 +505,14 @@ class VVIAPIClient:
                 "name": "Stable Revenue / Critical Labor",
                 "risk_level": "High",
                 "executive_narrative": "Revenue is stable, but labor costs have reached crisis levels—substantially exceeding benchmarks and threatening financial viability. This is often caused by chronic overstaffing, inefficient workflows, or sustained reliance on premium labor. Immediate emergency intervention is required to bring labor costs under control without allowing revenue to decline.",
+                "root_causes": [
+                    "Severe overstaffing with flat templates ignoring demand variation (same staffing Friday as Monday, same staffing 2pm as 6pm)",
+                    "Excessive overtime (12-18%+ of hours) or heavy reliance on premium labor (agency, PRN) indicating fundamental scheduling failure",
+                    "Major workflow breakdowns causing low productivity—providers seeing 2-3 patients/hour instead of 4-5 during peak",
+                    "Possible leadership gaps with no accountability for labor cost management or performance standards",
+                    "Cultural issues with staff resistance to efficiency improvements or 'we've always been overstaffed' mentality",
+                    "Combination of overstaffing AND inefficiency compounding the problem"
+                ],
                 "focus_areas": ["Emergency labor intervention", "Revenue protection", "Operational reset"],
                 "actions": {
                     "do_tomorrow": [
@@ -489,7 +549,275 @@ class VVIAPIClient:
                 "name": "At Risk Revenue / Excellent Labor",
                 "risk_level": "Medium",
                 "executive_narrative": "Outstanding labor efficiency is being undermined by revenue underperformance. This clinic is operationally lean and productive, but revenue per visit is falling short—indicating coding issues, charge capture gaps, unfavorable payer mix, or documentation problems. The focus must be on revenue recovery while maintaining hard-won labor discipline.",
+                "root_causes": [
+                    "Under-coding by 1-2 E&M levels on significant portion of visits (providers documenting level 4 work but billing level 3)",
+                    "Missed procedure charges from incomplete capture workflows (lacerations, splints, extended services not consistently billed)",
+                    "Charge lag or billing errors allowing revenue to slip through cracks before submission",
+                    "Documentation gaps preventing appropriate coding levels despite clinical complexity",
+                    "Possible payer mix deterioration or unfavorable contract rates reducing reimbursement per visit"
+                ],
                 "focus_areas": ["Revenue recovery", "Maintain labor discipline", "Charge capture"],
+                "actions": {
+                    "do_tomorrow": [
+                        "Revenue-focused huddle: celebrate labor efficiency, focus on revenue gaps.",
+                        "Audit yesterday's charge capture and coding.",
+                        "Ask providers: are we capturing all billable services?"
+                    ],
+                    "next_7_days": [
+                        "Conduct comprehensive revenue cycle diagnostic.",
+                        "Review coding levels, charge capture, and denial patterns.",
+                        "Analyze payer mix and contract performance.",
+                        "Provider documentation audit on top 10 CPT codes."
+                    ],
+                    "next_30_60_days": [
+                        "Launch intensive provider coding and documentation training.",
+                        "Implement real-time charge capture monitoring and feedback.",
+                        "Optimize E&M levels and ancillary service billing.",
+                        "Address top denial reasons and appeal backlog.",
+                        "Review contracts and identify renegotiation opportunities."
+                    ],
+                    "next_60_90_days": [
+                        "Target 5-10% revenue per visit improvement.",
+                        "Formalize provider scorecards with financial transparency.",
+                        "Consider service line expansion if capacity supports it.",
+                        "Maintain labor discipline while growing revenue."
+                    ]
+                },
+                "expected_impact": {
+                    "vvi_improvement": "7-12%",
+                    "timeline": "60-120 days",
+                    "key_risks": ["Revenue continues to slide", "Provider resistance", "Compliance issues"]
+                }
+            },
+            "S10": {
+                "name": "At Risk Revenue / Stable Labor",
+                "risk_level": "Medium",
+                "executive_narrative": "Revenue performance is declining while labor costs remain stable but could drift if not monitored. This clinic needs a dual focus: aggressive revenue improvement through better coding, charge capture, and billing while maintaining labor cost discipline. The risk is that fixing revenue problems could inadvertently cause labor costs to rise.",
+                "root_causes": [
+                    "Revenue decline from combination of under-coding and missed charges reducing revenue per visit by 10-15%",
+                    "Provider documentation not supporting higher E&M levels despite clinical work performed",
+                    "Billing workflow gaps or delays allowing charges to be lost or denied",
+                    "Possible volume decline or payer mix shift reducing overall revenue",
+                    "Lack of revenue monitoring allowing slow erosion without timely intervention"
+                ],
+                "focus_areas": ["Revenue prioritization", "Labor efficiency maintenance", "Balanced recovery"],
+                "actions": {
+                    "do_tomorrow": [
+                        "Dual-focus huddle: revenue needs attention, labor is okay.",
+                        "Yesterday's revenue audit: charge capture, coding, collections.",
+                        "Quick labor check to ensure no drift while fixing revenue."
+                    ],
+                    "next_7_days": [
+                        "Revenue cycle deep-dive: identify top 3 revenue leakage points.",
+                        "Provider documentation spot-checks.",
+                        "Review labor metrics to ensure stability during revenue push.",
+                        "Analyze denial patterns and payer mix."
+                    ],
+                    "next_30_60_days": [
+                        "Execute revenue improvement plan (coding training, charge capture tech).",
+                        "Maintain labor discipline with ongoing efficiency monitoring.",
+                        "Address billing workflow gaps.",
+                        "Provider engagement on financial performance."
+                    ],
+                    "next_60_90_days": [
+                        "Target 4-8% VVI improvement primarily through revenue gains.",
+                        "Balance revenue growth with labor cost control.",
+                        "Prevent labor from drifting while focused on revenue."
+                    ]
+                },
+                "expected_impact": {
+                    "vvi_improvement": "5-9%",
+                    "timeline": "90+ days",
+                    "key_risks": ["Revenue slides further", "Labor drifts during revenue focus", "Provider burnout"]
+                }
+            },
+            "S11": {
+                "name": "At Risk Revenue / At Risk Labor",
+                "risk_level": "High",
+                "executive_narrative": "Dual performance concerns with both revenue and labor trending in the wrong direction. This clinic is experiencing simultaneous revenue leakage and labor inefficiency, creating a compounding margin problem. Leadership must triage priorities, execute parallel improvement plans, and prevent further deterioration on either dimension. Without intervention, this scenario rapidly degrades into crisis.",
+                "root_causes": [
+                    "Simultaneous problems: under-coding/missed charges reducing revenue AND overstaffing/overtime increasing labor costs",
+                    "Lack of operational discipline allowing both issues to develop without early intervention",
+                    "Possible leadership gaps or accountability issues preventing timely problem-solving",
+                    "Workflow inefficiencies affecting both dimensions (slow throughput hurts revenue AND requires more staff)",
+                    "Staff and provider engagement issues leading to performance decline across the board"
+                ],
+                "focus_areas": ["Dual stabilization", "Prevent further decline", "Triage priorities"],
+                "actions": {
+                    "do_tomorrow": [
+                        "Dual-threat huddle: both revenue and labor need attention.",
+                        "Quick assessment: which is worse and needs immediate focus?",
+                        "Yesterday's metrics review for both dimensions."
+                    ],
+                    "next_7_days": [
+                        "Triage decision: stabilize revenue first or labor first based on severity.",
+                        "Daily dual-metric huddles (revenue and labor).",
+                        "Rapid diagnostics on both revenue cycle and labor efficiency.",
+                        "Identify quick wins that improve both (e.g., better scheduling reduces labor and increases revenue)."
+                    ],
+                    "next_30_60_days": [
+                        "Execute parallel improvement plans with clear ownership.",
+                        "Revenue: coding training, charge capture, denials.",
+                        "Labor: staffing templates, workflow efficiency, overtime control.",
+                        "Weekly steering committee to monitor both tracks."
+                    ],
+                    "next_60_90_days": [
+                        "Target 8-15% combined VVI improvement.",
+                        "Prevent slide into Critical on either dimension.",
+                        "Build sustainable operating discipline for both revenue and labor."
+                    ]
+                },
+                "expected_impact": {
+                    "vvi_improvement": "8-15%",
+                    "timeline": "3-6 months",
+                    "key_risks": ["One or both slide to Critical", "Team overwhelm", "Competing priorities"]
+                }
+            },
+            "S12": {
+                "name": "At Risk Revenue / Critical Labor",
+                "risk_level": "Critical",
+                "executive_narrative": "A dangerous combination of declining revenue and critical labor cost overruns that threatens financial viability. Labor costs are substantially exceeding benchmarks while revenue underperforms, creating severe margin pressure. This requires immediate crisis intervention on labor while simultaneously stabilizing revenue to prevent complete operational failure.",
+                "root_causes": [
+                    "Critical labor overspend from severe overstaffing combined with excessive overtime and premium labor usage",
+                    "Revenue decline from under-coding and missed charges making the labor problem unsustainable",
+                    "Complete misalignment of staffing to demand patterns burning 30-50% excess labor",
+                    "Workflow collapse during peak hours requiring excessive staff to handle normal volume",
+                    "Possible leadership crisis with no one accountable for financial performance or willing to make hard decisions"
+                ],
+                "focus_areas": ["Labor crisis mode", "Revenue triage", "Operational stabilization"],
+                "actions": {
+                    "do_tomorrow": [
+                        "Crisis huddle: labor is critical, revenue is at risk.",
+                        "Immediate labor intervention takes priority.",
+                        "Protect revenue from further decline during labor reset."
+                    ],
+                    "next_7_days": [
+                        "Daily crisis management meetings.",
+                        "Emergency labor cost reduction plan.",
+                        "Revenue protection plan (maintain coding quality during turbulence).",
+                        "Communicate clearly with staff and providers about situation."
+                    ],
+                    "next_30_60_days": [
+                        "Execute labor transformation (redesign staffing, workflows).",
+                        "Stabilize revenue cycle basics (charge capture, denials).",
+                        "Prevent further decline on both dimensions.",
+                        "Weekly leadership reviews with clear accountability."
+                    ],
+                    "next_60_90_days": [
+                        "Bring labor back to Stable (10-15% reduction).",
+                        "Prevent revenue from sliding to Critical.",
+                        "Build foundation for future recovery.",
+                        "Address staff morale and retention."
+                    ]
+                },
+                "expected_impact": {
+                    "vvi_improvement": "15-25%",
+                    "timeline": "6-12 months",
+                    "key_risks": ["Financial viability threatened", "Staff exodus", "Quality and safety events"]
+                }
+            },
+            "S13": {
+                "name": "Critical Revenue / Excellent Labor",
+                "risk_level": "High",
+                "executive_narrative": "Despite excellent labor efficiency, revenue performance has fallen to crisis levels—substantially below benchmark and threatening the clinic's financial sustainability. This indicates severe problems with coding, charge capture, payer contracts, or case mix. Emergency revenue intervention is required while protecting the operational excellence that has been achieved on the labor side.",
+                "root_causes": [
+                    "Severe under-coding by 1-2 levels on majority of visits (level 2-3 coding when level 4-5 work performed)",
+                    "Systemic charge capture failure with 15-30% of billable services not being captured or billed",
+                    "Major billing process breakdown allowing charges to be lost, delayed, or denied at high rates",
+                    "Possible unfavorable payer mix or contract rates significantly below market",
+                    "Provider documentation completely inadequate to support appropriate coding levels despite clinical work"
+                ],
+                "focus_areas": ["Revenue emergency", "Protect labor excellence", "Financial viability"],
+                "actions": {
+                    "do_tomorrow": [
+                        "Revenue crisis huddle with leadership.",
+                        "Immediate revenue cycle audit.",
+                        "Maintain labor discipline while addressing revenue crisis."
+                    ],
+                    "next_7_days": [
+                        "Daily revenue recovery meetings.",
+                        "Emergency coding and documentation intervention.",
+                        "Charge capture technology deployment if needed.",
+                        "Denial management acceleration.",
+                        "Contract review for immediate renegotiation opportunities."
+                    ],
+                    "next_30_60_days": [
+                        "Intensive provider documentation training and coaching.",
+                        "Real-time charge capture audits with daily feedback.",
+                        "Revenue cycle process redesign.",
+                        "Consider service line adjustments or payer mix changes.",
+                        "Maintain labor efficiency throughout revenue transformation."
+                    ],
+                    "next_60_90_days": [
+                        "Target 12-20% revenue per visit improvement.",
+                        "Restore financial sustainability.",
+                        "Prevent labor from drifting during revenue crisis.",
+                        "Build long-term revenue discipline."
+                    ]
+                },
+                "expected_impact": {
+                    "vvi_improvement": "15-25%",
+                    "timeline": "6-12 months",
+                    "key_risks": ["Clinic closure consideration", "Provider departures", "Access reduction"]
+                }
+            },
+            "S14": {
+                "name": "Critical Revenue / Stable Labor",
+                "risk_level": "High",
+                "executive_narrative": "Critical revenue underperformance despite stable labor costs creates severe margin pressure and questions about long-term viability. Revenue per visit is substantially below benchmark, indicating systemic problems with clinical documentation, coding, charge capture, or payer relationships. This requires emergency revenue cycle transformation while preventing labor costs from drifting during the crisis.",
+                "root_causes": [
+                    "Critical revenue capture failure from combination of severe under-coding, missed charges, and billing errors",
+                    "Provider documentation practices far below standard preventing appropriate reimbursement",
+                    "Possible case mix issues with center seeing lower-acuity visits that generate less revenue",
+                    "Unfavorable payer contracts or high proportion of low-reimbursing payers",
+                    "Billing and collections process failures allowing significant revenue leakage"
+                ],
+                "focus_areas": ["Revenue emergency response", "Labor stability", "Financial rescue"],
+                "actions": {
+                    "do_tomorrow": [
+                        "Revenue crisis declaration with full leadership team.",
+                        "Yesterday's revenue audit with fine-tooth comb.",
+                        "Protect labor stability during revenue emergency."
+                    ],
+                    "next_7_days": [
+                        "Daily revenue recovery war room.",
+                        "Emergency provider coding education.",
+                        "Charge capture technology and process fixes.",
+                        "Billing and collections acceleration.",
+                        "Monitor labor to prevent drift during crisis focus."
+                    ],
+                    "next_30_60_days": [
+                        "Complete revenue cycle transformation.",
+                        "Provider financial performance transparency and accountability.",
+                        "Payer contract optimization.",
+                        "Service line profitability analysis.",
+                        "Maintain labor cost discipline."
+                    ],
+                    "next_60_90_days": [
+                        "Achieve 15-25% revenue improvement to restore viability.",
+                        "Build sustainable revenue capture culture.",
+                        "Prevent labor from becoming a new problem area."
+                    ]
+                },
+                "expected_impact": {
+                    "vvi_improvement": "18-28%",
+                    "timeline": "6-12 months",
+                    "key_risks": ["Financial insolvency", "Clinic closure", "Provider mass exodus"]
+                }
+            },
+            "S15": {
+                "name": "Critical Revenue / At Risk Labor",
+                "risk_level": "Critical",
+                "executive_narrative": "A severe dual crisis with critical revenue underperformance and deteriorating labor efficiency. Revenue is substantially below benchmark while labor costs are rising, creating a dangerous margin squeeze from both directions. This clinic is in survival mode and requires immediate executive intervention with parallel emergency actions on revenue and labor to restore viability.",
+                "root_causes": [
+                    "Critical revenue failure AND labor cost escalation occurring simultaneously",
+                    "Severe under-coding combined with overstaffing creating worst-case margin scenario",
+                    "Fundamental operational breakdown across all dimensions (workflows, staffing, documentation, billing)",
+                    "Leadership crisis or absence of accountability allowing both issues to spiral",
+                    "Possible staff and provider morale collapse leading to performance deterioration",
+                    "May indicate deeper structural problems: wrong location, unsustainable payer mix, or market conditions"
+                ],
+                "focus_areas": ["Dual emergency", "Triage and stabilize", "Survival mode"],
                 "actions": {
                     "do_tomorrow": [
                         "Revenue-focused huddle: celebrate labor efficiency, focus on revenue gaps.",
@@ -745,6 +1073,15 @@ class VVIAPIClient:
                 "name": "Critical Revenue / Critical Labor",
                 "risk_level": "Critical",
                 "executive_narrative": "The most severe scenario: catastrophic underperformance on both revenue and labor dimensions. Revenue is substantially below benchmark while labor costs are grossly exceeding targets, creating unsustainable losses. This clinic faces an existential crisis requiring immediate assessment of viability, executive-level intervention, and comprehensive operational transformation. Without dramatic improvement, closure or consolidation may be necessary.",
+                "root_causes": [
+                    "Severe revenue capture failure from systemic under-coding, missed charges, poor documentation, or billing process breakdown",
+                    "Critical labor inefficiency from overstaffing, poor workflows, excessive overtime, and reliance on premium labor simultaneously",
+                    "Complete misalignment of staffing to demand with flat templates ignoring Monday peaks and Friday valleys",
+                    "Leadership and accountability gaps allowing both revenue and labor issues to compound without intervention",
+                    "Provider documentation and coding practices significantly below standard (heavy level 2-3 coding, missing procedures)",
+                    "Cultural dysfunction with staff resistance to change, poor communication, or 'we've always done it this way' mentality",
+                    "Possible structural issues: wrong location, unsustainable payer mix, or market conditions that make the center unviable"
+                ],
                 "focus_areas": ["Survival", "Complete operational reset", "Viability assessment"],
                 "actions": {
                     "do_tomorrow": [
@@ -791,6 +1128,7 @@ class VVIAPIClient:
         risk_level = scenario_data["risk_level"]
         focus_areas = scenario_data["focus_areas"]
         executive_narrative = scenario_data.get("executive_narrative", "")
+        root_causes = scenario_data.get("root_causes", [])
         expected_impact = scenario_data["expected_impact"]
         
         return {
@@ -817,7 +1155,8 @@ class VVIAPIClient:
                 "name": scenario_name,
                 "risk_level": risk_level,
                 "focus_areas": focus_areas,
-                "executive_narrative": executive_narrative
+                "executive_narrative": executive_narrative,
+                "root_causes": root_causes
             },
             "actions": actions,
             "expected_impact": expected_impact,
@@ -1309,10 +1648,20 @@ if st.session_state.get("assessment_ready", False):
     if scenario.get('executive_narrative'):
         st.info(f"**Executive Summary:** {scenario['executive_narrative']}")
     
+    # Root Cause Analysis
+    if scenario.get('root_causes'):
+        st.markdown("---")
+        st.subheader("🔍 Root Cause Analysis")
+        st.caption("Why this may be happening (possible primary drivers):")
+        
+        for cause in scenario['root_causes']:
+            st.markdown(f"• {cause}")
+    
     # ========================================
     # Prescriptive Actions
     # ========================================
     
+    st.markdown("---")
     st.subheader("📋 Prescriptive Actions")
     
     st.caption(
@@ -1446,7 +1795,7 @@ st.markdown("---")
 st.markdown(
     """
     <div style="text-align:center; color:#777; font-size:0.85rem; padding:2rem 0 1rem 0;">
-        <p><b>Visit Value Index™ (VVI)</b> | Version 2.8 — Urgent Care Edition</p>
+        <p><b>Visit Value Index™ (VVI)</b> | Version 2.9 — Root Cause Analysis</p>
         <p>Bramhall Consulting, LLC | © 2024</p>
         <p style="margin-top:0.5rem;">
             <a href="https://bramhallconsulting.org" target="_blank" style="color:#b08c3e; text-decoration:none;">
