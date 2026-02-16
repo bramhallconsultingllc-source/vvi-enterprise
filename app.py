@@ -263,24 +263,27 @@ class VVIAPIClient:
                 "focus_areas": ["Gentle labor optimization", "Protect revenue", "Incremental efficiency"],
                 "actions": {
                     "do_tomorrow": [
-                        "5-minute huddle celebrating strong revenue; share today's flow priorities.",
-                        "Check yesterday's POS collections and registration accuracy.",
-                        "Ask leaders where they see wasted steps or downtime in the day."
+                        "Hold 5-minute huddle celebrating excellent revenue performance (celebrate specific wins: 'We're averaging $215 per visit vs. $200 target'). Then pivot to labor opportunity: 'We're running about 5-7% over our labor budget. Not a crisis, but let's tighten up.' Share today's volume forecast and ask: 'Where do you see downtime or wasted motion today?'",
+                        "Review yesterday's operational metrics: POS copay collection at check-in (target: 95%+), chart closure same-shift (target: 100%), and labor hours vs. patient volume. Calculate quick ratio: Did you have more than 1 FTE per 20 patients yesterday? If yes on Friday or off-peak hours, that's your opportunity.",
+                        "Ask department leads (front desk, MAs, providers) one question: 'What's one thing we do that takes time but doesn't add value for patients or revenue?' Capture answers in simple list—often the best efficiency ideas come from front-line staff who see the waste daily."
                     ],
                     "next_7_days": [
-                        "Complete a light throughput review on a busy clinic session.",
-                        "Identify 1-2 tasks that can be streamlined or re-sequenced.",
-                        "Review overtime and schedule patterns for small inefficiencies."
+                        "Conduct 90-minute time study during ONE busy session (Monday 5-7pm ideal) and ONE slow session (Friday 10am-12pm). Busy session: Can you maintain 4-5 patients per provider per hour? Where are bottlenecks? Slow session: Are staff idle? Could you operate with 1 fewer MA or front desk person? The contrast reveals your flex opportunity.",
+                        "Identify 2-3 small workflow improvements that don't require major changes. Common UC wins: (1) Batch medication refills twice daily instead of one-by-one (saves 30-45 min/day), (2) Use text/email for normal lab results instead of phone calls (saves 45-60 min/day), (3) Pre-stage rooms during downtime so MAs don't scramble during rush (saves 5 min per patient during peak).",
+                        "Review overtime patterns from last 4 weeks: Who's working OT? When? Why? If it's predictable (every Monday evening, every Sunday), that's a scheduling problem not a staffing problem. If it's random (staff callouts, unexpected surges), that's a flex/cross-training opportunity. Target: Get OT below 5% of total hours within 30 days.",
+                        "Analyze staffing by day and time: Are you staffing the same on Friday morning (50-60 patients) as Monday morning (100-120 patients)? Most UCs can reduce Friday staffing by 20-25% and Monday off-peak by 10-15%. Even small adjustments (send 1 MA home Friday at 11am if volume is light) add up to $25K-$35K annually."
                     ],
                     "next_30_60_days": [
-                        "Tune staffing templates using recent volume and no-show patterns.",
-                        "Cross-train select staff to flex across roles during peaks.",
-                        "Standardize best practices into simple checklists."
+                        "Fine-tune staffing templates based on actual UC demand patterns: MONDAY: Full staffing with surge capacity 9-11am and 4-7pm. TUESDAY-THURSDAY: Baseline staffing with 5-7pm bump. FRIDAY: Reduce by 20-30% especially morning hours. SATURDAY: Moderate staffing heavy on injury capability (X-ray critical). SUNDAY: Moderate with evening surge. Document the model so future scheduling follows the pattern.",
+                        "Cross-train 2-3 staff to create flexibility without adding FTEs: (1) Train 2 MAs to cover front desk during breaks/lunches (4 hours training), (2) Train 2 front desk to do basic MA tasks (rooming, vitals) during unexpected surges (4 hours training), (3) Train providers to room own patients during slow periods vs. having MAs wait around (cultural shift, 30-min discussion). Goal: Never have idle staff during slow times.",
+                        "Standardize efficient workflows into simple one-page checklists: 'Fast rooming' (5 minutes: vitals, chief complaint, insurance scan, payment collection, text provider), 'Quick checkout' (2 minutes: hand patient paperwork, work note, aftercare instructions while processing payment), 'End of shift closeout' (10 minutes: all charts closed, supplies restocked, rooms ready for next shift). Train all staff, post on wall.",
+                        "Review and optimize your smallest inefficiencies: Do MAs walk back and forth to supply closet 20 times per shift? Stock rooms better. Do front desk staff manually call insurance for every visit? Use real-time eligibility tool. Do providers spend 5 minutes finding prior visit notes? Optimize EHR workflow. These 'death by a thousand cuts' issues add 10-15% labor time—fixing them is pure efficiency gain."
                     ],
                     "next_60_90_days": [
-                        "Target modest labor efficiency lift (2-4% LCV improvement).",
-                        "Formalize quarterly review of staffing and throughput metrics.",
-                        "Share efficiency wins across peer clinics."
+                        "Set specific labor efficiency target: Reduce LCV by 2-4% over 90 days. For a UC at $88 LCV, get to $84-86. That's 0.5-1.0 FTE on a typical center ($35K-$70K annual savings). Break into weekly goals: Week 4 = -1%, Week 8 = -2%, Week 12 = -3%. Track weekly, celebrate small wins, troubleshoot misses.",
+                        "Formalize operational review cadence: (1) Daily 5-minute huddle on staffing and flow, (2) Weekly metrics review (labor hours, OT%, revenue, visits, cost per visit), (3) Monthly deep dive (staffing template review, workflow improvements, staff feedback), (4) Quarterly strategic planning (capacity, growth, new services). Put these on calendar with clear agendas and owners.",
+                        "Document and share your efficiency wins with other centers if you're in a system: Host 2-hour 'efficiency showcase' and teach: (1) How you reduced Friday overstaffing, (2) Your flex scheduling model, (3) Cross-training approach, (4) Simple workflow improvements that worked. Your team gets recognition, other centers get ideas, you build regional credibility as operational leader.",
+                        "Invest in modest staff engagement to prevent efficiency fatigue: Small changes add up but can feel like 'doing more with less.' Monthly: Recognize staff who suggested improvements. Quarterly: Pulse survey (3 questions: Workload reasonable? Have what you need? Concerns?). Annually: Stay interviews with top performers. Goal: Maintain efficiency gains without losing good people to burnout or feeling undervalued."
                     ]
                 },
                 "expected_impact": {
