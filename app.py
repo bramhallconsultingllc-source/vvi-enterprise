@@ -2,8 +2,8 @@
 Visit Value Index (VVI) Application - Enterprise Edition
 Bramhall Consulting, LLC
 
-VERSION: 2.3 - Cache Fix + Complete 16 Scenarios
-Last Updated: February 13, 2026
+VERSION: 2.4 - Executive Narratives Added
+Last Updated: February 16, 2026
 
 Upgraded architecture:
 - API-first design with local fallback
@@ -12,7 +12,7 @@ Upgraded architecture:
 - Performance optimizations
 - Production-ready deployment
 - COMPLETE 16-scenario library built-in (S01-S16)
-- Fixed: Cache refresh to ensure latest scenarios load
+- Executive narratives for each scenario (replaces generic risk levels)
 """
 
 from __future__ import annotations
@@ -208,6 +208,7 @@ class VVIAPIClient:
             "S01": {
                 "name": "Excellent Revenue / Excellent Labor",
                 "risk_level": "Low",
+                "executive_narrative": "Outstanding performance across both revenue and labor dimensions. This clinic is operating at or above benchmark on all key metrics, demonstrating strong clinical productivity, efficient workflows, and disciplined cost management. The primary focus is sustaining this excellence and preventing gradual drift.",
                 "focus_areas": ["Sustain excellence", "Prevent drift", "Scale best practices"],
                 "actions": {
                     "do_tomorrow": [
@@ -240,6 +241,7 @@ class VVIAPIClient:
             "S02": {
                 "name": "Excellent Revenue / Stable Labor",
                 "risk_level": "Low",
+                "executive_narrative": "Strong revenue performance with labor costs tracking slightly above optimal levels. Revenue capture and clinical productivity are excellent, but there are opportunities for modest labor efficiency gains. The focus is on gentle optimization without disrupting the revenue engine or compromising quality.",
                 "focus_areas": ["Gentle labor optimization", "Protect revenue", "Incremental efficiency"],
                 "actions": {
                     "do_tomorrow": [
@@ -272,6 +274,7 @@ class VVIAPIClient:
             "S03": {
                 "name": "Excellent Revenue / At Risk Labor",
                 "risk_level": "Medium",
+                "executive_narrative": "Excellent revenue performance is being undermined by emerging labor cost issues. While clinical productivity and revenue capture remain strong, labor efficiency is trending in the wrong direction—indicating workflow inefficiencies, overstaffing, or excessive premium labor usage. Corrective action is needed now to prevent further deterioration.",
                 "focus_areas": ["Correct labor drift", "Protect revenue base", "Throughput restoration"],
                 "actions": {
                     "do_tomorrow": [
@@ -306,6 +309,7 @@ class VVIAPIClient:
             "S04": {
                 "name": "Excellent Revenue / Critical Labor",
                 "risk_level": "High",
+                "executive_narrative": "This is the most margin-damaging combination: strong revenue performance overshadowed by severe labor inefficiency. Labor costs are substantially outpacing targets, eroding profitability and masking operational instability. Immediate intervention is required to prevent deeper workforce issues such as turnover, burnout, or schedule failures.",
                 "focus_areas": ["Emergency labor correction", "Protect revenue gains", "Prevent burnout cascade"],
                 "actions": {
                     "do_tomorrow": [
@@ -341,6 +345,7 @@ class VVIAPIClient:
             "S05": {
                 "name": "Stable Revenue / Excellent Labor",
                 "risk_level": "Low",
+                "executive_narrative": "Outstanding labor efficiency with revenue performance meeting but not exceeding benchmarks. This clinic has mastered operational discipline and workforce productivity, creating a strong foundation for revenue growth. The opportunity lies in better charge capture, coding optimization, or strategic service line expansion without compromising labor excellence.",
                 "focus_areas": ["Revenue opportunity capture", "Sustain labor discipline", "Grow margin"],
                 "actions": {
                     "do_tomorrow": [
@@ -375,6 +380,7 @@ class VVIAPIClient:
             "S06": {
                 "name": "Stable Revenue / Stable Labor",
                 "risk_level": "Low",
+                "executive_narrative": "Solid, sustainable performance across both dimensions with room for improvement in both areas. This clinic is neither in crisis nor optimized—it's in the comfortable middle. The risk is complacency and gradual drift. The opportunity is to pick one improvement lever and execute a focused initiative to move toward excellence.",
                 "focus_areas": ["Incremental gains", "Prevent complacency", "Build momentum"],
                 "actions": {
                     "do_tomorrow": [
@@ -409,6 +415,7 @@ class VVIAPIClient:
             "S07": {
                 "name": "Stable Revenue / At Risk Labor",
                 "risk_level": "Medium",
+                "executive_narrative": "Revenue performance is holding steady, but labor costs are trending upward and approaching unsustainable levels. Workflow inefficiencies, overstaffing patterns, or excessive overtime are eroding margins. The clinic needs focused labor cost correction while protecting the revenue base and avoiding disruptions that could harm access or quality.",
                 "focus_areas": ["Labor cost correction", "Protect revenue stability", "Improve throughput"],
                 "actions": {
                     "do_tomorrow": [
@@ -443,6 +450,7 @@ class VVIAPIClient:
             "S08": {
                 "name": "Stable Revenue / Critical Labor",
                 "risk_level": "High",
+                "executive_narrative": "Revenue is stable, but labor costs have reached crisis levels—substantially exceeding benchmarks and threatening financial viability. This is often caused by chronic overstaffing, inefficient workflows, or sustained reliance on premium labor. Immediate emergency intervention is required to bring labor costs under control without allowing revenue to decline.",
                 "focus_areas": ["Emergency labor intervention", "Revenue protection", "Operational reset"],
                 "actions": {
                     "do_tomorrow": [
@@ -478,6 +486,7 @@ class VVIAPIClient:
             "S09": {
                 "name": "At Risk Revenue / Excellent Labor",
                 "risk_level": "Medium",
+                "executive_narrative": "Outstanding labor efficiency is being undermined by revenue underperformance. This clinic is operationally lean and productive, but revenue per visit is falling short—indicating coding issues, charge capture gaps, unfavorable payer mix, or documentation problems. The focus must be on revenue recovery while maintaining hard-won labor discipline.",
                 "focus_areas": ["Revenue recovery", "Maintain labor discipline", "Charge capture"],
                 "actions": {
                     "do_tomorrow": [
@@ -514,6 +523,7 @@ class VVIAPIClient:
             "S10": {
                 "name": "At Risk Revenue / Stable Labor",
                 "risk_level": "Medium",
+                "executive_narrative": "Revenue performance is declining while labor costs remain stable but could drift if not monitored. This clinic needs a dual focus: aggressive revenue improvement through better coding, charge capture, and billing while maintaining labor cost discipline. The risk is that fixing revenue problems could inadvertently cause labor costs to rise.",
                 "focus_areas": ["Revenue prioritization", "Labor efficiency maintenance", "Balanced recovery"],
                 "actions": {
                     "do_tomorrow": [
@@ -548,6 +558,7 @@ class VVIAPIClient:
             "S11": {
                 "name": "At Risk Revenue / At Risk Labor",
                 "risk_level": "High",
+                "executive_narrative": "Dual performance concerns with both revenue and labor trending in the wrong direction. This clinic is experiencing simultaneous revenue leakage and labor inefficiency, creating a compounding margin problem. Leadership must triage priorities, execute parallel improvement plans, and prevent further deterioration on either dimension. Without intervention, this scenario rapidly degrades into crisis.",
                 "focus_areas": ["Dual stabilization", "Prevent further decline", "Triage priorities"],
                 "actions": {
                     "do_tomorrow": [
@@ -582,6 +593,7 @@ class VVIAPIClient:
             "S12": {
                 "name": "At Risk Revenue / Critical Labor",
                 "risk_level": "Critical",
+                "executive_narrative": "A dangerous combination of declining revenue and critical labor cost overruns that threatens financial viability. Labor costs are substantially exceeding benchmarks while revenue underperforms, creating severe margin pressure. This requires immediate crisis intervention on labor while simultaneously stabilizing revenue to prevent complete operational failure.",
                 "focus_areas": ["Labor crisis mode", "Revenue triage", "Operational stabilization"],
                 "actions": {
                     "do_tomorrow": [
@@ -617,6 +629,7 @@ class VVIAPIClient:
             "S13": {
                 "name": "Critical Revenue / Excellent Labor",
                 "risk_level": "High",
+                "executive_narrative": "Despite excellent labor efficiency, revenue performance has fallen to crisis levels—substantially below benchmark and threatening the clinic's financial sustainability. This indicates severe problems with coding, charge capture, payer contracts, or case mix. Emergency revenue intervention is required while protecting the operational excellence that has been achieved on the labor side.",
                 "focus_areas": ["Revenue emergency", "Protect labor excellence", "Financial viability"],
                 "actions": {
                     "do_tomorrow": [
@@ -654,6 +667,7 @@ class VVIAPIClient:
             "S14": {
                 "name": "Critical Revenue / Stable Labor",
                 "risk_level": "High",
+                "executive_narrative": "Critical revenue underperformance despite stable labor costs creates severe margin pressure and questions about long-term viability. Revenue per visit is substantially below benchmark, indicating systemic problems with clinical documentation, coding, charge capture, or payer relationships. This requires emergency revenue cycle transformation while preventing labor costs from drifting during the crisis.",
                 "focus_areas": ["Revenue emergency response", "Labor stability", "Financial rescue"],
                 "actions": {
                     "do_tomorrow": [
@@ -690,6 +704,7 @@ class VVIAPIClient:
             "S15": {
                 "name": "Critical Revenue / At Risk Labor",
                 "risk_level": "Critical",
+                "executive_narrative": "A severe dual crisis with critical revenue underperformance and deteriorating labor efficiency. Revenue is substantially below benchmark while labor costs are rising, creating a dangerous margin squeeze from both directions. This clinic is in survival mode and requires immediate executive intervention with parallel emergency actions on revenue and labor to restore viability.",
                 "focus_areas": ["Dual emergency", "Triage and stabilize", "Survival mode"],
                 "actions": {
                     "do_tomorrow": [
@@ -727,6 +742,7 @@ class VVIAPIClient:
             "S16": {
                 "name": "Critical Revenue / Critical Labor",
                 "risk_level": "Critical",
+                "executive_narrative": "The most severe scenario: catastrophic underperformance on both revenue and labor dimensions. Revenue is substantially below benchmark while labor costs are grossly exceeding targets, creating unsustainable losses. This clinic faces an existential crisis requiring immediate assessment of viability, executive-level intervention, and comprehensive operational transformation. Without dramatic improvement, closure or consolidation may be necessary.",
                 "focus_areas": ["Survival", "Complete operational reset", "Viability assessment"],
                 "actions": {
                     "do_tomorrow": [
@@ -775,6 +791,7 @@ class VVIAPIClient:
         scenario_name = scenario_data["name"]
         risk_level = scenario_data["risk_level"]
         focus_areas = scenario_data["focus_areas"]
+        executive_narrative = scenario_data.get("executive_narrative", "")
         expected_impact = scenario_data["expected_impact"]
         
         return {
@@ -800,7 +817,8 @@ class VVIAPIClient:
                 "id": scenario_id,
                 "name": scenario_name,
                 "risk_level": risk_level,
-                "focus_areas": focus_areas
+                "focus_areas": focus_areas,
+                "executive_narrative": executive_narrative
             },
             "actions": actions,
             "expected_impact": expected_impact,
@@ -1292,13 +1310,14 @@ if st.session_state.get("assessment_ready", False):
             <p style="font-size:16px; font-weight:600; color:#b08c3e; margin-top:0.5rem;">
                 {scenario['id']}: {scenario['name']}
             </p>
-            <p style="font-size:14px; color:#666; margin-top:0.5rem;">
-                Risk Level: <span style="font-weight:600;">{scenario['risk_level']}</span>
-            </p>
         </div>
         """,
         unsafe_allow_html=True,
     )
+    
+    # Executive Narrative
+    if scenario.get('executive_narrative'):
+        st.info(f"**Executive Summary:** {scenario['executive_narrative']}")
     
     # ========================================
     # Prescriptive Actions
@@ -1437,7 +1456,7 @@ st.markdown("---")
 st.markdown(
     """
     <div style="text-align:center; color:#777; font-size:0.85rem; padding:2rem 0 1rem 0;">
-        <p><b>Visit Value Index™ (VVI)</b> | Version 2.3 ✨</p>
+        <p><b>Visit Value Index™ (VVI)</b> | Version 2.4</p>
         <p>Bramhall Consulting, LLC | © 2024</p>
         <p style="margin-top:0.5rem;">
             <a href="https://bramhallconsulting.org" target="_blank" style="color:#b08c3e; text-decoration:none;">
