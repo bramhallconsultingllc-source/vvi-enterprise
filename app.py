@@ -2,7 +2,7 @@
 Visit Value Index (VVI) Application - Enterprise Edition
 Bramhall Consulting, LLC
 
-VERSION: 2.6 - McKinsey Design (Rendering Fix)
+VERSION: 2.7 - Enhanced Prescriptive Actions
 Last Updated: February 16, 2026
 
 Upgraded architecture:
@@ -13,7 +13,8 @@ Upgraded architecture:
 - Production-ready deployment
 - COMPLETE 16-scenario library built-in (S01-S16)
 - Executive narratives for each scenario
-- McKinsey-caliber visual design (sophisticated colors, depth, typography)
+- McKinsey-caliber visual design
+- HIGHLY SPECIFIC prescriptive actions with concrete examples, metrics, and timelines
 """
 
 from __future__ import annotations
@@ -213,24 +214,24 @@ class VVIAPIClient:
                 "focus_areas": ["Sustain excellence", "Prevent drift", "Scale best practices"],
                 "actions": {
                     "do_tomorrow": [
-                        "Brief huddle to recognize performance and reinforce 'what good looks like.'",
-                        "Verify yesterday's charts are closed and POS collections reconciled.",
-                        "Ask staff where today's biggest risk to flow might be and mitigate early."
+                        "Hold a 10-minute team huddle to recognize the excellent performance. Be specific: 'Our VVI score of [X] puts us in the top 10% nationally. This is the result of your work—tight workflows, strong coding, and disciplined staffing. Thank you.' Recognition prevents complacency and reinforces behaviors you want to keep.",
+                        "Verify yesterday's performance basics held: All charts closed same-day? (Target: 95%+). Point-of-service collections reconciled? (Target: 90%+ of copays collected). Any schedule gaps or no-shows that hurt productivity? Track these daily—excellence requires daily discipline.",
+                        "Ask your team: 'Where's our biggest risk to maintaining this performance today?' Common answers: key person out sick, new staff learning curve, unexpected volume surge, EMR downtime. Identify the risk and mitigate it before it becomes a problem. This daily risk check prevents surprises."
                     ],
                     "next_7_days": [
-                        "Run a simple time-study on a busy session to confirm throughput remains tight.",
-                        "Spot-check coding and POS for any early signs of revenue leakage.",
-                        "Check schedule templates against actual demand to confirm continued fit."
+                        "Run a 90-minute time study on one busy session to confirm workflows remain tight. Use a stopwatch and simple spreadsheet. Track: patient arrival to rooming (target: <12 min), MA tasks per patient (target: 12-15 min), provider time (comparing to wRVU), checkout (target: <3 min). You should see minimal waste. If times are creeping up 10-15%, that's early drift—fix it now before it compounds.",
+                        "Spot-check coding and charge capture for early revenue leakage signs. Pull 10 random charts from last week. Are E&M levels appropriate for complexity? (Compare to your top coder). Are all procedures captured and billed? Any denied claims that should have been caught? Missing charges are how revenue drift starts—catch it early with weekly audits.",
+                        "Review schedule templates against actual demand patterns. Pull last 4 weeks of data: appointments scheduled vs. slots available by day/hour. Are you still matched to demand? Most clinics see seasonal shifts (back-to-school surge, winter illness, summer lull) that require template tweaks. Goal: maintain 85-90% template utilization without overloading providers or staff."
                     ],
                     "next_30_60_days": [
-                        "Document this clinic's playbook (staffing, workflows, huddle routines).",
-                        "Use this site as a peer-teaching location for under-performing clinics.",
-                        "Refresh stay interviews or engagement touchpoints with key staff."
+                        "Document your clinic's operational playbook in a simple 5-10 page guide. Include: staffing model (FTEs by role), daily huddle checklist, workflow standards (rooming process, checkout process), quality metrics, and key troubleshooting tips. Why? When you hire new staff or a manager, this is your training manual. It codifies excellence so it doesn't walk out the door when people leave.",
+                        "Use your clinic as a teaching site for under-performing clinics in your system. Host 2-3 peer observers for a half-day visit. Walk them through your workflows, share your playbook, show them your huddle. Benefits: (1) Your team gets recognized as experts (great for morale), (2) Teaching forces you to articulate what makes you excellent, (3) You build relationships with peer clinics.",
+                        "Conduct stay interviews or pulse surveys with key staff. Don't wait for exit interviews. Ask: What do you love about working here? What would you change? What would make you consider leaving? Any early burnout signs? Excellence is fragile—losing a great MA or front desk lead can crater performance. Know your people's satisfaction level and address concerns proactively."
                     ],
                     "next_60_90_days": [
-                        "Review succession plans for front-line leaders and key roles.",
-                        "Stress-test capacity for modest volume growth without harming VVI.",
-                        "Refine KPIs and dashboards to keep leading indicators visible."
+                        "Review succession plans for front-line leaders and key roles. Who's your backup if your clinic manager leaves? If your lead MA retires? If your best coder quits? Identify 1-2 people for each critical role and create development plans. Send them to training, give them stretch projects, cross-train them. Succession planning isn't just for executives—it's critical for operational roles.",
+                        "Stress-test your capacity for modest volume growth (5-10%) without harming VVI. If patient demand increases, can you handle it efficiently? Model it: What if you add 50 visits/month—do you need more staff? Can you flex schedules? What's your breaking point? Know your capacity ceiling so you can grow strategically without destroying the efficiency you've built.",
+                        "Refine your KPI dashboards to keep leading indicators visible. Move beyond VVI to track: same-day chart closure %, POS collection %, schedule template utilization %, staff overtime hours, patient satisfaction, provider wRVU. Display these weekly in a simple one-page dashboard. Review in monthly leadership meetings. Leading indicators catch problems before they hurt VVI."
                     ]
                 },
                 "expected_impact": {
@@ -314,27 +315,27 @@ class VVIAPIClient:
                 "focus_areas": ["Emergency labor correction", "Protect revenue gains", "Prevent burnout cascade"],
                 "actions": {
                     "do_tomorrow": [
-                        "Emergency labor review meeting with operations and HR.",
-                        "Immediate staffing audit: are we carrying ghost positions or excessive overtime?",
-                        "Freeze all discretionary hiring and overtime until analysis complete."
+                        "Call an emergency labor review meeting (operations lead, clinic manager, HR) for 1 hour. Bring last 4 weeks of payroll data, overtime reports, and staffing templates. Goal: understand where labor costs are bleeding—is it overtime (>10% of total hours?), premium labor (agency/PRN >5%?), or overstaffing?",
+                        "Conduct immediate staffing audit: Print your staffing template vs. actual staff scheduled for today. Are you carrying 'ghost positions' (budgeted but unfilled roles you're still paying for)? Are you scheduling more FTEs than your volume justifies? Count: do you have more than 1 FTE per 200 visits/month?",
+                        "Freeze all discretionary hiring and overtime approvals until analysis complete (24-48 hours). Require VP/Director approval for any overtime. This creates immediate pressure relief and prevents the bleeding from getting worse while you diagnose."
                     ],
                     "next_7_days": [
-                        "Conduct full workflow analysis to identify waste and duplication.",
-                        "Review all staffing templates and adjust to match actual demand.",
-                        "Identify tasks that can be eliminated, automated, or reassigned.",
-                        "Daily check-ins on labor metrics and overtime."
+                        "Conduct a 2-hour workflow time study on your busiest session (typically Tue/Wed 8am-12pm). Assign someone with a stopwatch to shadow: track check-in time (target: <5 min), rooming time (target: <8 min), MA tasks per patient (target: 4-6 tasks, 12-15 min total), provider time per patient, checkout time (target: <3 min). Identify wasted motion—most clinics find 15-25 minutes of duplicated work per patient encounter.",
+                        "Map every role's daily tasks on a whiteboard: Front desk (check-in, phones, checkout, scanning), MAs (rooming, vitals, orders, messages), and nurses (triage, refills, care coordination). Look for duplication (are 2 people doing the same task?), waste (tasks that don't add value), and imbalance (is one role overwhelmed while another has downtime?). Goal: find 3-5 tasks to eliminate or reassign.",
+                        "Review all staffing templates against actual patient volume by day and hour. Create a simple Excel: Mon-Fri by hour, show scheduled FTEs vs. actual patient arrivals. Most clinics find they're overstaffed Mon/Fri AM (quiet) and understaffed Tue/Wed PM (slammed). Identify opportunities to flex staff to match demand—even 0.5 FTE shift saves $35K-$50K annually.",
+                        "Run an overtime and premium labor analysis: Last 4 weeks, who worked overtime? How much? Why? (Unexpected volume? Staff callouts? Poor scheduling?) What did you spend on agency/PRN/float staff? Premium labor over 5% of total hours is a red flag. Create a weekly overtime tracking dashboard (simple spreadsheet) with manager accountability."
                     ],
                     "next_30_60_days": [
-                        "Redesign workflows to reduce labor intensity while maintaining quality.",
-                        "Implement strict overtime controls with daily approval.",
-                        "Cross-train staff to create flexibility and reduce reliance on premium labor.",
-                        "Consider temporary productivity consultants if internal capacity lacking."
+                        "Redesign workflows to eliminate labor waste. Start with your top 3 time-wasters from the time study. Common wins: (1) Batch phone refills instead of one-by-one (saves 2-3 MA hours/day), (2) Use MyChart for appointment reminders instead of phone calls (saves 1-2 front desk hours/day), (3) Pre-visit planning to front-load work and reduce day-of chaos (saves 15-20 min per complex visit), (4) Eliminate duplicate data entry between systems.",
+                        "Implement strict overtime controls with daily manager approval and weekly VP review. Create an overtime approval form (1-pager: who, why, how many hours, alternatives considered). Set a hard target: reduce overtime from current level to <5% of total hours within 60 days. Track weekly and celebrate wins. Most clinics save $40K-$80K annually by cutting unnecessary overtime in half.",
+                        "Cross-train 2-3 staff members to create flexibility and reduce reliance on premium labor (agency, PRN, float pool). Identify your most critical coverage gaps (usually front desk and MA roles) and train backups. Even 4-8 hours of cross-training per person creates massive flexibility. Goal: never pay $75/hour for agency staff when you have $28/hour regular staff sitting idle.",
+                        "Bring in temporary productivity consultants if internal capacity is lacking. Consider: Huron, ECG, Kaufman Hall, or local operational consultants. A 2-week rapid diagnostic ($15K-$25K) often pays for itself 5x by finding hidden waste. They'll do time studies, benchmark analysis, and create a detailed action plan with ROI projections."
                     ],
                     "next_60_90_days": [
-                        "Target 10-15% labor cost reduction to restore sustainability.",
-                        "Formalize new staffing standards and daily huddle discipline.",
-                        "Monitor staff engagement closely to prevent attrition.",
-                        "Develop formal retention plan for key clinical and support staff."
+                        "Set aggressive but achievable labor cost reduction target: 10-15% LCV improvement within 90 days. For a $130/visit LCV, this means getting to $110-$117. That's ~1.5-2.0 FTEs on a 10-provider clinic ($105K-$140K annual savings). Break it into weekly milestones and track on a visible dashboard. Celebrate every 2-3% improvement.",
+                        "Formalize new staffing standards based on your redesigned workflows. Create clear staffing ratios: Target 1 FTE per 180-220 visits/month depending on complexity. Document it in a simple 1-page 'Staffing Model' that shows FTEs by role and expected volume. Get leadership sign-off. Use it to guide all future hiring and scheduling decisions.",
+                        "Monitor staff engagement and morale closely during the transformation. Labor optimization can feel threatening. Do monthly pulse surveys (3 questions: How's workload? Do you have what you need? Any concerns?). Hold skip-level conversations (VP talks directly to front-line staff). Address burnout signals immediately—losing a good MA costs $25K-$40K in recruitment and training.",
+                        "Develop formal retention plan for key clinical and support staff. Identify your 'must-keep' employees (top performers, hard-to-replace roles). What would make them leave? What would make them stay? Common retention levers: flexibility (schedules), development (training budget), recognition (peer awards), and compensation (spot bonuses for high performers during tough times)."
                     ]
                 },
                 "expected_impact": {
@@ -747,30 +748,27 @@ class VVIAPIClient:
                 "focus_areas": ["Survival", "Complete operational reset", "Viability assessment"],
                 "actions": {
                     "do_tomorrow": [
-                        "Emergency executive session: assess whether clinic is salvageable.",
-                        "If continuing: declare full crisis mode with daily war room.",
-                        "Immediate actions on both revenue and labor fronts."
+                        "Convene emergency executive session (CEO/COO, CFO, CMO, VP Operations) for 2 hours. Bring 6 months of financials, last month's detailed P&L, staffing data, and volume trends. Make the go/no-go decision: Is this clinic salvageable? If margin is <-15% and declining, closure may be more responsible than prolonged losses. If you commit to recovery, you need full executive sponsorship and resources.",
+                        "If continuing operations: Declare crisis mode with daily war room meetings (7:30am, 30 minutes, standing room only). Attendees: clinic manager, operations lead, revenue cycle director, HR. Agenda: Yesterday's numbers (visits, revenue, labor hours, issues), today's priorities, roadblocks needing executive clearance. This is not a 90-day plan—this is daily triage until you stop the bleeding.",
+                        "Implement immediate emergency actions on both fronts: REVENUE: Pull yesterday's charges—are they all submitted? Any missing? Audit top 5 providers' coding from last week—are E&M levels too low? LABOR: Print today's schedule vs. staff scheduled—are you overstaffed for actual volume? Send people home if census is light (pay them, but stop the work). What's your overtime situation? Stop it today except for true emergencies requiring VP approval."
                     ],
                     "next_7_days": [
-                        "Daily executive crisis meetings with board/system visibility.",
-                        "Emergency revenue actions: coding blitz, charge capture, collections acceleration.",
-                        "Emergency labor actions: staffing cuts, overtime freeze, workflow triage.",
-                        "Transparent communication plan for staff, providers, patients.",
-                        "Assess whether temporary external support (consultants, interim leaders) needed."
+                        "Hold daily crisis management meetings with brutal honesty and clear accountability. Track 5 metrics daily: (1) Visits completed vs. scheduled, (2) Gross charges submitted, (3) Labor hours worked vs. budgeted, (4) Overtime hours, (5) Cash collected. Post them on a whiteboard visible to everyone. Celebrate any day that's better than the day before. You need daily wins to build momentum.",
+                        "Execute emergency revenue capture actions: (1) Coding blitz: Revenue cycle team audits every chart from this week in real-time, coaches providers immediately on documentation gaps. Target: 15-25% coding improvement is common when you go from sloppy to tight. (2) Charge capture sprint: Run daily charge lag report—anything not billed same-day gets escalated. (3) Collections acceleration: Call patients with balances >$500, offer payment plans, send to collections faster.",
+                        "Execute emergency labor cost reduction: (1) Staffing cuts: Do you have any unfilled positions you're holding open? Eliminate them today. Any positions filled by people doing almost nothing? Performance-manage or reassign within 48 hours. (2) Overtime freeze: Absolute ban on overtime except life-safety issues with written COO approval. Track daily. (3) Premium labor ban: No agency, no PRN, no float pool. Cancel all contracts. Use your own staff or close slots.",
+                        "Communicate transparently with all staff and providers about the crisis and expectations. Don't sugarcoat it: 'Our clinic is in serious financial trouble. We're losing $[X] per month. If we don't turn this around in 60-90 days, closure is possible. Here's what we're doing and here's what we need from you.' People can handle hard truth better than uncertainty. Give them a chance to rise to the challenge or self-select out."
                     ],
                     "next_30_60_days": [
-                        "Execute comprehensive transformation of both revenue and labor.",
-                        "Revenue: Complete billing cycle redesign, provider retraining, contract renegotiation.",
-                        "Labor: Staffing model rebuild, workflow elimination/redesign, productivity standards.",
-                        "Consider service consolidation, hours reduction, or other structural changes.",
-                        "Weekly progress reviews with clear go/no-go decision points."
+                        "Execute comprehensive transformation of both revenue cycle and labor model simultaneously. REVENUE: (1) Complete provider documentation and coding retraining—dedicate 2-4 hours per provider with EHR training specialist and certified coder. Show them their current vs. optimal levels with real charts. (2) Rebuild charge capture workflow—implement real-time charge reconciliation with daily huddles. (3) Contract renegotiation: Pull your top 10 payers by revenue—are any contracts >3 years old? Renegotiate. Even 2-3% rate increases matter in crisis.",
+                        "LABOR: (1) Redesign staffing model from scratch using industry benchmarks: Target 1 FTE per 180-200 visits/month adjusted for complexity. Calculate your gap—if you're at 1 FTE per 120 visits, you're 33-50% overstaffed. (2) Rebuild workflows with zero-based approach: Every task must justify itself. Eliminate anything that doesn't directly improve patient care, revenue capture, or compliance. Common cuts: redundant documentation, unnecessary meetings, low-value administrative tasks.",
+                        "Consider major structural changes if fundamentals don't improve: (1) Service consolidation: Can you merge with another clinic to share overhead? (2) Hours reduction: Cut to 4 days/week to match sustainable staffing levels? (3) Specialty focus: Drop low-margin services, double down on profitable ones? (4) Facility changes: Relocate to lower-cost space? (5) Technology reset: Is your EMR creating more work than it eliminates? Switch or simplify configuration.",
+                        "Establish weekly executive steering committee with clear go/no-go decision milestones. Week 4: Have we stopped the bleeding (losses stabilized)? Week 8: Are we seeing improvement (losses decreasing)? Week 12: Are we on path to breakeven within 6 months? If answer is 'no' at any checkpoint, you need to make the hard decision about closure before losses compound."
                     ],
                     "next_60_90_days": [
-                        "Achieve minimum 25-40% VVI improvement or make closure decision.",
-                        "Rebuild sustainable operating foundation if recovery succeeds.",
-                        "Address deep cultural and operational issues that led to crisis.",
-                        "Develop rigorous ongoing monitoring to prevent recurrence.",
-                        "If closure decided: manage compassionate wind-down for staff and patients."
+                        "Target minimum 25-40% VVI improvement or make closure decision. Break this into components: Need 15-25% revenue improvement (better coding, charge capture, collections) + 15-25% labor reduction (staffing cuts, workflow redesign, overtime elimination). That's getting from a -20% margin to breakeven. Track weekly progress on visible dashboard. If you're not at +5% by week 4, +12% by week 8, and +20% by week 12, the math doesn't work.",
+                        "If recovery is succeeding, rebuild sustainable operating foundation: Document new staffing model, new workflow standards, new quality metrics. Train all staff on new expectations. Implement rigorous ongoing monitoring (weekly KPI review, monthly deep dives, quarterly strategic planning). Celebrate wins but stay paranoid—you're one bad quarter away from crisis again.",
+                        "Address deep cultural and operational issues that led to this crisis. Common root causes: Leadership churn, lack of accountability, poor financial transparency, 'we've always done it this way' mentality, physician resistance to operational discipline. You need cultural transformation not just operational fixes. Consider bringing in outside expertise (interim manager, operational consultant, or management services organization) to drive change.",
+                        "If closure is decided, manage a compassionate and responsible wind-down: (1) Patient transition plan: 90 days notice, help patients find new providers, transfer records seamlessly. (2) Staff transition: Severance packages, outplacement services, recommendation letters, job fairs. (3) Financial closure: Settle with payers, collect AR, close contracts honorably. (4) Community communication: Transparent about reasons, minimize damage to health system reputation. Sometimes the right answer is closing gracefully rather than prolonged suffering."
                     ]
                 },
                 "expected_impact": {
@@ -1448,7 +1446,7 @@ st.markdown("---")
 st.markdown(
     """
     <div style="text-align:center; color:#777; font-size:0.85rem; padding:2rem 0 1rem 0;">
-        <p><b>Visit Value Index™ (VVI)</b> | Version 2.6</p>
+        <p><b>Visit Value Index™ (VVI)</b> | Version 2.7 — Enhanced Actions</p>
         <p>Bramhall Consulting, LLC | © 2024</p>
         <p style="margin-top:0.5rem;">
             <a href="https://bramhallconsulting.org" target="_blank" style="color:#b08c3e; text-decoration:none;">
