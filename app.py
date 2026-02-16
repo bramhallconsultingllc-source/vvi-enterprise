@@ -2,7 +2,7 @@
 Visit Value Index (VVI) Application - Enterprise Edition
 Bramhall Consulting, LLC
 
-VERSION: 2.5 - McKinsey Design Upgrade
+VERSION: 2.6 - McKinsey Design (Rendering Fix)
 Last Updated: February 16, 2026
 
 Upgraded architecture:
@@ -13,7 +13,7 @@ Upgraded architecture:
 - Production-ready deployment
 - COMPLETE 16-scenario library built-in (S01-S16)
 - Executive narratives for each scenario
-- McKinsey-caliber visual design (sophisticated gradients, depth, typography)
+- McKinsey-caliber visual design (sophisticated colors, depth, typography)
 """
 
 from __future__ import annotations
@@ -1185,26 +1185,10 @@ if st.session_state.get("assessment_ready", False):
     
     # Sophisticated tier colors with gradients
     tier_design = {
-        "Excellent": {
-            "bg": "linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)",
-            "border": "#66bb6a",
-            "accent": "#2e7d32"
-        },
-        "Stable": {
-            "bg": "linear-gradient(135deg, #fff9c4 0%, #fff59d 100%)",
-            "border": "#fdd835",
-            "accent": "#f9a825"
-        },
-        "At Risk": {
-            "bg": "linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%)",
-            "border": "#ff9800",
-            "accent": "#ef6c00"
-        },
-        "Critical": {
-            "bg": "linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%)",
-            "border": "#e57373",
-            "accent": "#c62828"
-        }
+        "Excellent": {"bg": "#e8f5e9", "border": "#66bb6a", "accent": "#2e7d32"},
+        "Stable": {"bg": "#fff9c4", "border": "#fdd835", "accent": "#f9a825"},
+        "At Risk": {"bg": "#ffe0b2", "border": "#ff9800", "accent": "#ef6c00"},
+        "Critical": {"bg": "#ffebee", "border": "#e57373", "accent": "#c62828"}
     }
     
     design = tier_design.get(tiers["vvi"], tier_design["Stable"])
@@ -1212,81 +1196,19 @@ if st.session_state.get("assessment_ready", False):
     with hero_col:
         st.markdown(
             f"""
-            <div style="
-                background: {design['bg']};
-                padding: 2rem 2rem;
-                border-radius: 16px;
-                border-left: 6px solid {design['border']};
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 
-                            0 2px 8px rgba(0, 0, 0, 0.04);
-                text-align: center;
-                position: relative;
-                overflow: hidden;
-            ">
-                <div style="
-                    position: absolute;
-                    top: -50px;
-                    right: -50px;
-                    width: 150px;
-                    height: 150px;
-                    background: rgba(255, 255, 255, 0.1);
-                    border-radius: 50%;
-                "></div>
-                
-                <div style="
-                    font-size: 0.65rem;
-                    font-weight: 700;
-                    letter-spacing: 0.15em;
-                    text-transform: uppercase;
-                    color: #616161;
-                    margin-bottom: 0.75rem;
-                    opacity: 0.8;
-                ">
+            <div style="background:{design['bg']};padding:2rem;border-radius:16px;border-left:6px solid {design['border']};box-shadow:0 8px 32px rgba(0,0,0,0.08),0 2px 8px rgba(0,0,0,0.04);text-align:center;">
+                <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#616161;margin-bottom:0.75rem;opacity:0.8;">
                     Visit Value Index (VVI)
                 </div>
-                
-                <div style="
-                    font-size: 3.5rem;
-                    font-weight: 800;
-                    color: {design['accent']};
-                    line-height: 1;
-                    margin: 0.5rem 0;
-                    letter-spacing: -0.02em;
-                ">
+                <div style="font-size:3.5rem;font-weight:800;color:{design['accent']};line-height:1;margin:0.5rem 0;letter-spacing:-0.02em;">
                     {scores['vvi']:.1f}
                 </div>
-                
-                <div style="
-                    font-size: 0.95rem;
-                    color: #424242;
-                    margin: 1rem 0 1.25rem 0;
-                    font-weight: 500;
-                    opacity: 0.9;
-                ">
+                <div style="font-size:0.95rem;color:#424242;margin:1rem 0 1.25rem 0;font-weight:500;opacity:0.9;">
                     Overall performance vs. benchmark
                 </div>
-                
-                <div style="
-                    display: inline-block;
-                    padding: 0.5rem 1.5rem;
-                    background: rgba(255, 255, 255, 0.9);
-                    border-radius: 24px;
-                    border: 2px solid {design['border']};
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-                ">
-                    <span style="
-                        font-size: 0.75rem;
-                        font-weight: 700;
-                        color: #616161;
-                        letter-spacing: 0.05em;
-                        text-transform: uppercase;
-                    ">Tier:</span>
-                    <span style="
-                        font-size: 0.95rem;
-                        font-weight: 800;
-                        color: {design['accent']};
-                        margin-left: 0.5rem;
-                    ">{tiers['vvi']}</span>
+                <div style="display:inline-block;padding:0.5rem 1.5rem;background:rgba(255,255,255,0.9);border-radius:24px;border:2px solid {design['border']};box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+                    <span style="font-size:0.75rem;font-weight:700;color:#616161;letter-spacing:0.05em;text-transform:uppercase;">Tier:</span>
+                    <span style="font-size:0.95rem;font-weight:800;color:{design['accent']};margin-left:0.5rem;">{tiers['vvi']}</span>
                 </div>
             </div>
             """,
@@ -1320,72 +1242,21 @@ if st.session_state.get("assessment_ready", False):
     with c_rf:
         st.markdown(
             f"""
-            <div style="
-                background: {rf_design['bg']};
-                padding: 1.5rem;
-                border-radius: 14px;
-                border-left: 5px solid {rf_design['border']};
-                box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06),
-                            0 2px 6px rgba(0, 0, 0, 0.03);
-                position: relative;
-                overflow: hidden;
-            ">
-                <div style="
-                    position: absolute;
-                    top: -30px;
-                    right: -30px;
-                    width: 100px;
-                    height: 100px;
-                    background: rgba(255, 255, 255, 0.15);
-                    border-radius: 50%;
-                "></div>
-                
-                <div style="
-                    font-size: 0.65rem;
-                    font-weight: 700;
-                    letter-spacing: 0.12em;
-                    text-transform: uppercase;
-                    color: #757575;
-                    margin-bottom: 0.75rem;
-                    opacity: 0.85;
-                ">
+            <div style="background:{rf_design['bg']};padding:1.5rem;border-radius:14px;border-left:5px solid {rf_design['border']};box-shadow:0 6px 24px rgba(0,0,0,0.06),0 2px 6px rgba(0,0,0,0.03);">
+                <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#757575;margin-bottom:0.75rem;opacity:0.85;">
                     Revenue Factor (RF)
                 </div>
-                
-                <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 0.75rem;">
-                    <div style="
-                        font-size: 2.25rem;
-                        font-weight: 800;
-                        color: {rf_design['accent']};
-                        line-height: 1;
-                        letter-spacing: -0.02em;
-                    ">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:0.75rem;">
+                    <div style="font-size:2.25rem;font-weight:800;color:{rf_design['accent']};line-height:1;letter-spacing:-0.02em;">
                         {scores['rf']:.1f}
                     </div>
-                    <div style="
-                        padding: 0.35rem 1rem;
-                        background: rgba(255, 255, 255, 0.85);
-                        border-radius: 20px;
-                        border: 2px solid {rf_design['border']};
-                        font-size: 0.75rem;
-                        font-weight: 700;
-                        color: {rf_design['accent']};
-                        letter-spacing: 0.03em;
-                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-                    ">
+                    <div style="padding:0.35rem 1rem;background:rgba(255,255,255,0.85);border-radius:20px;border:2px solid {rf_design['border']};font-size:0.75rem;font-weight:700;color:{rf_design['accent']};letter-spacing:0.03em;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
                         {tiers['rf']}
                     </div>
                 </div>
-                
-                <div style="
-                    font-size: 0.8rem;
-                    color: #616161;
-                    font-weight: 500;
-                    line-height: 1.4;
-                    opacity: 0.9;
-                ">
-                    Actual NRPV <span style="font-weight: 700; color: {rf_design['accent']};">${metrics['nrpv']:.2f}</span><br/>
-                    vs. benchmark <span style="font-weight: 600; opacity: 0.7;">${rt:.2f}</span>
+                <div style="font-size:0.8rem;color:#616161;font-weight:500;line-height:1.4;opacity:0.9;">
+                    Actual NRPV <span style="font-weight:700;color:{rf_design['accent']};">${metrics['nrpv']:.2f}</span><br/>
+                    vs. benchmark <span style="font-weight:600;opacity:0.7;">${rt:.2f}</span>
                 </div>
             </div>
             """,
@@ -1395,72 +1266,21 @@ if st.session_state.get("assessment_ready", False):
     with c_lf:
         st.markdown(
             f"""
-            <div style="
-                background: {lf_design['bg']};
-                padding: 1.5rem;
-                border-radius: 14px;
-                border-left: 5px solid {lf_design['border']};
-                box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06),
-                            0 2px 6px rgba(0, 0, 0, 0.03);
-                position: relative;
-                overflow: hidden;
-            ">
-                <div style="
-                    position: absolute;
-                    top: -30px;
-                    right: -30px;
-                    width: 100px;
-                    height: 100px;
-                    background: rgba(255, 255, 255, 0.15);
-                    border-radius: 50%;
-                "></div>
-                
-                <div style="
-                    font-size: 0.65rem;
-                    font-weight: 700;
-                    letter-spacing: 0.12em;
-                    text-transform: uppercase;
-                    color: #757575;
-                    margin-bottom: 0.75rem;
-                    opacity: 0.85;
-                ">
+            <div style="background:{lf_design['bg']};padding:1.5rem;border-radius:14px;border-left:5px solid {lf_design['border']};box-shadow:0 6px 24px rgba(0,0,0,0.06),0 2px 6px rgba(0,0,0,0.03);">
+                <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#757575;margin-bottom:0.75rem;opacity:0.85;">
                     Labor Factor (LF)
                 </div>
-                
-                <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 0.75rem;">
-                    <div style="
-                        font-size: 2.25rem;
-                        font-weight: 800;
-                        color: {lf_design['accent']};
-                        line-height: 1;
-                        letter-spacing: -0.02em;
-                    ">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:0.75rem;">
+                    <div style="font-size:2.25rem;font-weight:800;color:{lf_design['accent']};line-height:1;letter-spacing:-0.02em;">
                         {scores['lf']:.1f}
                     </div>
-                    <div style="
-                        padding: 0.35rem 1rem;
-                        background: rgba(255, 255, 255, 0.85);
-                        border-radius: 20px;
-                        border: 2px solid {lf_design['border']};
-                        font-size: 0.75rem;
-                        font-weight: 700;
-                        color: {lf_design['accent']};
-                        letter-spacing: 0.03em;
-                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-                    ">
+                    <div style="padding:0.35rem 1rem;background:rgba(255,255,255,0.85);border-radius:20px;border:2px solid {lf_design['border']};font-size:0.75rem;font-weight:700;color:{lf_design['accent']};letter-spacing:0.03em;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
                         {tiers['lf']}
                     </div>
                 </div>
-                
-                <div style="
-                    font-size: 0.8rem;
-                    color: #616161;
-                    font-weight: 500;
-                    line-height: 1.4;
-                    opacity: 0.9;
-                ">
-                    Benchmark LCV <span style="font-weight: 600; opacity: 0.7;">${lt:.2f}</span><br/>
-                    vs. actual <span style="font-weight: 700; color: {lf_design['accent']};">${metrics['lcv']:.2f}</span>
+                <div style="font-size:0.8rem;color:#616161;font-weight:500;line-height:1.4;opacity:0.9;">
+                    Benchmark LCV <span style="font-weight:600;opacity:0.7;">${lt:.2f}</span><br/>
+                    vs. actual <span style="font-weight:700;color:{lf_design['accent']};">${metrics['lcv']:.2f}</span>
                 </div>
             </div>
             """,
@@ -1628,7 +1448,7 @@ st.markdown("---")
 st.markdown(
     """
     <div style="text-align:center; color:#777; font-size:0.85rem; padding:2rem 0 1rem 0;">
-        <p><b>Visit Value Index™ (VVI)</b> | Version 2.5 — McKinsey Design</p>
+        <p><b>Visit Value Index™ (VVI)</b> | Version 2.6</p>
         <p>Bramhall Consulting, LLC | © 2024</p>
         <p style="margin-top:0.5rem;">
             <a href="https://bramhallconsulting.org" target="_blank" style="color:#b08c3e; text-decoration:none;">
