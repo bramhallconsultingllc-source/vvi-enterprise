@@ -2291,9 +2291,11 @@ if st.session_state.get("assessment_ready", False):
 
         nrpv = net_rev_v / visits_v if visits_v else 0
         lcv  = labor_v  / visits_v if visits_v else 0
-        rf   = (nrpv / (rt_v / visits_v)) * 100 if rt_v and visits_v else 0
-        lf   = ((lt_v / visits_v) / lcv) * 100   if lt_v and visits_v and lcv else 0
-        vvi  = (rf + lf) / 2
+        
+        # Use the scores already calculated and passed in scores_data
+        rf   = scores_data.get("rf", 0)
+        lf   = scores_data.get("lf", 0)
+        vvi  = scores_data.get("vvi", 0)
 
         rev_tier = scores_data.get("rev_tier",
                    result_data.get("revenue_tier", ""))
@@ -2366,9 +2368,9 @@ if st.session_state.get("assessment_ready", False):
             ("LCV",                  f"${lcv:,.2f}",               "Labor Cost per Visit"),
             ("SWB %",                f"{(labor_v/net_rev_v*100):.1f}%" if net_rev_v else "—",
                                                                    "Labor as % of Revenue"),
-            ("Revenue Factor (RF)",  f"{rf:.1f}%",                 "Actual NRPV ÷ Budgeted NRPV"),
-            ("Labor Factor (LF)",    f"{lf:.1f}%",                 "Budgeted LCV ÷ Actual LCV"),
-            ("VVI Score",            f"{vvi:.1f}%",                "Overall Visit Value Index"),
+            ("Revenue Factor (RF)",  f"{rf:.1f}",                  "Actual NRPV ÷ Budgeted NRPV"),
+            ("Labor Factor (LF)",    f"{lf:.1f}",                  "Budgeted LCV ÷ Actual LCV"),
+            ("VVI Score",            f"{vvi:.1f}",                 "Overall Visit Value Index"),
         ]
         for i,(label,val,defn) in enumerate(metrics):
             row=12+i; ws_fs.row_dimensions[row].height=22
