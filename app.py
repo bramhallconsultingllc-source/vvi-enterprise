@@ -63,8 +63,16 @@ def _get_openai_client():
         return None, "openai package not installed. Add `openai` to requirements.txt."
     
     try:
-        client = _OpenAI(api_key=key)
+        # Initialize with just the API key, no other parameters
+        client = _OpenAI(api_key=key, max_retries=2, timeout=30.0)
         return client, None
+    except TypeError as e:
+        # If initialization fails due to parameter issues, try minimal init
+        try:
+            client = _OpenAI(api_key=key)
+            return client, None
+        except Exception as e2:
+            return None, f"Failed to initialize OpenAI client: {str(e2)}"
     except Exception as e:
         return None, f"Failed to initialize OpenAI client: {str(e)}"
 
