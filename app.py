@@ -52,7 +52,7 @@ except Exception:
 def _get_openai_client():
     """Return OpenAI client using key from Streamlit secrets or env."""
     try:
-        key = st.secrets.get("OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY")
+        key = st.secrets["OPENAI_API_KEY"]
     except Exception:
         key = os.getenv("OPENAI_API_KEY")
     
