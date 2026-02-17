@@ -2412,7 +2412,7 @@ if st.session_state.get("assessment_ready", False):
                   f"predict. perform. prosper.  |  "
                   f"{datetime.now().strftime('%B %d, %Y')}")
         fc.font=F_(8,italic=True,color=MEDG); fc.alignment=AL("center")
-        fc.border=Border(top=Side(style="thin",color=GOLD))
+        fc.border=OBorder(top=OSide(style="thin",color=GOLD))
 
         ws_fs.page_setup.orientation="portrait"
         ws_fs.page_setup.paperSize=ws_fs.PAPERSIZE_LETTER
@@ -2597,7 +2597,7 @@ if st.session_state.get("assessment_ready", False):
                   f"CONFIDENTIAL  |  {datetime.now().strftime('%B %d, %Y')}")
         fc2.font=F_(8,italic=True,color=MEDG)
         fc2.alignment=AL("center")
-        fc2.border=Border(top=Side(style="thin",color=GOLD))
+        fc2.border=OBorder(top=OSide(style="thin",color=GOLD))
 
         ws_ar.page_setup.orientation="portrait"
         ws_ar.page_setup.paperSize=ws_ar.PAPERSIZE_LETTER
