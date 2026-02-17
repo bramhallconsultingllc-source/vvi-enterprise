@@ -55,11 +55,18 @@ def _get_openai_client():
         key = st.secrets.get("OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY")
     except Exception:
         key = os.getenv("OPENAI_API_KEY")
+    
     if not key:
         return None, "Missing OPENAI_API_KEY in Streamlit secrets."
+    
     if not _OPENAI_AVAILABLE:
         return None, "openai package not installed. Add `openai` to requirements.txt."
-    return _OpenAI(api_key=key), None
+    
+    try:
+        client = _OpenAI(api_key=key)
+        return client, None
+    except Exception as e:
+        return None, f"Failed to initialize OpenAI client: {str(e)}"
 
 
 def extract_vvi_from_file(file_bytes: bytes, filename: str) -> dict:
@@ -1395,12 +1402,15 @@ with st.expander("➕ Add a Clinic to Portfolio", expanded=len(st.session_state.
         # AI extraction
         if run_extract:
             with st.spinner("🔍 AI reading your spreadsheet…"):
-                file_bytes = new_upload.read()
-                result = extract_vvi_from_file(file_bytes, new_upload.name)
+                try:
+                    file_bytes = new_upload.read()
+                    result = extract_vvi_from_file(file_bytes, new_upload.name)
+                except Exception as e:
+                    result = {"error": f"Extraction error: {str(e)}"}
 
             if "error" in result:
                 st.error(f"❌ Extraction failed: {result['error']}")
-                st.info("Please enter values manually below.")
+                st.info("💡 Please enter values manually below or check your OpenAI API key in Streamlit secrets.")
                 show_manual = True
             else:
                 # Store in session state for display / editing
@@ -1672,7 +1682,7 @@ if st.session_state.portfolio:
         avg_lf   = round(sum(c["lf"]  for c in st.session_state.portfolio) / n, 1)
         critical_count = sum(1 for c in st.session_state.portfolio if c["risk"] in ["Critical","High"])
 
-        pm1, pm2, pm3, pm4 = st.columns(4)
+        pm1, pm2, pm3, pm4, pm5 = st.columns(5)
 
         def port_card(col, label, val, sub, color="#1a1a2e"):
             col.markdown(f"""
@@ -1685,7 +1695,8 @@ if st.session_state.portfolio:
         port_card(pm1, "Clinics in Portfolio", n, "total")
         port_card(pm2, "Avg VVI Score", avg_vvi, "portfolio average")
         port_card(pm3, "Avg Revenue Factor", avg_rf, "RF average")
-        port_card(pm4, "High / Critical Risk", critical_count, "clinics needing attention",
+        port_card(pm4, "Avg Labor Factor", avg_lf, "LF average")
+        port_card(pm5, "High / Critical Risk", critical_count, "clinics needing attention",
                   color="#dc3545" if critical_count > 0 else "#28a745")
 
         st.markdown("<br>", unsafe_allow_html=True)
