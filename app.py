@@ -34,6 +34,9 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from openpyxl import Workbook as OpenpyxlWorkbook
+from openpyxl.styles import Font as OFont, PatternFill as OFill, Alignment as OAlignment, Border as OBorder, Side as OSide
+from openpyxl.utils import get_column_letter as get_col_letter
 
 # OpenAI — optional, graceful fallback if not installed
 try:
@@ -2226,12 +2229,9 @@ if st.session_state.get("assessment_ready", False):
                            period_str: str, net_rev_v: float,
                            visits_v: int, labor_v: float,
                            rt_v: float, lt_v: float) -> bytes:
-        """Write scenario content into a fresh copy of the VVI template."""
-        from openpyxl import Workbook
-        from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
-        from openpyxl.utils import get_column_letter
+        """Write scenario content into a polished Excel report."""
 
-        # ── palette (matches template) ───────────────────────
+        # ── palette ──────────────────────────────────────────
         NAVY  = "0D1B2A"; GOLD  = "B08C3E"; LGOLD = "F5EDD6"
         MGRAY = "F0F2F5"; WHITE = "FFFFFF"; DGRAY = "4A4A4A"
         MEDG  = "8C8C8C"; BORD  = "D0D5DD"; SLATE = "2C3E50"
@@ -2239,31 +2239,31 @@ if st.session_state.get("assessment_ready", False):
         TE="155724"; TS="856404"; TA="7D4E00"; TC="721C24"
 
         def F_(sz=10, bold=False, color="000000", italic=False):
-            return Font(name="Arial", size=sz, bold=bold,
+            return OFont(name="Arial", size=sz, bold=bold,
                         color=color, italic=italic)
-        def FL(color): return PatternFill("solid", fgColor=color)
+        def FL(color): return OFill("solid", fgColor=color)
         def AL(h="left", v="center", wrap=False, indent=0):
-            return Alignment(horizontal=h, vertical=v,
+            return OAlignment(horizontal=h, vertical=v,
                              wrap_text=wrap, indent=indent)
         def BDR(top=False, bot=False, l=False, r=False,
                 color=BORD, style="thin"):
-            s = Side(style=style, color=color)
-            n = Side(style=None)
-            return Border(top=s if top else n, bottom=s if bot else n,
+            s = OSide(style=style, color=color)
+            n = OSide(style=None)
+            return OBorder(top=s if top else n, bottom=s if bot else n,
                           left=s if l else n, right=s if r else n)
         def FB():
-            s = Side(style="thin", color=BORD)
-            return Border(top=s, bottom=s, left=s, right=s)
+            s = OSide(style="thin", color=BORD)
+            return OBorder(top=s, bottom=s, left=s, right=s)
         def GB():
-            s = Side(style="medium", color=GOLD)
-            return Border(top=s, bottom=s, left=s, right=s)
+            s = OSide(style="medium", color=GOLD)
+            return OBorder(top=s, bottom=s, left=s, right=s)
 
         def tier_colors(tier_str):
             m = {"Excellent":(CE,TE),"Stable":(CS,TS),
                  "At Risk":(CA,TA),"Critical":(CC,TC)}
             return m.get(tier_str, (MGRAY, DGRAY))
 
-        wb2 = Workbook()
+        wb2 = OpenpyxlWorkbook()
 
         # ════════════════════════════════════════════════════
         # SHEET 1 — Financial Summary (prefilled)
@@ -2272,7 +2272,7 @@ if st.session_state.get("assessment_ready", False):
         ws_fs.title = "Financial Summary"
         ws_fs.sheet_view.showGridLines = False
         for col, w in {1:3,2:34,3:22,4:30,5:3}.items():
-            ws_fs.column_dimensions[get_column_letter(col)].width = w
+            ws_fs.column_dimensions[get_col_letter(col)].width = w
 
         nrpv = net_rev_v / visits_v if visits_v else 0
         lcv  = labor_v  / visits_v if visits_v else 0
@@ -2410,7 +2410,7 @@ if st.session_state.get("assessment_ready", False):
         ws_ar = wb2.create_sheet("VVI Assessment Report")
         ws_ar.sheet_view.showGridLines = False
         for col, w in {1:3,2:18,3:16,4:16,5:40,6:3}.items():
-            ws_ar.column_dimensions[get_column_letter(col)].width=w
+            ws_ar.column_dimensions[get_col_letter(col)].width=w
 
         ws_ar.row_dimensions[1].height=8
         ws_ar.row_dimensions[2].height=56
@@ -2566,7 +2566,7 @@ if st.session_state.get("assessment_ready", False):
         for j,(val,bg,tx) in enumerate(imp_vals):
             c=ws_ar.cell(row=cur_row,column=2+j,value=val)
             c.font=F_(11 if j<2 else 9, bold=(j<2), color=tx)
-            c.fill=bg if isinstance(bg,PatternFill) else FL(LGOLD)
+            c.fill=bg if isinstance(bg, OFill) else FL(LGOLD)
             c.alignment=AL("center",wrap=True)
             c.border=FB()
         ws_ar.merge_cells(
