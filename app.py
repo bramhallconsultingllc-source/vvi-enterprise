@@ -329,23 +329,6 @@ class VVIAPIClient:
                         "Formalize ongoing labor monitoring to prevent future drift: (1) Daily metrics dashboard (labor hours, cost per visit, overtime hours) visible to all, (2) Weekly operational review with managers (labor performance, problem-solving, course corrections), (3) Monthly deep dive (staffing template effectiveness, workflow improvements, trend analysis), (4) Quarterly strategic review (capacity planning, growth scenarios, retention). Labor drift happens slowly—monitoring catches it early."
                     ]
                 },
-                        "Conduct simple time-study on one busy session.",
-                        "Map MA/front-desk tasks to identify duplication.",
-                        "Review staffing templates vs. actual volume by hour/day.",
-                        "Spot-check chart closure timeliness and rework."
-                    ],
-                    "next_30_60_days": [
-                        "Refine staffing templates to match demand more closely.",
-                        "Clarify roles to reduce drift and handoff confusion.",
-                        "Streamline 1-2 high-friction workflows.",
-                        "Introduce basic labor KPI review into weekly huddles."
-                    ],
-                    "next_60_90_days": [
-                        "Set modest labor efficiency target (4-8% LCV improvement).",
-                        "Invest in cross-training for flexibility.",
-                        "Reassess burnout through pulse checks or stay interviews."
-                    ]
-                },
                 "expected_impact": {
                     "vvi_improvement": "5-9%",
                     "timeline": "60-90 days",
@@ -477,23 +460,6 @@ class VVIAPIClient:
                         "Build quarterly review habit to prevent drift back to mediocrity: Every 90 days: (1) Deep dive on metrics (are we maintaining gains?), (2) Staff pulse survey (engagement holding?), (3) Competitive scan (what are other UCs doing?), (4) Set next quarter's improvement focus. Complacency is the enemy of stable performers. Quarterly reviews maintain momentum."
                     ]
                 },
-                        "Light operational review to identify 1-2 quick wins.",
-                        "Spot-check both revenue (coding, charge capture) and labor (schedule fit, overtime).",
-                        "Gather staff input on friction points or improvement ideas.",
-                        "Confirm KPI dashboards are visible and reviewed weekly."
-                    ],
-                    "next_30_60_days": [
-                        "Pick one improvement lever (revenue or labor) and execute a focused initiative.",
-                        "Formalize a continuous improvement cadence (monthly reviews, quarterly goals).",
-                        "Share best practices with peer clinics if in a system.",
-                        "Invest in staff development or cross-training to build resilience."
-                    ],
-                    "next_60_90_days": [
-                        "Target 2-5% VVI improvement through disciplined optimization.",
-                        "Develop clear succession and coverage plans for key roles.",
-                        "Consider piloting new service lines or access innovations if stable."
-                    ]
-                },
                 "expected_impact": {
                     "vvi_improvement": "2-5%",
                     "timeline": "90+ days",
@@ -535,23 +501,6 @@ class VVIAPIClient:
                         "Formalize staffing standards preventing future drift: Create 2-page 'UC Staffing Model' documenting: (1) FTEs by role and volume tier, (2) Flex protocols (when to add surge, when to send home), (3) Cross-training requirements, (4) Overtime approval process. Get leadership sign-off. Use for all scheduling decisions. Prevents 'gut feel' staffing that causes drift.",
                         "Staff engagement during labor tightening: Monthly 3-question survey: Workload reasonable? Have resources needed? Concerns? One-on-ones with key performers: What keeps you here? What might make you leave? Labor optimization can feel threatening—proactive engagement prevents backlash. Address concerns fast. Goal: Efficiency without turnover.",
                         "Ongoing labor monitoring preventing recurrence: Daily dashboard (hours, cost/visit, OT), Weekly manager review (performance, issues, solutions), Monthly deep dive (template effectiveness, trends, adjustments), Quarterly strategic review (capacity, growth, retention). Labor drift is gradual—systematic monitoring catches early. Build the habit, prevent the problem."
-                    ]
-                },
-                        "Conduct workflow time-study on a typical busy session.",
-                        "Map all clinical and administrative tasks; identify redundancy.",
-                        "Review staffing templates against actual patient volume by day/hour.",
-                        "Analyze overtime trends and identify root causes."
-                    ],
-                    "next_30_60_days": [
-                        "Optimize staffing templates to match demand more precisely.",
-                        "Streamline 2-3 highest-friction workflows (e.g., rooming, checkout, prior auth).",
-                        "Implement tighter overtime approval and tracking process.",
-                        "Cross-train staff to create flex capacity without adding FTEs."
-                    ],
-                    "next_60_90_days": [
-                        "Target 5-8% labor cost reduction through efficiency (not layoffs if possible).",
-                        "Formalize daily labor huddles and weekly KPI review.",
-                        "Monitor staff morale and engagement to prevent attrition."
                     ]
                 },
                 "expected_impact": {
@@ -854,12 +803,6 @@ class VVIAPIClient:
                         "Maintain labor stability as non-negotiable parallel commitment: Monthly (not daily—revenue needs primary attention) labor check: LCV vs. budget, OT%, template compliance, any new staffing requests. Set bright line: 'If LCV rises more than 3% from current level, we implement immediate labor freeze and daily monitoring.' Don't let revenue focus create a new labor problem. Two problems simultaneously is S11/S12/S15 territory.",
                         "Build sustainable revenue infrastructure so this doesn't happen again: Why did revenue reach Critical? Was there no monitoring? Provider turnover that disrupted coding quality? EHR transition? Payer change? Leadership gap? Identify root cause of how you got here, not just how to fix it. Build the monitoring system that catches the next drift at $5-8/visit, not $30-35/visit.",
                         "Timeline to viability: Set honest milestones with leadership and board: 30 days = stop the decline (coding and charge capture stabilized), 60 days = early recovery visible ($10+/visit improvement), 90 days = At Risk threshold reached ($190+ NRPV), 6 months = Stable threshold target ($200+ NRPV), 12 months = full sustainability. This is a 12-month recovery, not a 90-day fix. Set expectations accordingly."
-                    ]
-                },
-                    "next_60_90_days": [
-                        "Achieve 15-25% revenue improvement to restore viability.",
-                        "Build sustainable revenue capture culture.",
-                        "Prevent labor from becoming a new problem area."
                     ]
                 },
                 "expected_impact": {
