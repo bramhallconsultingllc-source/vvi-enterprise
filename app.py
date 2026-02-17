@@ -40,7 +40,7 @@ from openpyxl.utils import get_column_letter as get_col_letter
 
 # OpenAI — optional, graceful fallback if not installed
 try:
-    from openai import OpenAI as _OpenAI
+    import openai as _openai
     _OPENAI_AVAILABLE = True
 except Exception:
     _OPENAI_AVAILABLE = False
@@ -49,8 +49,8 @@ except Exception:
 # AI Extraction Helper
 # ============================================================
 
-def _get_openai_client():
-    """Return OpenAI client using key from Streamlit secrets or env."""
+def _get_openai_api_key():
+    """Return OpenAI API key from Streamlit secrets or env."""
     try:
         key = st.secrets["OPENAI_API_KEY"]
     except Exception:
@@ -62,19 +62,7 @@ def _get_openai_client():
     if not _OPENAI_AVAILABLE:
         return None, "openai package not installed. Add `openai` to requirements.txt."
     
-    try:
-        # Initialize with just the API key, no other parameters
-        client = _OpenAI(api_key=key, max_retries=2, timeout=30.0)
-        return client, None
-    except TypeError as e:
-        # If initialization fails due to parameter issues, try minimal init
-        try:
-            client = _OpenAI(api_key=key)
-            return client, None
-        except Exception as e2:
-            return None, f"Failed to initialize OpenAI client: {str(e2)}"
-    except Exception as e:
-        return None, f"Failed to initialize OpenAI client: {str(e)}"
+    return key, None
 
 
 def extract_vvi_from_file(file_bytes: bytes, filename: str) -> dict:
@@ -83,9 +71,12 @@ def extract_vvi_from_file(file_bytes: bytes, filename: str) -> dict:
     Returns dict with keys: visits, nor, swb, period, nrpv_target, lcv_target,
     clinic_name, confidence, raw_text, error
     """
-    client, err = _get_openai_client()
+    api_key, err = _get_openai_api_key()
     if err:
         return {"error": err}
+    
+    # Set API key for v0.28.1
+    _openai.api_key = api_key
 
     # Convert file to readable text using pandas
     try:
@@ -135,7 +126,8 @@ JSON FORMAT:
 }"""
 
     try:
-        resp = client.chat.completions.create(
+        # Use v0.28.1 API
+        resp = _openai.ChatCompletion.create(
             model="gpt-4o",
             temperature=0.1,
             messages=[
@@ -204,9 +196,12 @@ AI_COACH_QUESTIONS = [
 
 def ai_coach_answer(question: str, scenario_data: dict, scores: dict) -> tuple[bool, str]:
     """Returns (ok, markdown_text)."""
-    client, err = _get_openai_client()
+    api_key, err = _get_openai_api_key()
     if err:
         return False, err
+    
+    # Set API key for v0.28.1
+    _openai.api_key = api_key
 
     context = {
         "vvi_score": scores.get("vvi"),
@@ -223,7 +218,8 @@ def ai_coach_answer(question: str, scenario_data: dict, scores: dict) -> tuple[b
     }
 
     try:
-        resp = client.chat.completions.create(
+        # Use v0.28.1 API
+        resp = _openai.ChatCompletion.create(
             model="gpt-4o-mini",
             temperature=0.25,
             messages=[
