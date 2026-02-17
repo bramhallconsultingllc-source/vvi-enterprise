@@ -2627,7 +2627,7 @@ if st.session_state.get("assessment_ready", False):
         visits_v      = visits,
         labor_v       = labor,
         rt_v          = rt,
-        lt_v          = lt,
+        lt_v          = lt
     )
 
     safe_name = "".join(c if c.isalnum() or c in " -_" else "_"
