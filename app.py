@@ -2,8 +2,8 @@
 Visit Value Index (VVI) Application - Enterprise Edition
 Bramhall Consulting, LLC
 
-VERSION: 3.0 - AI Document Upload (Beta)
-Last Updated: February 16, 2026
+VERSION: 3.1 - Complete Edition (All 16 Scenarios)
+Last Updated: February 17, 2026
 
 Upgraded architecture:
 - API-first design with local fallback
@@ -13,9 +13,9 @@ Upgraded architecture:
 - Production-ready deployment
 - COMPLETE 16-scenario library built-in (S01-S16)
 - Executive narratives for each scenario
-- ROOT CAUSE ANALYSIS for diagnostic insight
+- ROOT CAUSE ANALYSIS for diagnostic insight (all 16 scenarios)
 - McKinsey-caliber visual design
-- URGENT CARE-SPECIFIC prescriptive actions
+- URGENT CARE-SPECIFIC prescriptive actions - ALL 16 SCENARIOS COMPLETE
 - AI-POWERED DOCUMENT UPLOAD for auto-extraction (Beta - requires API)
 """
 
@@ -575,27 +575,27 @@ class VVIAPIClient:
                 "focus_areas": ["Emergency labor intervention", "Revenue protection", "Operational reset"],
                 "actions": {
                     "do_tomorrow": [
-                        "Crisis huddle: revenue is stable but labor is unsustainable.",
-                        "Immediate staffing and overtime audit.",
-                        "Freeze all discretionary spending and hiring."
+                        "Call emergency labor crisis meeting (center manager, operations lead, HR, finance) for 90 minutes. Bring: last 4 weeks payroll data by role and day, overtime report (hours and cost), PRN/agency spend, staffing template vs. actual. Goal: Quantify the crisis—if LCV is $105 vs. $85 target, that's $20/visit × 100 visits/day × 260 days = $520K annual overspend. Name the number. Urgency needs a dollar figure.",
+                        "Immediate staffing audit of today's schedule: Print today's template vs. staff physically present. Count FTEs by role and time block. Calculate: FTEs scheduled ÷ patients expected. UC target is roughly 1 FTE per 6-7 patients expected per hour. If you have 12 FTEs scheduled for 40 patients today (Friday), you're 40% overstaffed. Make same-day adjustments—send people home if census allows, stop unnecessary overtime tonight.",
+                        "Freeze all discretionary labor immediately: No new hires approved without VP sign-off, no overtime without director approval, no agency/PRN orders without COO authorization. Put it in writing via email today. This stops the bleeding while you diagnose. One sentence: 'Effective immediately, all labor additions require director-level approval until further notice.'"
                     ],
                     "next_7_days": [
-                        "Daily labor review meetings with operations and finance.",
-                        "Conduct rapid diagnostic: where is labor cost coming from?",
-                        "Implement strict overtime controls with VP-level approval.",
-                        "Begin provider discussions on documentation to protect revenue during labor changes."
+                        "Daily 30-minute labor war room meetings (7:30am, operations lead + center manager + HR): Review yesterday's actual hours vs. budget, overnight hours, today's schedule vs. forecast volume. Make real-time corrections daily. UC labor crises are fixed one day at a time—you can't batch this into a monthly review. Daily discipline is the fix.",
+                        "Rapid diagnostic on WHERE labor costs are coming from: Break down by category: (1) Regular hours overstaffing (staffing flat regardless of day/volume), (2) Overtime (who, when, how much, why), (3) Premium labor (agency/PRN—what's the rate? what role? how many hours?), (4) Role inefficiency (providers seeing 2-3 patients/hour instead of 4-5). Each has different fix. Most UCs find all four, but one usually dominates—find yours.",
+                        "Implement immediate overtime controls: Create approval form (1 page: who, why, how many hours, alternatives considered, manager signature, director signature). Require submission BEFORE overtime begins, not after. Set hard target: OT under 5% of total hours within 30 days. Track daily. Post the number publicly. When people see others getting approval denied, behavior changes fast.",
+                        "Protect revenue during labor crisis: Brief providers on what's happening. Explain you're fixing labor, not cutting corners on care. Ask them to maintain: same-shift chart closure (don't let backlash cause charting delays), documentation quality (don't rush and under-code), patient throughput (4+ patients/hour during peak). Revenue is stable—keep it there."
                     ],
                     "next_30_60_days": [
-                        "Redesign staffing model and templates to match volume.",
-                        "Eliminate low-value tasks and administrative waste.",
-                        "Rebuild core workflows for maximum efficiency.",
-                        "Implement daily labor huddles and weekly trend reviews."
+                        "Completely redesign staffing templates from scratch using UC demand data: Pull 8 weeks of patient arrivals by day and hour. Build template that matches demand: MONDAY (heaviest): 3-4 providers, 6-8 MAs, 3 front desk for 100-140 patients. FRIDAY (lightest): 2 providers, 3-4 MAs, 2 front desk for 50-70 patients. PEAK HOURS (4-7pm daily): Add 1 surge provider and 2 MAs. OFF-PEAK (1-3pm daily): Reduce by 15-20%. Calculate FTE savings: most UCs find 1.5-2.5 FTE savings from template redesign alone ($105K-$175K annually).",
+                        "Workflow redesign to fix throughput collapse: If providers are seeing 2-3 patients/hour instead of 4-5, you have workflow problem not staffing problem. Observe and document: Where does time go? Rooming too slow (target 5 min)? Provider waiting for MA (communication breakdown)? Checkout backed up (front desk overwhelmed)? Chart behind (EHR inefficiency)? Fix the workflow before adding staff. Better workflow = more patients with same staff.",
+                        "Eliminate premium labor dependency with UC-specific cross-training: MEDICAL ASSISTANTS: 2-3 trained to cover front desk (8 hours training), reducing need for front desk overstaffing. FRONT DESK: 2 trained to do basic rooming during surges (4 hours training). PROVIDERS: Culture shift—during slow periods, room own patients instead of waiting for MA. Create internal PRN pool: existing staff willing to pick up Monday/Sunday surge shifts at straight time vs. agency at $80-120/hour.",
+                        "Address cultural issues head-on if 'we've always been overstaffed' is part of the problem: Town hall with all staff (30 minutes): 'We're spending $20 more per patient than we should be. That's not sustainable. We're making changes. Here's why, here's what, here's the timeline, here's how we're protecting you.' People resist change when they don't understand it. Transparency creates compliance. Give them a chance to be part of the solution."
                     ],
                     "next_60_90_days": [
-                        "Execute 12-15% labor cost reduction plan.",
-                        "Formalize new operating standards and performance expectations.",
-                        "Monitor staff engagement and retention closely.",
-                        "Prevent revenue from slipping during labor transformation."
+                        "Target 12-15% labor cost reduction bringing LCV from crisis to At Risk level: For UC at $105 LCV, target $89-92. That's roughly 1.5-2.0 FTE equivalent ($105K-$140K annually). Break into phases: Month 1 = stop OT and premium labor (-$15K-$25K), Month 2 = template optimization (-$30K-$50K), Month 3 = workflow efficiency (-$20K-$35K). Track weekly cost per visit. Celebrate every $1/visit improvement.",
+                        "Formalize new UC staffing standards and hold them: Create 2-page 'Labor Playbook' documenting: FTEs by role, day, and volume tier; flex protocols (when to add surge, when to send home); overtime approval process; cross-training requirements; accountability expectations. Get VP sign-off. Distribute to all managers. Review quarterly. Make it the operating standard—not just a policy but actual daily practice.",
+                        "Monitor staff morale closely through transformation—UC labor cuts can trigger turnover cascade: Monthly 3-question pulse survey (anonymous): Workload manageable? Have resources needed? Concerns about changes? Skip-level conversations: VP or director talks directly to front-line staff monthly (bypasses manager filter). Address concerns within 48 hours. Losing a senior MA or experienced front desk lead costs $25K-$40K in recruitment and training—protect your best people.",
+                        "Build sustainability: prevent recurrence of labor crisis: Daily dashboard (labor hours, cost/visit, OT hours) visible to management. Weekly scorecard review with action items. Monthly deep dive (template effectiveness, trends, adjustments needed). Quarterly strategic review (capacity planning, growth scenarios). Most UCs that fix labor crises drift back within 18-24 months because monitoring stops. Build the habit permanently."
                     ]
                 },
                 "expected_impact": {
@@ -618,28 +618,27 @@ class VVIAPIClient:
                 "focus_areas": ["Revenue recovery", "Maintain labor discipline", "Charge capture"],
                 "actions": {
                     "do_tomorrow": [
-                        "Revenue-focused huddle: celebrate labor efficiency, focus on revenue gaps.",
-                        "Audit yesterday's charge capture and coding.",
-                        "Ask providers: are we capturing all billable services?"
+                        "Hold revenue-recovery huddle leading with celebration: 'Our labor efficiency is outstanding—top tier nationally. Our revenue is slipping: $185/visit vs. $200 target. That $15 gap × 100 visits/day × 260 days = $390K we're not capturing. We don't have a labor problem—we can focus entirely on revenue.' Staff respond better when they know the full picture and understand the opportunity.",
+                        "Conduct urgent revenue cycle audit of yesterday's visits: Pull every chart. For each: (1) E&M level billed vs. visit complexity—was a level 4 coded as level 3? (2) Every procedure captured? (lac repair, splinting, I&D, nebulizer, EKG), (3) Every diagnostic billed? (X-rays, labs, UA), (4) Visit type correct—work comp billed as occupational not sick visit? Calculate: actual billed vs. what could have been billed. That gap is your opportunity.",
+                        "Protect labor excellence while pivoting to revenue: Quick check—is labor in danger of drifting while attention shifts to revenue? Review today's schedule vs. volume forecast. Any unnecessary overtime? New PRN requests? Set the rule now: 'Revenue improvement comes from better coding and capture—not adding people.' Prevents the common trap of fixing one problem while creating another."
                     ],
                     "next_7_days": [
-                        "Conduct comprehensive revenue cycle diagnostic.",
-                        "Review coding levels, charge capture, and denial patterns.",
-                        "Analyze payer mix and contract performance.",
-                        "Provider documentation audit on top 10 CPT codes."
+                        "Comprehensive E&M coding analysis across all providers: Pull last 2 weeks coding distribution per provider. UC best practice: 60% level 4, 30% level 3, 10% level 5. If showing 70-75% level 3, systematically under-coding. Calculate per-provider impact: Provider coding 80% level 3 = leaving $12/visit × 300 visits/month = $3,600/month = $43K/year. Show providers their own numbers—this creates urgency faster than any policy.",
+                        "Procedure capture gap analysis: Last 30 days—count lacerations (all billed with repair code?), splints applied (all have splinting code?), wheezing visits (all have nebulizer code?), work comp visits (billed as occupational health?). Most UCs find 15-25% of procedures either not captured or miscoded. Each missed code = $50-$200 lost. This is pure revenue recovery with zero additional work.",
+                        "Charge capture workflow analysis: Where do charges fall through? Common UC gaps: charge lag (visits not submitted same day—target 95%+), order-to-charge gap (X-ray read but not billed), procedure documentation issues (lac repair performed but not documented correctly for billing), EHR configuration problems. Each gap is fixable with a process change, not a person.",
+                        "Payer contract review: Top 10 payers by volume—when did you last negotiate rates? Most UC contracts can be renegotiated every 2-3 years for 3-5% increases. Even 3% on $3M revenue = $90K annually. Also check denial rates by payer—high denials with specific payer suggests contract or credentialing issue needing resolution."
                     ],
                     "next_30_60_days": [
-                        "Launch intensive provider coding and documentation training.",
-                        "Implement real-time charge capture monitoring and feedback.",
-                        "Optimize E&M levels and ancillary service billing.",
-                        "Address top denial reasons and appeal backlog.",
-                        "Review contracts and identify renegotiation opportunities."
+                        "UC-specific provider documentation and coding training—real chart examples only: Bring certified coder for 2-hour session per provider using THEIR OWN charts. Show: (1) This visit you coded level 3—two more HPI elements would make it level 4, $18 difference, (2) This laceration—repair code not billed, $85 lost, (3) This work comp visit billed as sick visit—$40 lost. Real examples from their own practice change behavior faster than any lecture or generic training.",
+                        "Real-time charge capture monitoring with daily feedback: (1) Daily charge lag report at 8am—anything unbilled from yesterday gets resolved before noon, (2) Weekly provider scorecard: E&M distribution, procedure capture rate, revenue/visit vs. peers, (3) Monthly one-on-one coaching for below-median providers. Frame as supportive: 'Here's your capture rate vs. what was available—here's how to close the gap.' Transparency drives improvement without resentment.",
+                        "Optimize occupational health revenue—biggest UC quick win: Work comp pays 20-30% more than commercial. Are you capturing all employer relationships? Add: pre-employment physicals ($150-200 each), drug screening program, OSHA compliance services. Proper coding of work comp visits alone can add $8-12/visit to your average without new patient acquisition. High impact, low effort.",
+                        "Denial management and AR acceleration: Pull denial report by payer and reason. Top 5 reasons = 70-80% of denials. Most common UC: missing prior auth, bundling errors, timely filing, incorrect diagnosis, eligibility errors. Fix root cause—don't just resubmit, prevent future denials. Each 1% denial rate reduction = $15K-$30K annually."
                     ],
                     "next_60_90_days": [
-                        "Target 5-10% revenue per visit improvement.",
-                        "Formalize provider scorecards with financial transparency.",
-                        "Consider service line expansion if capacity supports it.",
-                        "Maintain labor discipline while growing revenue."
+                        "Revenue per visit target: Increase NRPV 6-10% over 90 days. For UC at $185, target $197-204. That's $12-19/visit × 100 visits/day × 260 days = $312K-$494K annual improvement at zero additional labor cost. Milestones: 30 days = +3% (quick wins), 60 days = +6% (training impact), 90 days = +9% (full implementation). Track weekly. Celebrate every $1/visit improvement.",
+                        "Provider financial transparency and accountability: Monthly scorecard shared in group meeting—patients seen, revenue/visit, E&M distribution, procedure capture rate. Rank anonymously first, then by name. Celebrate top performers publicly, coach low performers privately. UC providers are competitive—seeing peer data motivates self-correction more than any policy or training program.",
+                        "Protect labor excellence while improving revenue: Explicitly recognize staff for maintaining lean operations: 'You're keeping costs down AND improving capture. That's exceptional.' Consider team incentive: if center achieves both revenue and labor targets, team celebration or bonus. Dual success is the goal—don't let revenue focus erode your hard-won labor discipline.",
+                        "Build self-sustaining revenue capture culture: Quarterly provider coding education (keep sharp), monthly charge capture audits (catch drift early), annual payer contract reviews, new provider onboarding includes coding training week one. Revenue discipline like fitness—can't do once and coast. Build habits that make excellent capture automatic and permanent."
                     ]
                 },
                 "expected_impact": {
@@ -662,26 +661,27 @@ class VVIAPIClient:
                 "focus_areas": ["Revenue prioritization", "Labor efficiency maintenance", "Balanced recovery"],
                 "actions": {
                     "do_tomorrow": [
-                        "Dual-focus huddle: revenue needs attention, labor is okay.",
-                        "Yesterday's revenue audit: charge capture, coding, collections.",
-                        "Quick labor check to ensure no drift while fixing revenue."
+                        "Hold dual-focus huddle leading with clarity on what's broken: 'Revenue is slipping—we're at $185/visit vs. $200 target. Labor is stable, which is great. Our job is to recover revenue WITHOUT letting labor drift. These are two separate problems. Today we focus on understanding the revenue gap.' Divide and conquer: manager monitors labor daily, director focuses on revenue recovery.",
+                        "Yesterday's revenue audit—same approach as crisis: Pull 15 charts. Check E&M level billed vs. complexity, procedures captured, diagnostics billed, visit type correct. Calculate actual vs. potential revenue. Also: charge lag report (anything from yesterday not yet submitted?), denial rate this week (higher than normal?). Find where revenue is leaking before trying to fix it.",
+                        "Quick labor guard-rails check: Review today's schedule vs. expected volume. Any unnecessary staffing? Overtime requests? PRN orders? Set firm rule with managers: 'Labor stays within budget while we fix revenue. Any labor additions need director approval. Revenue improvement comes from better coding and capture, not more people.' Put it in writing."
                     ],
                     "next_7_days": [
-                        "Revenue cycle deep-dive: identify top 3 revenue leakage points.",
-                        "Provider documentation spot-checks.",
-                        "Review labor metrics to ensure stability during revenue push.",
-                        "Analyze denial patterns and payer mix."
+                        "Revenue cycle deep-dive to identify top 3 leakage points: (1) Run E&M distribution report—how does your coding mix compare to 60/30/10 best practice? (2) Pull procedure capture rate—what % of visits have a procedure code in addition to E&M? (3) Check charge lag—what % of charges submitted same day? (4) Review denial rate and top denial reasons. Rank the three biggest gaps by dollar impact—fix in order of magnitude.",
+                        "Provider documentation spot-check using real charts: Audit 5 charts per provider (not random—pick complex visits). Are they documenting enough for the level they're billing? Are they under-documenting AND under-coding? Are procedures performed but not documented in billing-friendly language? 30 minutes of review often reveals $10-15/visit systematic gap that can be fixed with targeted coaching.",
+                        "Labor stability monitoring during revenue push: Weekly check: labor hours vs. budget, OT%, PRN/agency usage. Create simple dashboard visible to management. If labor starts creeping (even 3-4% over budget), escalate immediately—don't let revenue focus create labor blind spot. This week's habit prevents next month's labor crisis.",
+                        "Payer mix and denial pattern analysis: Pull 60-day data. Which payers are denying most? What reasons? Any contract that's expired or needs renegotiation? Any credentialing issues causing claim rejections? Revenue problems are often multi-cause—under-coding AND denials AND payer issues simultaneously. Identify all causes before treating any one."
                     ],
                     "next_30_60_days": [
-                        "Execute revenue improvement plan (coding training, charge capture tech).",
-                        "Maintain labor discipline with ongoing efficiency monitoring.",
-                        "Address billing workflow gaps.",
-                        "Provider engagement on financial performance."
+                        "Execute focused revenue improvement plan with parallel labor monitoring: REVENUE track (director owns): Provider coding training with real examples, daily charge capture audits, denial management acceleration, occupational health optimization. LABOR track (manager owns): Weekly template review, overtime monitoring, flex scheduling maintenance. Two separate owners, two separate scorecards, one weekly joint review.",
+                        "Provider coding and documentation training—UC-specific, chart-based: Same approach as S09—bring certified coder, use real charts, show real dollar gaps. For S10, emphasize both under-coding AND charge capture since both are likely occurring. Also cover: proper work comp coding, procedure documentation for billing, how to document level 4 complexity efficiently without adding chart time.",
+                        "Address billing workflow gaps systematically: Map current charge capture process from order to submission. Where are the handoffs? Where do charges fall through? Implement: same-day charge submission rule (flag exceptions daily), order-to-charge reconciliation (does every X-ray order have a corresponding charge?), procedure note checklist (standard language that satisfies billing requirements). Fix the process, not just the people.",
+                        "Maintain labor discipline with light-touch monitoring: Monthly labor review (not crisis mode—this is preventive): Hours vs. budget, OT%, staffing template compliance, PRN usage. Flag any category trending up for immediate correction. The goal: labor stays stable while revenue improves. Don't let the team assume labor is 'solved'—maintain vigilance."
                     ],
                     "next_60_90_days": [
-                        "Target 4-8% VVI improvement primarily through revenue gains.",
-                        "Balance revenue growth with labor cost control.",
-                        "Prevent labor from drifting while focused on revenue."
+                        "Target 4-8% VVI improvement through revenue gains without labor changes: Revenue track target: +$8-16/visit (bringing $185 to $193-201). Labor track target: maintain current LCV ±2%. Combined = meaningful VVI improvement with zero new resources. Milestones: Month 1 = revenue gap identified and training launched, Month 2 = +$5/visit improvement showing, Month 3 = +$10/visit sustained and new habits embedded.",
+                        "Develop permanent revenue and labor dual-monitoring system: Simple weekly one-page dashboard showing both: Revenue per visit (trend line vs. target), Labor cost per visit (trend line vs. target), VVI score. Review every Monday in 15-minute leadership huddle. Any metric moving wrong direction = immediate investigation and correction. Dual monitoring prevents the situation from recurring.",
+                        "Provider financial scorecard rollout with both dimensions: Monthly report per provider: revenue generated (visits × revenue/visit), E&M distribution, procedure capture rate, patient volume. Share in group setting. Celebrate high revenue capture. Coach low performers privately. Make financial performance visible—it's not punitive, it's professional transparency that every business function has.",
+                        "Prevent recurrence: build revenue discipline as permanent habit: Quarterly provider coding refresher (30 min, case-based), monthly charge capture audit, annual payer contract review cycle, new provider orientation includes coding training week 1. Revenue drift is gradual and silent—build systems that catch it at $3-5/visit, not $15-20/visit."
                     ]
                 },
                 "expected_impact": {
@@ -704,26 +704,27 @@ class VVIAPIClient:
                 "focus_areas": ["Dual stabilization", "Prevent further decline", "Triage priorities"],
                 "actions": {
                     "do_tomorrow": [
-                        "Dual-threat huddle: both revenue and labor need attention.",
-                        "Quick assessment: which is worse and needs immediate focus?",
-                        "Yesterday's metrics review for both dimensions."
+                        "Hold dual-threat crisis assessment meeting (director, manager, HR, finance—60 minutes): Bring yesterday's metrics: revenue per visit vs. target, labor cost per visit vs. target, OT hours, charge lag. Quantify both gaps with dollar figures: 'Revenue gap = $10/visit × 90 visits/day × 260 days = $234K annually. Labor gap = $8/visit excess × same = $187K annually. Combined = $421K problem.' Triage decision: Which is actively getting worse faster? Address that first while stabilizing the other.",
+                        "Immediate dual-metric audit of yesterday's operations: REVENUE SIDE: Pull 10 charts—E&M levels appropriate? Procedures captured? Work comp coded correctly? LABOR SIDE: Actual hours vs. budget, overtime, PRN usage, staffing vs. volume. Calculate: patients per FTE hour (target: 1.0-1.2). If you're at 0.7, you're 30-40% over-labored. If revenue per visit is $185 vs. $200 target, you're under-capturing $15. Name both numbers clearly.",
+                        "Freeze all labor additions immediately AND launch revenue audit simultaneously: Send email to all managers: 'Effective now, no overtime without director approval, no new hires without VP approval.' Simultaneously, send email to revenue cycle lead: 'Pull charge capture report and E&M distribution for last 2 weeks. I need analysis by end of week.' Both moves in same day shows urgency on both fronts."
                     ],
                     "next_7_days": [
-                        "Triage decision: stabilize revenue first or labor first based on severity.",
-                        "Daily dual-metric huddles (revenue and labor).",
-                        "Rapid diagnostics on both revenue cycle and labor efficiency.",
-                        "Identify quick wins that improve both (e.g., better scheduling reduces labor and increases revenue)."
+                        "Daily 7:30am dual-metric war room (30 min): First 10 min = labor (yesterday's hours, OT, any staffing issues), next 10 min = revenue (charge lag, denials, any coding flags), last 10 min = today's priorities and decisions. Keep it tight and action-oriented. No analysis paralysis—make decisions, assign owners, follow up tomorrow. This daily discipline prevents both issues from compounding.",
+                        "Triage decision on primary focus based on severity scoring: Score each dimension 1-10 on: (1) How far below target?, (2) How fast is it deteriorating?, (3) How long to fix?. Whichever scores higher gets primary focus first 30 days. Common finding: labor crisis is faster to stop (cut OT today) but revenue recovery takes longer (training takes 60-90 days). Often: fix labor first (stop bleeding), then fix revenue (capture opportunity).",
+                        "Rapid parallel diagnostics in first week: LABOR: Time study on busy session (Mon 5-7pm) vs. slow session (Fri 10am-12pm), staffing template vs. demand curve analysis, OT root cause breakdown. REVENUE: E&M distribution per provider, procedure capture rate, top denial reasons, charge lag analysis. Two people, two workstreams, both complete by Friday. You need diagnosis before treatment.",
+                        "Identify dual-benefit quick wins that improve BOTH dimensions simultaneously: (1) Workflow improvements—faster throughput means more patients per provider hour (revenue) AND less labor per patient (cost), (2) Cross-training—flexible staff reduces PRN usage (cost) AND allows better peak coverage (revenue access), (3) Scheduling optimization—matching staff to demand reduces overstaffing (cost) AND ensures right people during peak for throughput (revenue). These dual-benefit wins are gold."
                     ],
                     "next_30_60_days": [
-                        "Execute parallel improvement plans with clear ownership.",
-                        "Revenue: coding training, charge capture, denials.",
-                        "Labor: staffing templates, workflow efficiency, overtime control.",
-                        "Weekly steering committee to monitor both tracks."
+                        "Execute parallel improvement tracks with separate owners and weekly joint review: REVENUE TRACK (director or revenue cycle lead owns): Week 1-2 = provider coding training, Week 3-4 = charge capture process redesign, Week 5-6 = denial management, Week 7-8 = occupational health optimization. Target: +$8-12/visit. LABOR TRACK (operations manager owns): Week 1-2 = template redesign, Week 3-4 = workflow efficiency, Week 5-6 = cross-training, Week 7-8 = OT elimination. Target: -$6-10/visit. Weekly joint check-in: 30 minutes, both owners, share progress.",
+                        "Labor stabilization first 30 days: Template redesign (stop staffing Friday like Monday—immediate 20-25% Friday labor reduction), overtime freeze with daily approval requirement, PRN/agency elimination plan (replace with internal cross-trained staff), send-home protocols when census drops (if <3 patients waiting at 2pm, send 1 MA home). Month 1 goal: Get labor from At Risk back to Stable. Don't try to get to Excellent immediately—stabilize first.",
+                        "Revenue stabilization first 30 days: Provider coding coaching (focus on quick wins: 2 more HPI elements for level 4, consistent procedure code capture), daily charge lag monitoring with same-day submission rule, denial management acceleration (appeal everything >$100 within 30 days), occupational health proper coding audit (work comp pays 20-30% more—are all visits coded correctly?). Month 1 goal: Stop revenue decline, not yet recovery.",
+                        "Communication strategy for staff and providers during dual transformation: Town hall (30 minutes, all staff): 'We have two problems: revenue per visit is below target AND labor costs are above budget. Here's exactly what that means in dollars. Here's what we're doing about each. Here's what we need from you. Timeline: 90 days to stabilize, 6 months to recover.' People handle hard truth better than uncertainty. Give them a chance to be part of the solution."
                     ],
                     "next_60_90_days": [
-                        "Target 8-15% combined VVI improvement.",
-                        "Prevent slide into Critical on either dimension.",
-                        "Build sustainable operating discipline for both revenue and labor."
+                        "Target 8-15% combined VVI improvement: Revenue component: +$10-18/visit through coding and capture improvements. Labor component: -$6-12/visit through scheduling optimization and workflow efficiency. Combined impact: significant VVI recovery from At Risk/At Risk toward Stable/Stable. Track both weekly. If one track falling behind, allocate more resources. Month 3 target: neither dimension should be declining.",
+                        "Prevent slide to Critical on either dimension—this is the non-negotiable goal for 90 days: Weekly red/yellow/green status for both revenue and labor. If either goes red (trending toward Critical), escalate to VP immediately and implement emergency protocols from S08 (labor) or S13 (revenue) playbooks. The worst outcome is letting At Risk become Critical while focused on the other dimension.",
+                        "Build accountability structure that monitors both permanently: Weekly dual scorecard (one page, both dimensions, trend lines), monthly leadership review (what worked, what didn't, adjustments), quarterly strategic assessment (are we on path back to Stable?). Assign a named owner for each dimension with explicit accountability. When two problems exist, they need two owners or one gets ignored.",
+                        "Staff retention during dual transformation—UC talent is scarce: Monthly pulse survey: Workload manageable? Have resources needed? Concerns about changes? Act on results within 72 hours. Losing a senior MA during labor restructuring + revenue recovery = $30K-$50K cost plus 3-6 months performance loss. Protect your best people explicitly—tell them they're valued, ask what they need, make accommodations where possible."
                     ]
                 },
                 "expected_impact": {
@@ -751,22 +752,22 @@ class VVIAPIClient:
                         "Protect revenue from further decline during labor reset."
                     ],
                     "next_7_days": [
-                        "Daily crisis management meetings.",
-                        "Emergency labor cost reduction plan.",
-                        "Revenue protection plan (maintain coding quality during turbulence).",
-                        "Communicate clearly with staff and providers about situation."
+                        "Daily 7:30am crisis meetings (director + manager + finance): Yesterday's labor hours vs. budget, OT hours, PRN spend, patient volume. Yesterday's revenue: charges submitted, denial rate, charge lag. Make immediate decisions daily—send staff home if census low, approve/deny OT requests, escalate revenue issues. Daily discipline stops compounding of both problems.",
+                        "Emergency labor cost reduction plan—labor is primary crisis: (1) Overtime freeze with daily director approval required, (2) All PRN/agency contracts reviewed—cancel any not covering essential gaps, (3) Staffing template audit: compare Friday template to Monday template—if same, Friday is overstaffed 30-40%, (4) Send-home protocol: if <3 patients waiting at any time, send 1 MA and 1 front desk home. Target: 15% labor cost reduction within 30 days.",
+                        "Revenue protection plan to prevent further decline during labor turbulence: Brief providers and staff: 'We're fixing labor costs—that means some staffing changes. It does NOT mean cutting corners on documentation or coding. Please maintain: same-shift chart closure, complete procedure capture, appropriate E&M levels.' Revenue is At Risk—don't let labor crisis turn it Critical. Hold the line on coding quality even during disruption.",
+                        "Transparent communication with all staff about dual situation: All-hands 20-minute meeting: 'Labor is costing us $20/visit more than it should. Revenue is $10/visit below where it needs to be. Combined, we're losing $30/visit × 90 visits/day = $702K annual shortfall. We're fixing both. Here's the plan. Here's what we need from you. Here's our timeline.' People rise to challenges when they understand them."
                     ],
                     "next_30_60_days": [
-                        "Execute labor transformation (redesign staffing, workflows).",
-                        "Stabilize revenue cycle basics (charge capture, denials).",
-                        "Prevent further decline on both dimensions.",
-                        "Weekly leadership reviews with clear accountability."
+                        "Execute labor transformation as primary fix—match staffing to UC demand: Complete template redesign: MONDAY (100-140 patients): Full staffing + 4-7pm surge capacity. FRIDAY (50-70 patients): 25-30% reduction. DAILY LULLS (1-3pm): 15-20% reduction via split shifts or flex home. Eliminate overtime entirely except director-approved emergencies. Cancel all routine PRN/agency. Cross-train 3 MAs for front desk, 2 front desk for basic MA tasks. Month 2 labor target: LCV from Critical to At Risk.",
+                        "Revenue stabilization to prevent further decline: Provider coding coaching (chart-based, 2 hours per provider), daily charge capture audits (same-day submission rule), denial management acceleration (appeal all >$100 within 30 days), work comp coding audit (are all occupational visits getting premium rates?). Month 2 revenue target: Stop the slide—hold current NRPV, prevent further deterioration while labor fix takes priority.",
+                        "Weekly dual-track steering committee: 30 minutes every Monday. Labor track owner presents: LCV trend, OT%, template compliance, cross-training progress. Revenue track owner presents: NRPV trend, charge lag, denial rate, coding distribution progress. Joint discussion: Any interactions between tracks? Resource conflicts? Sequencing adjustments needed? Clear accountabilities, clear milestones, weekly check-in.",
+                        "Address staff morale during simultaneous labor and revenue pressure: Monthly anonymous 3-question pulse survey (workload, resources, concerns). Skip-level conversations monthly (director to front-line staff directly). Recognize staff publicly for maintaining quality during difficult period. Small wins: Celebrate first week of OT under 5%, first provider who hits coding target. UC staff are resilient—they need to know leadership is present, honest, and has a plan."
                     ],
                     "next_60_90_days": [
-                        "Bring labor back to Stable (10-15% reduction).",
-                        "Prevent revenue from sliding to Critical.",
-                        "Build foundation for future recovery.",
-                        "Address staff morale and retention."
+                        "Labor target: Bring LCV from Critical to At Risk (10-15% reduction): For UC at $105 LCV, target $89-94 in 90 days. This is realistic through: template redesign ($35K-$50K monthly savings), OT elimination ($15K-$25K monthly), PRN reduction ($10K-$15K monthly). Track weekly cost per visit. Don't declare victory until LCV is consistently below At Risk threshold for 4+ consecutive weeks.",
+                        "Revenue target: Hold At Risk, prevent slide to Critical: Maintain current NRPV throughout labor transformation. Even if you can't improve revenue in 90 days, not letting it fall further is a win. Set floor: 'If NRPV drops below $175, we escalate to revenue crisis mode.' With labor consuming attention, revenue discipline must be maintained by dedicated owner with daily monitoring.",
+                        "Build foundation for 6-12 month full recovery: Once labor is stabilized (Month 3), pivot primary focus to revenue recovery. Use S09/S13 playbooks for revenue improvement once labor burden is removed. This is a sequenced recovery: Month 1-3 = stop bleeding (labor), Month 4-6 = stabilize (revenue), Month 7-12 = recover (both to Stable). Communicate this timeline to staff and leadership—set realistic expectations.",
+                        "Succession and retention planning during extended crisis: Identify your 3 most critical employees (can't lose during recovery). What would make each leave? What would make them stay? Targeted retention actions: flexible scheduling for top MA, public recognition for lead provider, development opportunity for center manager. Losing key people during a dual crisis adds 3-6 months to recovery timeline. Protect them proactively."
                     ]
                 },
                 "expected_impact": {
@@ -789,29 +790,27 @@ class VVIAPIClient:
                 "focus_areas": ["Revenue emergency", "Protect labor excellence", "Financial viability"],
                 "actions": {
                     "do_tomorrow": [
-                        "Revenue crisis huddle with leadership.",
-                        "Immediate revenue cycle audit.",
-                        "Maintain labor discipline while addressing revenue crisis."
+                        "Declare revenue emergency with leadership team and quantify the crisis: 'Our labor is excellent—top tier. But revenue is at $170/visit vs. $200 target. That $30 gap × 90 visits/day × 260 days = $702K annual shortfall we're not capturing. The good news: we only have ONE problem. We fix revenue and this center becomes excellent. Assign dedicated revenue crisis owner—this needs a full-time champion, not a part-time committee.'",
+                        "Conduct urgent revenue cycle audit across all dimensions: (1) Pull last 30 days E&M distribution by provider—if >50% level 3, that's primary problem, (2) Procedure capture rate—should be 25-35% of UC visits, if lower you're missing charges, (3) Charge lag report—anything not submitted same day is a process failure, (4) Denial rate by payer—anything >5% overall needs investigation, (5) Occupational health % and coding accuracy. Calculate: what's the single biggest revenue gap? Fix that first.",
+                        "Protect labor excellence as your most valuable asset during revenue crisis: Labor is your competitive advantage—one dimension working. Email all managers: 'Labor budget is frozen during revenue recovery. Zero overtime without VP approval. Zero PRN without director approval. Revenue improvement comes from better coding and capture—not adding people. Labor stays exactly where it is.' Make it explicit, make it written, make it non-negotiable."
                     ],
                     "next_7_days": [
-                        "Daily revenue recovery meetings.",
-                        "Emergency coding and documentation intervention.",
-                        "Charge capture technology deployment if needed.",
-                        "Denial management acceleration.",
-                        "Contract review for immediate renegotiation opportunities."
+                        "Daily revenue recovery war room (30 minutes, 7:30am): Revenue crisis owner + billing director + center manager. Review: yesterday's charges submitted (target 95%+ same day), denial rate this week, any provider coding flags, today's priorities. One decision minimum per meeting. Every day of Critical revenue at 90 visits = $2,700 of uncaptured revenue. Move fast.",
+                        "Emergency provider coding intervention—complete within this week: Individual 30-minute chart reviews with each provider using their OWN charts from last 7 days. Show specific examples with dollar amounts: 'This visit—level 4 complexity billed as level 3, $18 lost. This laceration—repair code not captured, $85 lost. This work comp visit—billed as sick visit, $40 lost.' Real examples, real dollars, non-threatening tone. Providers respond to 'you're leaving money on the table' faster than any policy.",
+                        "Charge capture technology and process emergency audit: Is EHR charge capture workflow correct? All UC procedures in template (neb, splints, lac repairs, I&D, EKG)? Are ancillary orders auto-generating charges or requiring manual entry? Any known system gaps? Pull list of all procedures performed last 30 days vs. procedure codes billed—gap analysis shows what's falling through. Fix the technology before training the people.",
+                        "Denial management acceleration: Pull AR aging. Anything >45 days needs immediate collector attention. Appeal all denied claims >$100 within 5 business days (this week). Denial root cause analysis: top 5 reasons for denials represent 70-80% of denial volume—fix the root causes. Collections acceleration can recover $20K-$50K in first 30 days from aged AR alone."
                     ],
                     "next_30_60_days": [
-                        "Intensive provider documentation training and coaching.",
-                        "Real-time charge capture audits with daily feedback.",
-                        "Revenue cycle process redesign.",
-                        "Consider service line adjustments or payer mix changes.",
-                        "Maintain labor efficiency throughout revenue transformation."
+                        "Intensive UC-specific provider documentation and coding training—chart-based only: Bring certified UC coder for 3-hour group session using real charts from your center. Then individual 45-minute follow-up with each provider. Cover: (1) Exactly what documentation makes level 4 vs. level 3 (the 2-3 missing elements in their charts), (2) Every procedure that requires separate billing in UC (show checklist), (3) Occupational health vs. sick visit coding rules, (4) How to document level 4 complexity in 30 seconds not 5 minutes using EHR templates. Practice changes happen in 60-90 days—start immediately.",
+                        "Real-time charge capture monitoring with daily provider feedback: (1) Daily charge lag dashboard showing each provider's same-day submission rate, (2) Weekly scorecard: E&M distribution, procedure capture rate, revenue/visit vs. peers and national UC benchmark, (3) Monthly one-on-one coaching session with bottom-quartile performers. Make data transparent and supportive—'Here's your capture vs. what was available, here's the dollar gap, here's how to close it.' Remove friction from good documentation.",
+                        "Revenue cycle process redesign—fix every leakage point: Map current process: order → documentation → charge capture → submission → adjudication → payment. Find every hand-off where charges can fall through. Implement: same-day submission rule (hard stop at end of each shift), order-to-charge reconciliation (every X-ray ordered has corresponding charge), procedure note template (standard language satisfying billing requirements), end-of-shift charge reconciliation by provider. Process fixes are faster and more durable than behavior changes.",
+                        "Payer contract and mix strategic review: Top 10 payers by volume—last rate negotiation date, current rates vs. market, denial rates by payer. Schedule meetings with top 3 payers for rate discussions. Even 3-5% rate increases on major contracts add $45K-$90K annually with zero operational changes. Also analyze case mix: are you seeing lower-acuity visits than your market supports? If yes, marketing occupational health and acute injury care can improve mix naturally."
                     ],
                     "next_60_90_days": [
-                        "Target 12-20% revenue per visit improvement.",
-                        "Restore financial sustainability.",
-                        "Prevent labor from drifting during revenue crisis.",
-                        "Build long-term revenue discipline."
+                        "Target 12-20% revenue per visit improvement through aggressive coding and capture fixes: For UC at $170 NRPV, target $195-204 within 90 days. Phased milestones: Month 1 = +$8/visit (quick wins: OT elimination, easy coding fixes), Month 2 = +$14/visit (training impact), Month 3 = +$18/visit (full implementation). Calculate weekly: visits × revenue improvement = monthly dollar recovery. Make the number visible.",
+                        "Restore financial sustainability by reaching At Risk Revenue tier as milestone: Getting from Critical to At Risk on revenue is the 90-day goal—not Excellence yet. That's realistic and meaningful. For UC at $170 NRPV, getting to $190 (At Risk threshold) is a $20/visit improvement × 90 visits/day × 90 days = $162K recovery in the period. Celebrate that milestone explicitly.",
+                        "Protect labor excellence throughout revenue crisis—this is your competitive advantage: Monthly labor check-in (not daily—revenue crisis deserves more attention, but labor needs monitoring): Hours vs. budget, OT%, PRN usage, template compliance. If labor starts drifting even 5%, immediate correction. You have one of two dimensions working—protect it fiercely. Don't let revenue crisis create a second problem.",
+                        "Build permanent revenue discipline infrastructure: (1) Monthly provider coding scorecards with peer benchmarks (permanent, not crisis-only), (2) Real-time charge capture dashboard visible to management daily, (3) Quarterly payer contract review cycle, (4) New provider onboarding includes 4-hour coding training in week 1. Revenue discipline must become cultural, not just a crisis response."
                     ]
                 },
                 "expected_impact": {
@@ -834,24 +833,29 @@ class VVIAPIClient:
                 "focus_areas": ["Revenue emergency response", "Labor stability", "Financial rescue"],
                 "actions": {
                     "do_tomorrow": [
-                        "Revenue crisis declaration with full leadership team.",
-                        "Yesterday's revenue audit with fine-tooth comb.",
-                        "Protect labor stability during revenue emergency."
+                        "Declare revenue crisis with full leadership team and quantify the problem: 'We're at $168/visit vs. $200 target. That $32 gap × 90 visits/day × 260 days = $748K annual revenue shortfall. Labor is stable—that's our one advantage. We're going to fix revenue without touching labor.' Assign a revenue crisis owner (director or VP level) with full authority to implement changes. This needs a dedicated leader, not a committee.",
+                        "Conduct comprehensive revenue audit of last 30 days: (1) E&M distribution by provider—if showing >50% level 3, that's your primary problem, (2) Procedure capture rate—what % of visits have a procedure code? Should be 25-35% in UC, (3) Charge lag—what % of charges submitted same day? Anything under 90% is a problem, (4) Denial rate by payer—over 5% overall is a red flag, (5) Work comp visits as % of total and whether coded correctly. Score each category: which is worst?",
+                        "Protect labor stability during revenue crisis—guard it like gold: Quick audit of today's schedule vs. volume forecast. Any overtime risk? New staffing requests? Send email to all managers: 'Labor budget remains frozen during revenue crisis. No exceptions. Any staffing changes require my personal approval.' Labor is stable—keep it that way by making its protection explicit and visible."
                     ],
                     "next_7_days": [
-                        "Daily revenue recovery war room.",
-                        "Emergency provider coding education.",
-                        "Charge capture technology and process fixes.",
-                        "Billing and collections acceleration.",
-                        "Monitor labor to prevent drift during crisis focus."
+                        "Daily revenue recovery war room (30 min, 7:30am): Revenue crisis owner + billing manager + center manager. Review: yesterday's charges submitted (target: 95%+ same day), denial rate this week vs. last week, any coding anomalies flagged by billing team, today's priorities. One decision per meeting minimum. Move fast—every day of Critical revenue is $2,500-$3,500 of unrecovered revenue.",
+                        "Emergency provider coding intervention—within this week: Schedule individual 30-minute chart reviews with each provider using their actual charts from last week. Show specific examples: 'This visit—you documented level 4 complexity but billed level 3. That's $18 left on the table. Here are the 2 additional elements you could have added in 30 extra seconds of documentation.' Make it concrete, non-threatening, and financially framed. Providers respond to 'you're leaving money on the table' more than 'you're coding wrong.'",
+                        "Charge capture technology and process audit: Is your EHR charge capture workflow functioning correctly? Are all common UC procedures in the charge capture template (neb treatments, splints, lac repairs, I&Ds)? Are ancillary orders (X-ray, labs) automatically generating charges or requiring manual entry? Any known system gaps? Fix process before adding people. Technology fixes are faster and cheaper than training fixes.",
+                        "Billing and collections acceleration: Pull AR aging report. Anything >60 days needs immediate attention. Assign collector to work through top 20 accounts by balance. Appeal all denied claims >$150 within 5 business days. Collections acceleration can recover $15K-$40K in first month from aged AR alone—quick cash while training impacts develop."
                     ],
                     "next_30_60_days": [
-                        "Complete revenue cycle transformation.",
-                        "Provider financial performance transparency and accountability.",
-                        "Payer contract optimization.",
-                        "Service line profitability analysis.",
-                        "Maintain labor cost discipline."
+                        "Complete revenue cycle transformation targeting the biggest gaps first: CODING (if primary gap): All-provider training complete, weekly coding distribution reports, monthly one-on-one coaching. CHARGE CAPTURE (if primary gap): EHR workflow redesign, daily charge lag reports, procedure capture checklists posted in every room. DENIALS (if primary gap): Root cause analysis complete, payer-specific fix protocols, timely filing monitoring. CONTRACTS (if primary gap): Top 3 payer renegotiation meetings scheduled, rate comparison analysis complete. Address the biggest dollar gap first.",
+                        "Provider financial transparency rollout: Monthly scorecard per provider: visits seen, revenue generated, revenue per visit, E&M distribution, procedure capture rate. Share in group setting—anonymous first month, named after. Benchmark against UC national data (not just internal peers). Providers in Critical revenue situations often don't realize their individual contribution to the problem. Data plus coaching creates rapid behavior change.",
+                        "Payer contract strategic review: Pull last 3 years of rate history by payer. Which haven't been renegotiated? Which have high denial rates indicating relationship issues? Which have rates significantly below market? Schedule meetings with top 5 payers. Even getting 2-3 payers to agree to 3-5% rate increases adds $45K-$90K annually with no operational changes required.",
+                        "Service line and case mix analysis: What types of visits are you seeing? If you have unusually high % of level 2-3 visits (simple sore throats, minor complaints) and low % of level 4-5 (complex injuries, multiple complaints), you may have a marketing/access problem—patients not knowing you handle higher-acuity cases. Market occupational health, sports medicine, and complex acute care more aggressively to improve case mix."
                     ],
+                    "next_60_90_days": [
+                        "Revenue recovery target: Improve NRPV 15-25% over 90 days. From $168 target $193-210. Milestones: Month 1 = +$8/visit (coding quick wins + charge capture fixes), Month 2 = +$15/visit (training impact + denial reduction), Month 3 = +$22/visit (contract improvements + full implementation). $22/visit improvement × 90 visits/day × 30 days = $59,400/month recovered. Quarterly = $178K. That's the prize.",
+                        "Maintain labor stability as non-negotiable parallel commitment: Monthly (not daily—revenue needs primary attention) labor check: LCV vs. budget, OT%, template compliance, any new staffing requests. Set bright line: 'If LCV rises more than 3% from current level, we implement immediate labor freeze and daily monitoring.' Don't let revenue focus create a new labor problem. Two problems simultaneously is S11/S12/S15 territory.",
+                        "Build sustainable revenue infrastructure so this doesn't happen again: Why did revenue reach Critical? Was there no monitoring? Provider turnover that disrupted coding quality? EHR transition? Payer change? Leadership gap? Identify root cause of how you got here, not just how to fix it. Build the monitoring system that catches the next drift at $5-8/visit, not $30-35/visit.",
+                        "Timeline to viability: Set honest milestones with leadership and board: 30 days = stop the decline (coding and charge capture stabilized), 60 days = early recovery visible ($10+/visit improvement), 90 days = At Risk threshold reached ($190+ NRPV), 6 months = Stable threshold target ($200+ NRPV), 12 months = full sustainability. This is a 12-month recovery, not a 90-day fix. Set expectations accordingly."
+                    ]
+                },
                     "next_60_90_days": [
                         "Achieve 15-25% revenue improvement to restore viability.",
                         "Build sustainable revenue capture culture.",
@@ -879,28 +883,27 @@ class VVIAPIClient:
                 "focus_areas": ["Dual emergency", "Triage and stabilize", "Survival mode"],
                 "actions": {
                     "do_tomorrow": [
-                        "Revenue-focused huddle: celebrate labor efficiency, focus on revenue gaps.",
-                        "Audit yesterday's charge capture and coding.",
-                        "Ask providers: are we capturing all billable services?"
+                        "Convene emergency executive session for 2 hours (CEO/COO, CFO, CMO, VP Operations, Revenue Cycle Director): Bring both P&Ls—revenue and labor. Quantify the combined crisis: 'Revenue gap = $30/visit below target. Labor gap = $12/visit above target. Combined = $42/visit shortfall × 90 visits/day × 260 days = $982K annual problem.' Make go/no-go decision: Is this center salvageable? If leadership is committed, assign TWO dedicated crisis owners—one for revenue, one for labor. Dual crises need dual leaders.",
+                        "Immediate dual-metric emergency triage: REVENUE: Pull last 20 charts—E&M coding, procedure capture, charge lag, denial rate. Score revenue crisis severity 1-10. LABOR: Print today's schedule vs. census. Calculate FTE per patient. Review last week's OT hours and PRN spend. Score labor crisis severity 1-10. The higher-scoring crisis gets primary attention first 2 weeks, but both need daily monitoring from day 1.",
+                        "Stop both bleeding wounds immediately: REVENUE: Send email to billing team—'Charge lag report due by 8am daily. Any charge >24 hours old is escalated to me.' LABOR: Send email to all managers—'Effective immediately: zero overtime without VP approval, zero PRN orders without director approval, no new hires.' Both moves in same day, same urgency level. This is triage—stop the bleeding before you can fix the injuries."
                     ],
                     "next_7_days": [
-                        "Conduct comprehensive revenue cycle diagnostic.",
-                        "Review coding levels, charge capture, and denial patterns.",
-                        "Analyze payer mix and contract performance.",
-                        "Provider documentation audit on top 10 CPT codes."
+                        "Daily dual-crisis war room at 7:15am (45 minutes): Revenue owner reports first (15 min): yesterday's charges, denial rate, any coding flags, today's revenue priorities. Labor owner reports second (15 min): yesterday's hours vs. budget, OT, PRN, any staffing issues. Joint discussion (15 min): resource conflicts, sequencing decisions, escalations needed. CEO/COO attends at least 3 of 5 days this week—signals urgency from top.",
+                        "Emergency revenue actions—execute all within 7 days: (1) Individual provider chart review with revenue crisis owner and certified coder—show each provider their specific coding gaps with dollar amounts, (2) Charge capture workflow audit—identify where charges fall through and implement same-day submission rule immediately, (3) Denial triage—pull 60-day denial report, appeal everything >$150 immediately, (4) Work comp audit—are all occupational visits getting premium rates? Correct retroactively where possible.",
+                        "Emergency labor actions—execute all within 7 days: (1) Overtime freeze with daily approval log (track who requests, why, approved/denied), (2) PRN/agency cancellation of all non-essential contracts this week, (3) Staffing template audit—compare Friday/Monday templates, send written recommendation for template redesign to scheduler, (4) Send-home protocol activated—if <3 patients waiting at any time, 1 MA and 1 front desk are sent home. These 4 actions should produce measurable cost reduction within 2 weeks.",
+                        "Communicate transparently with all staff—silence breeds fear in dual crises: All-hands meeting (30 minutes, all staff): 'We have two serious problems. Revenue is $30/visit below target. Labor is $12/visit above budget. Combined, we're losing nearly $1M annually. This is not sustainable. We're committed to fixing it. Here's the plan for each. Here's what we need from you. Here's our timeline. Questions?' Give people the real numbers. Staff who understand the severity rise to challenges—staff kept in the dark quit."
                     ],
                     "next_30_60_days": [
-                        "Launch intensive provider coding and documentation training.",
-                        "Implement real-time charge capture monitoring and feedback.",
-                        "Optimize E&M levels and ancillary service billing.",
-                        "Address top denial reasons and appeal backlog.",
-                        "Review contracts and identify renegotiation opportunities."
+                        "Execute parallel transformation tracks with weekly joint accountability: REVENUE TRACK (Month 1-2 actions): Week 1-2 = coding training complete for all providers, Week 3-4 = charge capture workflow redesigned and monitored daily, Week 5-6 = denial rate reduction plan executing, Week 7-8 = occupational health revenue optimization complete. Target: +$12/visit by end of Month 2. LABOR TRACK (Month 1-2 actions): Week 1-2 = template redesign implemented, Week 3-4 = cross-training launched (3 MAs → front desk, 2 front desk → basic MA), Week 5-6 = OT consistently under 5%, Week 7-8 = PRN dependency eliminated. Target: -$8/visit by end of Month 2.",
+                        "Revenue cycle comprehensive redesign—not patches, rebuild: (1) Provider documentation standards—create UC-specific templates that efficiently capture level 4 complexity, (2) Charge capture technology—implement real-time charge capture with EHR integration if not already present, (3) Billing workflow—redesign from charge creation to submission to appeal with clear hand-offs and daily reconciliation, (4) Payer management—top 5 payers contacted for rate discussions, all contracts reviewed for negotiation opportunities. This is a 60-day operational overhaul, not a training session.",
+                        "Labor model complete rebuild—match UC demand precisely: New staffing model documented: MONDAY (100-140 patients) = 4 providers, 7-8 MAs, 3 front desk plus surge capacity 4-7pm. FRIDAY (50-70 patients) = 2 providers, 3-4 MAs, 2 front desk. PEAK HOURS daily (9-11am, 4-7pm) = +1 provider, +2 MAs. OFF-PEAK DAILY (1-3pm) = -1 MA, -1 front desk via flex home. Calculate FTE savings vs. current model. For most UCs in this scenario: 1.5-2.5 FTE equivalent savings ($105K-$175K annually) from template alone.",
+                        "Address root cultural and leadership issues driving dual crisis: This scenario almost always has a leadership component. Who was watching these numbers? Why did revenue reach Critical before intervention? Why did labor reach At Risk without correction? Honest assessment: leadership capability gap? Accountability absence? Data visibility failure? Fix the system that allowed this to happen, not just the symptoms. Consider whether current center manager has capacity and capability to lead through recovery."
                     ],
                     "next_60_90_days": [
-                        "Target 5-10% revenue per visit improvement.",
-                        "Formalize provider scorecards with financial transparency.",
-                        "Consider service line expansion if capacity supports it.",
-                        "Maintain labor discipline while growing revenue."
+                        "Dual recovery targets for 90-day milestone: REVENUE: From Critical to At Risk threshold ($170+ NRPV). At $168 current, target $178-185 by day 90. That requires $10-17/visit improvement—achievable through coding correction and charge capture alone. LABOR: From At Risk to Stable threshold (LCV ≤$90). From $98 current, target $88-90 by day 90. Achievable through template redesign and OT elimination alone. COMBINED: Both improving simultaneously by day 90 = major victory. Celebrate it explicitly.",
+                        "Financial viability assessment at 60-day mark: If by day 60 you're not seeing +$5/visit revenue improvement AND -$4/visit labor improvement, reassess viability. This center may have structural issues (location, payer mix, market) that operational fixes cannot overcome. Make the honest assessment: (1) Is recovery trajectory realistic? (2) Can we reach breakeven within 12 months? (3) Is continued investment justified? Don't let sunk cost fallacy drive continued losses.",
+                        "Staff retention through extended dual crisis is critical: Identify your 5 most critical employees right now. What's their satisfaction level? What would make them leave? Proactive actions: Revenue crisis owner has 1:1 with top provider weekly. Labor crisis owner has 1:1 with senior MA weekly. CEO/COO sends personal thank-you to each top performer monthly. Small retention investments: $2,000 in targeted recognition prevents $50,000 in turnover cost. Protect your people explicitly and visibly.",
+                        "Build monitoring infrastructure that catches problems early—forever: After recovery, implement permanent dual monitoring: Daily dashboard (revenue per visit, labor cost per visit, visits, OT hours), Weekly leadership review (both metrics, trend analysis, action items), Monthly deep dive (root cause analysis, template review, provider performance), Quarterly strategic assessment (competitive position, growth opportunities, retention). S15 almost never happens when monitoring is strong. Build the system that prevents you from ever being here again."
                     ]
                 },
                 "expected_impact": {
@@ -1678,7 +1681,7 @@ st.markdown("---")
 st.markdown(
     """
     <div style="text-align:center; color:#777; font-size:0.85rem; padding:2rem 0 1rem 0;">
-        <p><b>Visit Value Index™ (VVI)</b> | Version 3.0 — AI Upload (Beta)</p>
+        <p><b>Visit Value Index™ (VVI)</b> | Version 3.1 — Complete Edition</p>
         <p>Bramhall Consulting, LLC | © 2024</p>
         <p style="margin-top:0.5rem;">
             <a href="https://bramhallconsulting.org" target="_blank" style="color:#b08c3e; text-decoration:none;">
