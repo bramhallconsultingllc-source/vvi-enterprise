@@ -2,7 +2,7 @@
 Visit Value Index (VVI) Application - Enterprise Edition
 Bramhall Consulting, LLC
 
-VERSION: 3.2 - Multi-Clinic Portfolio Manager
+VERSION: 3.3 - Board-Ready Excel Report + AI Coach + Multi-Clinic Portfolio
 Last Updated: February 17, 2026
 
 Upgraded architecture:
@@ -34,6 +34,191 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+
+# OpenAI — optional, graceful fallback if not installed
+try:
+    from openai import OpenAI as _OpenAI
+    _OPENAI_AVAILABLE = True
+except Exception:
+    _OPENAI_AVAILABLE = False
+
+# ============================================================
+# AI Extraction Helper
+# ============================================================
+
+def _get_openai_client():
+    """Return OpenAI client using key from Streamlit secrets or env."""
+    try:
+        key = st.secrets.get("OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY")
+    except Exception:
+        key = os.getenv("OPENAI_API_KEY")
+    if not key:
+        return None, "Missing OPENAI_API_KEY in Streamlit secrets."
+    if not _OPENAI_AVAILABLE:
+        return None, "openai package not installed. Add `openai` to requirements.txt."
+    return _OpenAI(api_key=key), None
+
+
+def extract_vvi_from_file(file_bytes: bytes, filename: str) -> dict:
+    """
+    Send spreadsheet content to GPT-4o and extract VVI metrics.
+    Returns dict with keys: visits, nor, swb, period, nrpv_target, lcv_target,
+    clinic_name, confidence, raw_text, error
+    """
+    client, err = _get_openai_client()
+    if err:
+        return {"error": err}
+
+    # Convert file to readable text using pandas
+    try:
+        if filename.endswith(".csv"):
+            df = pd.read_csv(io.BytesIO(file_bytes))
+            file_text = df.to_string(max_rows=200)
+        else:
+            xl = pd.read_excel(io.BytesIO(file_bytes), sheet_name=None)
+            parts = []
+            for sheet_name, df in xl.items():
+                parts.append(f"\n--- SHEET: {sheet_name} ---\n")
+                parts.append(df.to_string(max_rows=200))
+            file_text = "\n".join(parts)
+    except Exception as e:
+        return {"error": f"Could not read file: {e}"}
+
+    extraction_prompt = """You are a financial data extraction specialist for healthcare clinics.
+Extract the following metrics from this clinic financial spreadsheet.
+
+FIELDS TO EXTRACT:
+1. clinic_name: Name of the clinic (string, or null if not found)
+2. period: Reporting period e.g. "January 2026" (string, or null)
+3. visits: Total patient visits / encounters (integer)
+4. nor: Net Operating Revenue in dollars (float) — also called NOR, Net Revenue, Revenue
+5. swb: Labor expense in dollars (float) — also called SWB, Salaries Wages Benefits, Labor Cost, Labor Expense
+6. nrpv_target: Budgeted/target Net Revenue per Visit in dollars (float) — also called NRPV target, Revenue benchmark per visit
+7. lcv_target: Budgeted/target Labor Cost per Visit in dollars (float) — also called LCV target, SWB benchmark per visit
+8. confidence: Your confidence in the extraction — "high", "medium", or "low"
+
+RULES:
+- Return ONLY valid JSON, no markdown, no explanation
+- Use null for any field you cannot find with confidence
+- All dollar amounts should be raw numbers (e.g. 250000 not "$250,000")
+- If nrpv_target or lcv_target are not found, return null (do not guess)
+- If visits is expressed as thousands, convert to full integer
+
+JSON FORMAT:
+{
+  "clinic_name": "string or null",
+  "period": "string or null",
+  "visits": integer or null,
+  "nor": float or null,
+  "swb": float or null,
+  "nrpv_target": float or null,
+  "lcv_target": float or null,
+  "confidence": "high" | "medium" | "low"
+}"""
+
+    try:
+        resp = client.chat.completions.create(
+            model="gpt-4o",
+            temperature=0.1,
+            messages=[
+                {"role": "system", "content": extraction_prompt},
+                {"role": "user",   "content": f"Extract VVI metrics from this spreadsheet:\n\n{file_text[:12000]}"}
+            ]
+        )
+        raw = resp.choices[0].message.content.strip()
+        # Strip markdown fences if present
+        raw = raw.replace("```json", "").replace("```", "").strip()
+        data = json.loads(raw)
+        data["raw_text"] = file_text[:500]  # preview for debugging
+        return data
+    except json.JSONDecodeError as e:
+        return {"error": f"AI returned invalid JSON: {e}"}
+    except Exception as e:
+        return {"error": f"AI extraction failed: {e}"}
+
+
+# ============================================================
+# AI Coach
+# ============================================================
+
+AI_COACH_SYSTEM_PROMPT = """You are the VVI AI Coach for Bramhall Consulting.
+
+Your role is narrow and specific:
+- Answer only the selected canned question using the clinic context provided.
+- Never invent new actions beyond what the Insight Pack contains.
+- Maintain Bramhall Consulting's tone: calm, steady, operational, supportive, and practical.
+
+ABSOLUTE GUARDRAILS:
+- Never state causes as certainties. Use: "may", "could", "often", "typically", "may suggest".
+- Never diagnose burnout, disengagement, or personal/emotional states.
+- Never assert staffing levels or turnover certainty.
+- Never use: "your staff is...", "this caused...", "you need to...", "you are overstaffed..."
+- Replace with conditional, pattern-based language.
+
+ENDING REQUIREMENT (MANDATORY):
+End every answer with ONE short motivational closing line from this list, preceded by "---" and "**Leadership Reflection**":
+1. Steady progress compounds.
+2. Small wins, repeated consistently, shift long-term performance.
+3. Clarity and calm execution strengthen reliability.
+4. Momentum is built one disciplined action at a time.
+5. Operational excellence grows from consistency, not intensity.
+6. Predictability is a leadership superpower.
+7. Reliable routines create reliable outcomes.
+8. Every stable process reduces tomorrow's friction.
+9. Small adjustments today prevent large corrections tomorrow.
+10. Consistency turns complexity into something manageable.
+
+Format the closing line in italics. Answer in markdown. Be concise and scannable."""
+
+AI_COACH_QUESTIONS = [
+    "Explain this scenario to a CFO who is new to VVI.",
+    "What should we say in our morning huddles?",
+    "Summarize this clinic's situation in 3 bullets.",
+    "Why did we land in this scenario?",
+    "What early indicators should we monitor?",
+    "How do we communicate this to frontline staff?",
+    "What are practical ways to improve staff morale here?",
+    "What steps can reduce burnout for MAs and front-desk staff?",
+    "What would move us to the next better scenario?",
+    "Convert this scenario into a 1-minute message for staff.",
+]
+
+
+def ai_coach_answer(question: str, scenario_data: dict, scores: dict) -> tuple[bool, str]:
+    """Returns (ok, markdown_text)."""
+    client, err = _get_openai_client()
+    if err:
+        return False, err
+
+    context = {
+        "vvi_score": scores.get("vvi"),
+        "rf_score": scores.get("rf"),
+        "lf_score": scores.get("lf"),
+        "scenario": scenario_data.get("name", ""),
+        "risk_level": scenario_data.get("risk_level", ""),
+        "executive_narrative": scenario_data.get("executive_narrative", ""),
+        "root_causes": scenario_data.get("root_causes", []),
+        "focus_areas": scenario_data.get("focus_areas", []),
+        "do_tomorrow": scenario_data.get("actions", {}).get("do_tomorrow", []),
+        "next_7_days": scenario_data.get("actions", {}).get("next_7_days", []),
+        "expected_impact": scenario_data.get("expected_impact", {}),
+    }
+
+    try:
+        resp = client.chat.completions.create(
+            model="gpt-4o-mini",
+            temperature=0.25,
+            messages=[
+                {"role": "system", "content": AI_COACH_SYSTEM_PROMPT},
+                {"role": "user", "content": (
+                    f"Clinic context:\n{json.dumps(context, indent=2)}\n\n"
+                    f"Answer this question:\n{question}"
+                )}
+            ]
+        )
+        return True, resp.choices[0].message.content.strip()
+    except Exception as e:
+        return False, f"AI Coach error: {e}"
 
 # ============================================================
 # Configuration & Settings
@@ -1178,10 +1363,10 @@ with st.expander("➕ Add a Clinic to Portfolio", expanded=len(st.session_state.
 
     with col_upload:
         new_upload = st.file_uploader(
-            "Upload Financial Statement (optional)",
-            type=["xlsx", "xls", "csv", "pdf"],
+            "Upload VVI Financial Summary (.xlsx or .csv)",
+            type=["xlsx", "xls", "csv"],
             key="new_clinic_file",
-            help="Upload a P&L or financial spreadsheet. AI extraction activates once API is deployed. For now, enter metrics manually below."
+            help="Upload the VVI Clinic Financial Summary template. AI will extract all metrics automatically."
         )
 
     with col_name:
@@ -1192,36 +1377,136 @@ with st.expander("➕ Add a Clinic to Portfolio", expanded=len(st.session_state.
             key="new_clinic_name_input"
         )
 
-    # Show upload confirmation
+    # ── AI Extraction flow ────────────────────────────────────
     if new_upload is not None:
-        st.info(f"📎 **{new_upload.name}** uploaded — enter metrics manually below (AI extraction coming soon).")
+        st.success(f"📎 **{new_upload.name}** ready for extraction")
 
-    # Mini input form for this clinic
-    st.markdown("**Enter Clinic Metrics**")
-    c1, c2, c3 = st.columns(3)
-    with c1:
-        nc_visits = st.number_input("Monthly Visits", min_value=1, value=1000, step=50, key="nc_visits")
-        nc_period = st.text_input("Period", value="January 2026", key="nc_period")
-    with c2:
-        nc_rev = st.number_input("Net Revenue ($)", min_value=0.0, value=200000.0, step=1000.0, format="%.0f", key="nc_rev")
-        nc_rev_target = st.number_input("Revenue Target ($)", min_value=0.0, value=200000.0, step=1000.0, format="%.0f", key="nc_rev_target")
-    with c3:
-        nc_labor = st.number_input("Labor Cost ($)", min_value=0.0, value=85000.0, step=1000.0, format="%.0f", key="nc_labor")
-        nc_labor_target = st.number_input("Labor Target ($)", min_value=0.0, value=85000.0, step=1000.0, format="%.0f", key="nc_labor_target")
+        col_ai, col_manual = st.columns([1, 1])
+        with col_ai:
+            run_extract = st.button("🤖 Extract with AI", type="primary",
+                                    use_container_width=True,
+                                    help="AI reads your spreadsheet and auto-populates all metrics")
+        with col_manual:
+            show_manual = st.checkbox("Enter manually instead", key="show_manual_toggle")
+
+        # AI extraction
+        if run_extract:
+            with st.spinner("🔍 AI reading your spreadsheet…"):
+                file_bytes = new_upload.read()
+                result = extract_vvi_from_file(file_bytes, new_upload.name)
+
+            if "error" in result:
+                st.error(f"❌ Extraction failed: {result['error']}")
+                st.info("Please enter values manually below.")
+                show_manual = True
+            else:
+                # Store in session state for display / editing
+                st.session_state["extracted_data"] = result
+                conf = result.get("confidence", "low")
+                conf_color = {"high": "🟢", "medium": "🟡", "low": "🔴"}.get(conf, "⚪")
+                st.success(f"{conf_color} Extraction complete — confidence: **{conf.title()}**")
+
+                # Auto-fill clinic name from spreadsheet if user hasn't changed it
+                if result.get("clinic_name") and new_clinic_name.startswith("Clinic "):
+                    st.info(f"💡 Clinic name detected: **{result['clinic_name']}**")
+
+        # Show extracted values (editable)
+        if "extracted_data" in st.session_state and not show_manual:
+            ex = st.session_state["extracted_data"]
+            st.markdown("**✏️ Review & confirm extracted values:**")
+            c1, c2, c3 = st.columns(3)
+            with c1:
+                nc_visits      = st.number_input("Total Visits", min_value=1,
+                                                  value=int(ex.get("visits") or 1000),
+                                                  step=50, key="nc_visits")
+                nc_period      = st.text_input("Period",
+                                               value=str(ex.get("period") or "January 2026"),
+                                               key="nc_period")
+            with c2:
+                nc_rev         = st.number_input("Net Revenue — NOR ($)", min_value=0.0,
+                                                  value=float(ex.get("nor") or 200000.0),
+                                                  step=1000.0, format="%.0f", key="nc_rev")
+                nc_rev_target  = st.number_input("Budgeted NRPV ($/visit)", min_value=0.0,
+                                                  value=float(ex.get("nrpv_target") or 200.0),
+                                                  step=1.0, format="%.2f", key="nc_rev_target")
+            with c3:
+                nc_labor       = st.number_input("Labor Cost — SWB ($)", min_value=0.0,
+                                                  value=float(ex.get("swb") or 85000.0),
+                                                  step=1000.0, format="%.0f", key="nc_labor")
+                nc_labor_target= st.number_input("Budgeted LCV ($/visit)", min_value=0.0,
+                                                  value=float(ex.get("lcv_target") or 85.0),
+                                                  step=1.0, format="%.2f", key="nc_labor_target")
+
+            # Convert per-visit targets to totals for calculation
+            _rev_target_total   = nc_rev_target * nc_visits
+            _labor_target_total = nc_labor_target * nc_visits
+
+        else:
+            show_manual = True  # fall through to manual form
+
+    else:
+        show_manual = True
+
+    # ── Manual entry form ─────────────────────────────────────
+    if 'show_manual_toggle' not in st.session_state:
+        show_manual = True
+
+    if new_upload is None or st.session_state.get("show_manual_toggle", False):
+        if new_upload is None:
+            st.caption("No file uploaded — enter metrics manually, or upload the VVI template above.")
+        st.markdown("**Enter Clinic Metrics**")
+        c1, c2, c3 = st.columns(3)
+        with c1:
+            nc_visits       = st.number_input("Total Visits", min_value=1, value=1000,
+                                               step=50, key="nc_visits_m")
+            nc_period       = st.text_input("Period", value="January 2026", key="nc_period_m")
+        with c2:
+            nc_rev          = st.number_input("Net Revenue — NOR ($)", min_value=0.0,
+                                               value=200000.0, step=1000.0, format="%.0f",
+                                               key="nc_rev_m")
+            nc_rev_target   = st.number_input("Budgeted NRPV ($/visit)", min_value=0.0,
+                                               value=200.0, step=1.0, format="%.2f",
+                                               key="nc_rev_target_m")
+        with c3:
+            nc_labor        = st.number_input("Labor Cost — SWB ($)", min_value=0.0,
+                                               value=85000.0, step=1000.0, format="%.0f",
+                                               key="nc_labor_m")
+            nc_labor_target = st.number_input("Budgeted LCV ($/visit)", min_value=0.0,
+                                               value=85.0, step=1.0, format="%.2f",
+                                               key="nc_labor_target_m")
+        _rev_target_total   = nc_rev_target * nc_visits
+        _labor_target_total = nc_labor_target * nc_visits
 
     if st.button("✅ Add Clinic to Portfolio", type="primary", use_container_width=True):
         name = new_clinic_name.strip() or f"Clinic {len(st.session_state.portfolio) + 1}"
-        # Prevent duplicate names
+
+        # Use extracted clinic name if available and user hasn't renamed
+        if ("extracted_data" in st.session_state and
+                st.session_state["extracted_data"].get("clinic_name") and
+                name.startswith("Clinic ")):
+            name = st.session_state["extracted_data"]["clinic_name"]
+
         existing_names = [c["name"] for c in st.session_state.portfolio]
         if name in existing_names:
             name = f"{name} ({len(st.session_state.portfolio) + 1})"
 
-        # Calculate VVI scores inline
+        # Determine which input set to use
         try:
-            nrpv = nc_rev / nc_visits if nc_visits > 0 else 0
-            rt_pv = nc_rev_target / nc_visits if nc_visits > 0 else 1
-            lcv  = nc_labor / nc_visits if nc_visits > 0 else 0
-            lt_pv = nc_labor_target / nc_visits if nc_visits > 0 else 1
+            _visits = nc_visits
+            _rev    = nc_rev
+            _labor  = nc_labor
+            _rt     = _rev_target_total
+            _lt     = _labor_target_total
+            _period = nc_period
+        except NameError:
+            st.error("Please enter clinic metrics above before adding.")
+            st.stop()
+
+        try:
+            nrpv  = _rev / _visits if _visits > 0 else 0
+            rt_pv = _rt  / _visits if _visits > 0 else 1
+            lcv   = _labor / _visits if _visits > 0 else 0
+            lt_pv = _lt  / _visits if _visits > 0 else 1
             rf = round((nrpv / rt_pv) * 100, 1) if rt_pv > 0 else 0
             lf = round((lt_pv / lcv) * 100, 1) if lcv > 0 else 0
             vvi = round((rf + lf) / 2, 1)
@@ -1840,54 +2125,506 @@ if st.session_state.get("assessment_ready", False):
                 st.markdown(f"- {risk}")
     
     # ========================================
+    # ========================================
+    # AI Coach
+    # ========================================
+
+    st.markdown("---")
+    st.subheader("🤖 AI Coach")
+    st.caption(
+        "Ask a guided question about this clinic's scenario. "
+        "Powered by GPT-4o-mini — answers are grounded in the scenario analysis above."
+    )
+
+    coach_key_ok = bool(
+        (hasattr(st, "secrets") and st.secrets.get("OPENAI_API_KEY")) or
+        os.getenv("OPENAI_API_KEY")
+    )
+
+    if not coach_key_ok:
+        st.info(
+            "💡 **AI Coach requires an OpenAI API key.** "
+            "Add `OPENAI_API_KEY` to your Streamlit secrets to activate."
+        )
+    else:
+        coach_q = st.selectbox(
+            "Select a question:",
+            AI_COACH_QUESTIONS,
+            key="coach_question_select"
+        )
+        if st.button("💬 Ask AI Coach", type="primary"):
+            with st.spinner("AI Coach thinking…"):
+                ok, answer = ai_coach_answer(
+                    question=coach_q,
+                    scenario_data=scenario,
+                    scores=scores,
+                )
+            if ok:
+                st.markdown(answer)
+            else:
+                st.warning(answer)
+
     # Save & Export
     # ========================================
-    
+
     st.markdown("---")
     st.subheader("💾 Save & Export")
-    
+
     col1, col2 = st.columns(2)
-    
+
     with col1:
         run_name = st.text_input(
             "Save this assessment as:",
             value=f"Clinic {len(st.session_state.portfolio) + 1}"
         )
-        
         if st.button("💾 Save to Portfolio", type="primary"):
             name = run_name.strip() or f"Clinic {len(st.session_state.portfolio) + 1}"
             existing_names = [c["name"] for c in st.session_state.portfolio]
             if name in existing_names:
                 name = f"{name} (2)"
             st.session_state.portfolio.append({
-                "name":          name,
-                "period":        period,
-                "visits":        visits,
-                "net_revenue":   net_rev,
-                "labor_cost":    labor,
-                "rev_target":    rt,
-                "labor_target":  lt,
-                "vvi":           scores["vvi"],
-                "rf":            scores["rf"],
-                "lf":            scores["lf"],
-                "rev_tier":      result.get("revenue_tier", ""),
-                "lab_tier":      result.get("labor_tier", ""),
-                "scenario_id":   scenario["id"],
-                "risk":          scenario["risk_level"],
-                "nrpv":          round(net_rev / visits, 2) if visits > 0 else 0,
-                "lcv":           round(labor / visits, 2) if visits > 0 else 0,
-                "file_name":     None,
+                "name":        name,
+                "period":      period,
+                "visits":      visits,
+                "net_revenue": net_rev,
+                "labor_cost":  labor,
+                "rev_target":  rt,
+                "labor_target":lt,
+                "vvi":         scores["vvi"],
+                "rf":          scores["rf"],
+                "lf":          scores["lf"],
+                "rev_tier":    result.get("revenue_tier", ""),
+                "lab_tier":    result.get("labor_tier", ""),
+                "scenario_id": scenario["id"],
+                "risk":        scenario["risk_level"],
+                "nrpv":        round(net_rev / visits, 2) if visits > 0 else 0,
+                "lcv":         round(labor / visits, 2) if visits > 0 else 0,
+                "file_name":   None,
             })
-            st.success(f"✅ **{name}** saved to portfolio! Scroll up to view it in the Portfolio Manager.")
-    
+            st.success(f"✅ **{name}** saved to portfolio!")
+
     with col2:
         st.markdown("&nbsp;")
         st.download_button(
-            label="📄 Download Summary (JSON)",
+            label="📄 Download Raw Data (JSON)",
             data=json.dumps(result, indent=2),
             file_name=f"vvi_assessment_{period}.json",
             mime="application/json"
         )
+
+    # ── Excel Assessment Report Download ─────────────────────
+    st.markdown("---")
+    st.subheader("📊 Download Assessment Report (Excel)")
+    st.caption(
+        "Generates a board-ready Excel report with your scores, "
+        "Executive Narrative, Root Cause Analysis, and Action Plan — "
+        "populated with this clinic's specific scenario content."
+    )
+
+    def build_excel_report(scenario_data: dict, scores_data: dict,
+                           result_data: dict, clinic_name: str,
+                           period_str: str, net_rev_v: float,
+                           visits_v: int, labor_v: float,
+                           rt_v: float, lt_v: float) -> bytes:
+        """Write scenario content into a fresh copy of the VVI template."""
+        from openpyxl import Workbook
+        from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+        from openpyxl.utils import get_column_letter
+
+        # ── palette (matches template) ───────────────────────
+        NAVY  = "0D1B2A"; GOLD  = "B08C3E"; LGOLD = "F5EDD6"
+        MGRAY = "F0F2F5"; WHITE = "FFFFFF"; DGRAY = "4A4A4A"
+        MEDG  = "8C8C8C"; BORD  = "D0D5DD"; SLATE = "2C3E50"
+        CE="D4EDDA"; CS="FFF3CD"; CA="FFE5B4"; CC="F8D7DA"
+        TE="155724"; TS="856404"; TA="7D4E00"; TC="721C24"
+
+        def F_(sz=10, bold=False, color="000000", italic=False):
+            return Font(name="Arial", size=sz, bold=bold,
+                        color=color, italic=italic)
+        def FL(color): return PatternFill("solid", fgColor=color)
+        def AL(h="left", v="center", wrap=False, indent=0):
+            return Alignment(horizontal=h, vertical=v,
+                             wrap_text=wrap, indent=indent)
+        def BDR(top=False, bot=False, l=False, r=False,
+                color=BORD, style="thin"):
+            s = Side(style=style, color=color)
+            n = Side(style=None)
+            return Border(top=s if top else n, bottom=s if bot else n,
+                          left=s if l else n, right=s if r else n)
+        def FB():
+            s = Side(style="thin", color=BORD)
+            return Border(top=s, bottom=s, left=s, right=s)
+        def GB():
+            s = Side(style="medium", color=GOLD)
+            return Border(top=s, bottom=s, left=s, right=s)
+
+        def tier_colors(tier_str):
+            m = {"Excellent":(CE,TE),"Stable":(CS,TS),
+                 "At Risk":(CA,TA),"Critical":(CC,TC)}
+            return m.get(tier_str, (MGRAY, DGRAY))
+
+        wb2 = Workbook()
+
+        # ════════════════════════════════════════════════════
+        # SHEET 1 — Financial Summary (prefilled)
+        # ════════════════════════════════════════════════════
+        ws_fs = wb2.active
+        ws_fs.title = "Financial Summary"
+        ws_fs.sheet_view.showGridLines = False
+        for col, w in {1:3,2:34,3:22,4:30,5:3}.items():
+            ws_fs.column_dimensions[get_column_letter(col)].width = w
+
+        nrpv = net_rev_v / visits_v if visits_v else 0
+        lcv  = labor_v  / visits_v if visits_v else 0
+        rf   = (nrpv / (rt_v / visits_v)) * 100 if rt_v and visits_v else 0
+        lf   = ((lt_v / visits_v) / lcv) * 100   if lt_v and visits_v and lcv else 0
+        vvi  = (rf + lf) / 2
+
+        rev_tier = scores_data.get("rev_tier",
+                   result_data.get("revenue_tier", ""))
+        lab_tier = scores_data.get("lab_tier",
+                   result_data.get("labor_tier", ""))
+
+        def banner2(ws, row, sc, ec, text, fsz=16):
+            ws.merge_cells(start_row=row,start_column=sc,
+                           end_row=row,end_column=ec)
+            c = ws.cell(row=row,column=sc,value=text)
+            c.font=F_(fsz,True,WHITE); c.fill=FL(NAVY)
+            c.alignment=AL("center"); ws.row_dimensions[row].height=50
+
+        def gbar(ws, row, sc, ec, h=4):
+            ws.merge_cells(start_row=row,start_column=sc,
+                           end_row=row,end_column=ec)
+            ws.cell(row=row,column=sc).fill=FL(GOLD)
+            ws.row_dimensions[row].height=h
+
+        def slabel(ws, row, sc, ec, text):
+            ws.merge_cells(start_row=row,start_column=sc,
+                           end_row=row,end_column=ec)
+            c=ws.cell(row=row,column=sc,value=text)
+            c.font=F_(8,True,MEDG); c.alignment=AL("left",indent=1)
+            ws.row_dimensions[row].height=20
+
+        def div(ws, row, sc, ec, h=8):
+            ws.merge_cells(start_row=row,start_column=sc,
+                           end_row=row,end_column=ec)
+            ws.cell(row=row,column=sc).fill=FL(NAVY)
+            ws.row_dimensions[row].height=h
+
+        ws_fs.row_dimensions[1].height=8
+        banner2(ws_fs,2,2,4,"VISIT VALUE INDEX™  |  Clinic Financial Summary",17)
+        gbar(ws_fs,3,2,4)
+        slabel(ws_fs,4,2,4,"CLINIC IDENTIFICATION")
+        div(ws_fs,5,2,4,4)
+
+        id_vals=[("Clinic Name",clinic_name),
+                 ("Reporting Period",period_str),
+                 ("Date Prepared",datetime.now().strftime("%B %d, %Y"))]
+        for i,(label,val) in enumerate(id_vals):
+            row=6+i; ws_fs.row_dimensions[row].height=22
+            bg=FL(MGRAY) if i%2==0 else FL(WHITE)
+            lc=ws_fs.cell(row=row,column=2,value=label)
+            lc.font=F_(bold=True,color=DGRAY); lc.fill=bg
+            lc.alignment=AL(indent=1); lc.border=BDR(bot=True)
+            ws_fs.merge_cells(start_row=row,start_column=3,
+                              end_row=row,end_column=4)
+            vc=ws_fs.cell(row=row,column=3,value=val)
+            vc.font=F_(bold=True,color="000000")
+            vc.fill=FL(LGOLD); vc.alignment=AL(indent=1)
+            vc.border=BDR(bot=True)
+
+        # Metrics table
+        div(ws_fs,9,2,4)
+        slabel(ws_fs,10,2,4,"PERFORMANCE METRICS")
+        ws_fs.row_dimensions[11].height=26
+        for j,h in enumerate(["Metric","Value","Definition"],start=2):
+            c=ws_fs.cell(row=11,column=j,value=h)
+            c.font=F_(9,True,WHITE); c.fill=FL(SLATE)
+            c.alignment=AL("center"); c.border=FB()
+        ws_fs.merge_cells("D11:D11")
+
+        metrics=[
+            ("Total Visits",         f"{visits_v:,}",              "Total encounters"),
+            ("Net Revenue (NOR)",    f"${net_rev_v:,.0f}",         "Collected revenue, net of adjustments"),
+            ("Labor Expense (SWB)",  f"${labor_v:,.0f}",           "Salaries, wages & benefits"),
+            ("NRPV",                 f"${nrpv:,.2f}",              "Net Revenue per Visit"),
+            ("LCV",                  f"${lcv:,.2f}",               "Labor Cost per Visit"),
+            ("SWB %",                f"{(labor_v/net_rev_v*100):.1f}%" if net_rev_v else "—",
+                                                                   "Labor as % of Revenue"),
+            ("Revenue Factor (RF)",  f"{rf:.1f}%",                 "Actual NRPV ÷ Budgeted NRPV"),
+            ("Labor Factor (LF)",    f"{lf:.1f}%",                 "Budgeted LCV ÷ Actual LCV"),
+            ("VVI Score",            f"{vvi:.1f}%",                "Overall Visit Value Index"),
+        ]
+        for i,(label,val,defn) in enumerate(metrics):
+            row=12+i; ws_fs.row_dimensions[row].height=22
+            bg=FL(MGRAY) if i%2==0 else FL(WHITE)
+            is_key=label in("Revenue Factor (RF)","Labor Factor (LF)","VVI Score")
+            lc=ws_fs.cell(row=row,column=2,value=label)
+            lc.font=F_(bold=is_key); lc.fill=bg
+            lc.alignment=AL(indent=1); lc.border=BDR(bot=True)
+            vc=ws_fs.cell(row=row,column=3,value=val)
+            vc.font=F_(bold=is_key)
+            if is_key:
+                bg_score = {"Revenue Factor (RF)":FL(tier_colors(rev_tier)[0]),
+                            "Labor Factor (LF)": FL(tier_colors(lab_tier)[0]),
+                            "VVI Score":         FL(LGOLD)}.get(label, bg)
+                vc.fill=bg_score; vc.font=F_(bold=True,color=NAVY)
+            else:
+                vc.fill=bg
+            vc.alignment=AL("right"); vc.border=FB()
+            nc=ws_fs.cell(row=row,column=4,value=defn)
+            nc.font=F_(9,color=MEDG,italic=True)
+            nc.fill=bg; nc.alignment=AL(indent=1,wrap=True)
+            nc.border=BDR(bot=True)
+
+        # Scenario badge
+        div(ws_fs,21,2,4)
+        ws_fs.row_dimensions[22].height=8
+        ws_fs.row_dimensions[23].height=40
+        ws_fs.merge_cells("B23:D23")
+        sc_name=scenario_data.get("name","—")
+        sc=ws_fs.cell(row=23,column=2,value=sc_name)
+        sc.font=F_(14,True,NAVY); sc.fill=FL(LGOLD)
+        sc.alignment=AL("center"); sc.border=GB()
+
+        ws_fs.row_dimensions[24].height=8
+
+        # Footer
+        ws_fs.row_dimensions[25].height=18
+        ws_fs.merge_cells("B25:D25")
+        fc=ws_fs.cell(row=25,column=2,
+            value=f"Visit Value Index™  |  Bramhall Consulting, LLC  |  "
+                  f"predict. perform. prosper.  |  "
+                  f"{datetime.now().strftime('%B %d, %Y')}")
+        fc.font=F_(8,italic=True,color=MEDG); fc.alignment=AL("center")
+        fc.border=Border(top=Side(style="thin",color=GOLD))
+
+        ws_fs.page_setup.orientation="portrait"
+        ws_fs.page_setup.paperSize=ws_fs.PAPERSIZE_LETTER
+        ws_fs.page_setup.fitToPage=True
+        ws_fs.page_setup.fitToWidth=1
+
+        # ════════════════════════════════════════════════════
+        # SHEET 2 — VVI Assessment Report (populated)
+        # ════════════════════════════════════════════════════
+        ws_ar = wb2.create_sheet("VVI Assessment Report")
+        ws_ar.sheet_view.showGridLines = False
+        for col, w in {1:3,2:18,3:16,4:16,5:40,6:3}.items():
+            ws_ar.column_dimensions[get_column_letter(col)].width=w
+
+        ws_ar.row_dimensions[1].height=8
+        ws_ar.row_dimensions[2].height=56
+        banner2(ws_ar,2,2,5,"VVI™ ASSESSMENT REPORT",18)
+        gbar(ws_ar,3,2,5)
+
+        # Clinic + date sub-header
+        ws_ar.row_dimensions[4].height=24
+        ws_ar.merge_cells("B4:E4")
+        sub=ws_ar.cell(row=4,column=2,
+            value=f"{clinic_name}  |  {period_str}  |  "
+                  f"Generated {datetime.now().strftime('%B %d, %Y')}")
+        sub.font=F_(10,color=MEDG,italic=True)
+        sub.fill=FL(MGRAY); sub.alignment=AL("center")
+        sub.border=BDR(bot=True)
+
+        # ── Score cards row ───────────────────────────────
+        ws_ar.row_dimensions[5].height=8
+        slabel(ws_ar,6,2,5,"PERFORMANCE SCORES")
+        score_labels=["VVI Score","Revenue Factor","Labor Factor","Risk Level"]
+        ws_ar.row_dimensions[7].height=26
+        for j,h in enumerate(score_labels):
+            c=ws_ar.cell(row=7,column=2+j,value=h)
+            c.font=F_(9,True,WHITE); c.fill=FL(SLATE)
+            c.alignment=AL("center"); c.border=FB()
+
+        ws_ar.row_dimensions[8].height=44
+        rev_bg,rev_tx=tier_colors(rev_tier)
+        lab_bg,lab_tx=tier_colors(lab_tier)
+        score_vals=[
+            (f"{vvi:.1f}%",    LGOLD, NAVY),
+            (f"{rf:.1f}%",     rev_bg, rev_tx),
+            (f"{lf:.1f}%",     lab_bg, lab_tx),
+            (scenario_data.get("risk_level","—"), LGOLD, NAVY),
+        ]
+        for j,(val,bg,tx) in enumerate(score_vals):
+            c=ws_ar.cell(row=8,column=2+j,value=val)
+            c.font=F_(16,True,tx); c.fill=FL(bg)
+            c.alignment=AL("center"); c.border=GB()
+
+        # ── Scenario name ─────────────────────────────────
+        div(ws_ar,9,2,5)
+        ws_ar.row_dimensions[10].height=8
+        ws_ar.row_dimensions[11].height=38
+        ws_ar.merge_cells("B11:E11")
+        sc2=ws_ar.cell(row=11,column=2,value=sc_name)
+        sc2.font=F_(14,True,NAVY); sc2.fill=FL(LGOLD)
+        sc2.alignment=AL("center"); sc2.border=GB()
+
+        # ── Executive Narrative ───────────────────────────
+        div(ws_ar,12,2,5)
+        slabel(ws_ar,13,2,5,"EXECUTIVE NARRATIVE")
+        ws_ar.row_dimensions[14].height=26
+        ws_ar.merge_cells("B14:E14")
+        nhc=ws_ar.cell(row=14,column=2,
+            value="What This Means for Your Clinic")
+        nhc.font=F_(10,True,WHITE); nhc.fill=FL(SLATE)
+        nhc.alignment=AL("center"); nhc.border=FB()
+
+        narrative=scenario_data.get("executive_narrative","")
+        ws_ar.row_dimensions[15].height=max(100, min(len(narrative)//3, 160))
+        ws_ar.merge_cells("B15:E15")
+        nc=ws_ar.cell(row=15,column=2,value=narrative)
+        nc.font=F_(10); nc.fill=FL(WHITE)
+        nc.alignment=AL("left",wrap=True,v="top",indent=1)
+        nc.border=FB()
+
+        # ── Root Causes ───────────────────────────────────
+        div(ws_ar,16,2,5)
+        slabel(ws_ar,17,2,5,"ROOT CAUSE ANALYSIS  —  Why This May Be Happening")
+        ws_ar.row_dimensions[18].height=26
+        ws_ar.merge_cells("B18:E18")
+        rhc=ws_ar.cell(row=18,column=2,value="Primary Drivers to Examine")
+        rhc.font=F_(10,True,WHITE); rhc.fill=FL(SLATE)
+        rhc.alignment=AL("center"); rhc.border=FB()
+
+        root_causes=scenario_data.get("root_causes",[])
+        for i,rc_text in enumerate(root_causes[:6]):
+            row=19+i; ws_ar.row_dimensions[row].height=30
+            ws_ar.merge_cells(f"B{row}:E{row}")
+            bg=FL(MGRAY) if i%2==0 else FL(WHITE)
+            rc=ws_ar.cell(row=row,column=2,
+                value=f"{i+1}.  {rc_text}")
+            rc.font=F_(10); rc.fill=bg
+            rc.alignment=AL("left",indent=1,wrap=True)
+            rc.border=BDR(bot=True)
+
+        # ── Prescriptive Actions ──────────────────────────
+        action_start=25
+        div(ws_ar,action_start,2,5)
+        slabel(ws_ar,action_start+1,2,5,"PRESCRIPTIVE ACTIONS  —  Time-Phased Plan")
+
+        actions_data=scenario_data.get("actions",{})
+        phases=[
+            ("DO TOMORROW","Non-negotiable staples",SLATE,
+             actions_data.get("do_tomorrow",[])),
+            ("NEXT 7 DAYS","Quick wins","1A5276",
+             actions_data.get("next_7_days",[])),
+            ("NEXT 30–60 DAYS","High-impact changes","1E8449",
+             actions_data.get("next_30_60_days",[])),
+            ("NEXT 60–90 DAYS","Sustainability measures","784212",
+             actions_data.get("next_60_90_days",[])),
+        ]
+
+        cur_row=action_start+2
+        for phase_title, phase_sub, hdr_color, items in phases:
+            ws_ar.row_dimensions[cur_row].height=26
+            ws_ar.merge_cells(f"B{cur_row}:E{cur_row}")
+            phc=ws_ar.cell(row=cur_row,column=2,
+                value=f"{phase_title}  —  {phase_sub}")
+            phc.font=F_(9,True,WHITE); phc.fill=FL(hdr_color)
+            phc.alignment=AL("left",indent=1); phc.border=FB()
+            cur_row+=1
+
+            for i,item_text in enumerate(items[:3]):
+                # Trim very long action text to first sentence for Excel
+                short=item_text.split(":")[0].strip()
+                if len(short)<40 and len(item_text)>40:
+                    short=item_text[:200].rsplit(" ",1)[0]+"…"
+                ws_ar.row_dimensions[cur_row].height=36
+                ws_ar.merge_cells(f"B{cur_row}:E{cur_row}")
+                bg=FL(MGRAY) if i%2==0 else FL(WHITE)
+                ac=ws_ar.cell(row=cur_row,column=2,
+                    value=f"{'①②③'[i]}  {short}")
+                ac.font=F_(9); ac.fill=bg
+                ac.alignment=AL("left",indent=1,wrap=True,v="top")
+                ac.border=BDR(bot=True)
+                cur_row+=1
+
+        # ── Expected Impact ───────────────────────────────
+        div(ws_ar,cur_row,2,5); cur_row+=1
+        slabel(ws_ar,cur_row,2,5,"EXPECTED IMPACT OF IMPROVEMENT"); cur_row+=1
+
+        exp=scenario_data.get("expected_impact",{})
+        imp_headers=["VVI Improvement","Timeline","Key Risks"]
+        ws_ar.row_dimensions[cur_row].height=26
+        for j,h in enumerate(imp_headers):
+            c=ws_ar.cell(row=cur_row,column=2+j,value=h)
+            c.font=F_(9,True,WHITE); c.fill=FL(SLATE)
+            c.alignment=AL("center"); c.border=FB()
+        ws_ar.merge_cells(
+            start_row=cur_row,start_column=4,
+            end_row=cur_row,end_column=5)
+        cur_row+=1
+
+        ws_ar.row_dimensions[cur_row].height=44
+        risks_text="; ".join(exp.get("key_risks",["—"])[:3])
+        imp_vals=[
+            (exp.get("vvi_improvement","—"), LGOLD, NAVY),
+            (exp.get("timeline","—"),        LGOLD, NAVY),
+            (risks_text,                     FL(WHITE), DGRAY),
+        ]
+        for j,(val,bg,tx) in enumerate(imp_vals):
+            c=ws_ar.cell(row=cur_row,column=2+j,value=val)
+            c.font=F_(11 if j<2 else 9, bold=(j<2), color=tx)
+            c.fill=bg if isinstance(bg,PatternFill) else FL(LGOLD)
+            c.alignment=AL("center",wrap=True)
+            c.border=FB()
+        ws_ar.merge_cells(
+            start_row=cur_row,start_column=4,
+            end_row=cur_row,end_column=5)
+        cur_row+=2
+
+        # Footer
+        ws_ar.row_dimensions[cur_row].height=18
+        ws_ar.merge_cells(f"B{cur_row}:E{cur_row}")
+        fc2=ws_ar.cell(row=cur_row,column=2,
+            value=f"Visit Value Index™  |  Bramhall Consulting, LLC  |  "
+                  f"CONFIDENTIAL  |  {datetime.now().strftime('%B %d, %Y')}")
+        fc2.font=F_(8,italic=True,color=MEDG)
+        fc2.alignment=AL("center")
+        fc2.border=Border(top=Side(style="thin",color=GOLD))
+
+        ws_ar.page_setup.orientation="portrait"
+        ws_ar.page_setup.paperSize=ws_ar.PAPERSIZE_LETTER
+        ws_ar.page_setup.fitToPage=True
+        ws_ar.page_setup.fitToWidth=1
+
+        wb2.active=ws_fs
+
+        buf=io.BytesIO()
+        wb2.save(buf)
+        buf.seek(0)
+        return buf.read()
+
+    # Generate and offer download
+    clinic_display = result.get("clinic_name", period)
+    excel_bytes = build_excel_report(
+        scenario_data = scenario,
+        scores_data   = {
+            "vvi": scores["vvi"], "rf": scores["rf"], "lf": scores["lf"],
+            "rev_tier": result.get("revenue_tier",""),
+            "lab_tier": result.get("labor_tier",""),
+        },
+        result_data   = result,
+        clinic_name   = clinic_display,
+        period_str    = period,
+        net_rev_v     = net_rev,
+        visits_v      = visits,
+        labor_v       = labor,
+        rt_v          = rt,
+        lt_v          = lt,
+    )
+
+    safe_name = "".join(c if c.isalnum() or c in " -_" else "_"
+                        for c in clinic_display).strip()
+    st.download_button(
+        label="📊 Download Assessment Report (Excel)",
+        data=excel_bytes,
+        file_name=f"VVI_Report_{safe_name}_{period}.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        use_container_width=True,
+        type="primary",
+    )
     
     # New Assessment Button
     # ========================================
@@ -1906,7 +2643,7 @@ st.markdown("---")
 st.markdown(
     """
     <div style="text-align:center; color:#777; font-size:0.85rem; padding:2rem 0 1rem 0;">
-        <p><b>Visit Value Index™ (VVI)</b> | Version 3.2 — Portfolio Manager</p>
+        <p><b>Visit Value Index™ (VVI)</b> | Version 3.3 — Board-Ready Reports</p>
         <p>Bramhall Consulting, LLC | © 2024</p>
         <p style="margin-top:0.5rem;">
             <a href="https://bramhallconsulting.org" target="_blank" style="color:#b08c3e; text-decoration:none;">
