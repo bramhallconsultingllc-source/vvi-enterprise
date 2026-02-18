@@ -1365,7 +1365,7 @@ st.markdown("""
         🏥 Clinic Portfolio Manager
     </h3>
     <p style="color: #a0aec0; margin: 0; font-size: 0.9rem;">
-        Add clinics one at a time to build your portfolio — then analyze individually or as a group.
+        Add clinics to your portfolio and view their full assessment — Executive Summary, Root Causes, and Prescriptive Actions appear below.
     </p>
 </div>
 """, unsafe_allow_html=True)
@@ -1494,7 +1494,7 @@ with st.expander("➕ Add a Clinic to Portfolio", expanded=len(st.session_state.
         _rev_target_total   = nc_rev_target * nc_visits
         _labor_target_total = nc_labor_target * nc_visits
 
-    if st.button("✅ Add Clinic to Portfolio", type="primary", use_container_width=True):
+    if st.button("✅ Add Clinic & Run Assessment", type="primary", use_container_width=True):
         name = new_clinic_name.strip() or f"Clinic {len(st.session_state.portfolio) + 1}"
 
         # Use extracted clinic name if available and user hasn't renamed
@@ -1575,6 +1575,17 @@ with st.expander("➕ Add a Clinic to Portfolio", expanded=len(st.session_state.
                 "lcv": round(lcv, 2),
                 "file_name": new_upload.name if new_upload else None,
             })
+            
+            # Also set up for full assessment display
+            st.session_state.visits_input = nc_visits
+            st.session_state.net_rev_input = nc_rev
+            st.session_state.labor_cost_input = nc_labor
+            st.session_state.rev_target_input = nc_rev_target
+            st.session_state.lab_target_input = nc_labor_target
+            st.session_state.period_input = nc_period
+            st.session_state.assessment_ready = True
+            st.session_state.inputs_expanded = False
+            
             st.success(f"✅ **{name}** added to portfolio! ({scenario_id} — {rev_tier} Revenue / {lab_tier} Labor)")
             st.rerun()
         except Exception as e:
@@ -1671,7 +1682,7 @@ if st.session_state.portfolio:
 
         # Pull scenario detail from the SCENARIOS dict and display full analysis
         st.markdown("<br>", unsafe_allow_html=True)
-        st.info("💡 Enter this clinic's metrics in the **Assessment Inputs** form below to view the full Executive Narrative, Root Cause Analysis, and Prescriptive Actions for this scenario.")
+        st.info("💡 Click **Add Clinic & Run Assessment** above to view the full Executive Narrative, Root Cause Analysis, and Prescriptive Actions for this scenario.")
 
     # ============================================================
     # VIEW B: All Clinics — Portfolio View
@@ -1786,100 +1797,15 @@ if st.session_state.portfolio:
 st.markdown("---")
 
 # ============================================================
-# Input Form
-# ============================================================
-
-with st.expander("📊 Assessment Inputs", expanded=st.session_state.inputs_expanded):
-    
-    with st.form("vvi_inputs"):
-        
-        st.markdown("**Required Metrics**")
-        
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            visits = st.number_input(
-                "Number of Visits",
-                min_value=1,
-                step=1,
-                value=500,
-                key="visits_input",
-            )
-            
-            net_rev = st.number_input(
-                "Net Operating Revenue (NOR) ($)",
-                min_value=0.01,
-                step=100.0,
-                format="%.2f",
-                value=100000.00,
-                key="net_rev_input",
-            )
-        
-        with col2:
-            labor_cost = st.number_input(
-                "Labor Expense – Salaries, Wages, Benefits (SWB) ($)",
-                min_value=0.01,
-                step=100.0,
-                format="%.2f",
-                value=65000.00,
-                key="labor_cost_input",
-            )
-            
-            period = st.text_input(
-                "Period (YYYY-MM)",
-                value=datetime.now().strftime("%Y-%m"),
-                key="period_input"
-            )
-        
-        st.markdown("---")
-        st.markdown(
-            "**Optional Benchmarks**  \n"
-            "<span style='font-size:0.8rem;color:#777;'>"
-            "Industry-standard averages (customizable for your organization)"
-            "</span>",
-            unsafe_allow_html=True,
-        )
-        
-        col3, col4 = st.columns(2)
-        
-        with col3:
-            r_target = st.number_input(
-                "Budgeted NOR per Visit ($)",
-                min_value=1.0,
-                value=140.0,
-                step=1.0,
-                format="%.2f",
-                key="rev_target_input",
-            )
-        
-        with col4:
-            l_target = st.number_input(
-                "Budgeted SWB per Visit ($)",
-                min_value=1.0,
-                value=85.0,
-                step=1.0,
-                format="%.2f",
-                key="lab_target_input",
-            )
-        
-        submitted = st.form_submit_button("🚀 Run Assessment", use_container_width=True)
-
-
-# ============================================================
-# Process Submission
-# ============================================================
-
-if submitted:
-    st.session_state.assessment_ready = True
-    st.session_state.inputs_expanded = False
-    st.rerun()
-
-
-# ============================================================
-# Results Display
+# Results Display (triggered by Add Clinic & Run Assessment)
 # ============================================================
 
 if st.session_state.get("assessment_ready", False):
+    
+    st.markdown("---")
+    st.markdown("# 📋 Full Assessment Report")
+    st.caption("Complete analysis with Executive Summary, Root Causes, and Prescriptive Actions")
+    st.markdown("---")
     
     # Read values from session state
     visits = int(st.session_state.visits_input)
