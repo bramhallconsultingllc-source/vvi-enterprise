@@ -2034,30 +2034,11 @@ if st.session_state.portfolio:
     # "Add Another Clinic" appears AFTER portfolio dashboard
     st.markdown("<br>", unsafe_allow_html=True)
     
-# If NO clinics, show prominent onboarding
-if not st.session_state.portfolio:
-    st.info("👋 **Get Started:** Add your first clinic to begin tracking performance and generating assessments.")
+st.markdown("---")
 
-# --- Add Clinic Panel ---  
-# Expanded if no clinics, collapsed if clinics exist
-with st.expander(
-    "➕ Add Your First Clinic" if not st.session_state.portfolio else "➕ Add Another Clinic", 
-    expanded=(len(st.session_state.portfolio) == 0)
-):
-
-    col_upload, col_name = st.columns([2, 1])
-
-    with col_upload:
-        new_upload = st.file_uploader(
-            "Upload VVI Financial Summary (.xlsx or .csv)",
-            type=["xlsx", "xls", "csv"],
-            key="new_clinic_file",
-            help="Upload the VVI Clinic Financial Summary template. AI will extract all metrics automatically."
-        )
-
-    with col_name:
-        new_clinic_name = st.text_input(
-            "Clinic Name",
+# ============================================================
+# Results Display (triggered by Add Clinic & Run Assessment)
+# ============================================================
 
 if st.session_state.get("assessment_ready", False):
     
@@ -2187,8 +2168,22 @@ if st.session_state.get("assessment_ready", False):
     )
     
     # ========================================
-    # Executive Summary
+    # TAB NAVIGATION
     # ========================================
+    
+    tab1, tab2, tab3, tab4, tab5 = st.tabs([
+        "📊 Metrics & Scores",
+        "🔍 Root Causes", 
+        "📋 Action Plan",
+        "🤖 AI Coach",
+        "📥 Download Report"
+    ])
+    
+    # ========================================
+    # TAB 1: Metrics & Scores
+    # ========================================
+    
+    with tab1:
     
     st.markdown(
         "<h2 style='text-align:center; margin-bottom:0.5rem;'>Executive Summary</h2>",
