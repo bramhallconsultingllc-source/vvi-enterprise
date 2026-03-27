@@ -46,6 +46,16 @@ except Exception:
     _OPENAI_AVAILABLE = False
 
 # ============================================================
+# Helper Functions
+# ============================================================
+
+def get_base64_image(path: str) -> str:
+    """Return a base64-encoded string for the image at `path`."""
+    with open(path, "rb") as f:
+        data = f.read()
+    return base64.b64encode(data).decode("utf-8")
+
+# ============================================================
 # AI Extraction Helper
 # ============================================================
 
@@ -244,6 +254,106 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed",
 )
+
+# ============================================================
+# Branded Intro Section
+# ============================================================
+
+# CSS for intro section with logo and animated line
+intro_css = """
+<style>
+.intro-container {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+/* Logo: desktop default */
+.intro-logo {
+    max-width: 220px !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    display: block;
+}
+/* Mobile responsiveness — larger logo on phone screens */
+@media (max-width: 600px) {
+    .intro-logo {
+        max-width: 200px !important;
+        width: 200px !important;
+        margin-top: 0.6rem !important;
+    }
+}
+@media (max-width: 400px) {
+    .intro-logo {
+        max-width: 180px !important;
+        width: 180px !important;
+        margin-top: 0.6rem !important;
+    }
+}
+/* Thin gold line that "draws" across */
+.intro-line-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 1.2rem 0 0.8rem;
+}
+.intro-line {
+    width: 0;
+    height: 1.5px;
+    background: #b08c3e;
+    animation: lineGrow 1.6s ease-out forwards;
+}
+/* Text fade-in after the line draws */
+.intro-text {
+    opacity: 0;
+    transform: translateY(6px);
+    animation: fadeInUp 1.4s ease-out forwards;
+    animation-delay: 1.0s;
+    text-align: center;
+}
+/* Animations */
+@keyframes lineGrow {
+    0%   { width: 0; }
+    100% { width: 340px; }
+}
+@keyframes fadeInUp {
+    0%   { opacity: 0; transform: translateY(6px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+</style>
+"""
+st.markdown(intro_css, unsafe_allow_html=True)
+
+LOGO_PATH = "Logo BC.png"
+
+st.markdown("<div class='intro-container'>", unsafe_allow_html=True)
+
+# Logo
+if os.path.exists(LOGO_PATH):
+    img_data = get_base64_image(LOGO_PATH)
+    st.markdown(
+        f'<img src="data:image/png;base64,{img_data}" class="intro-logo" />',
+        unsafe_allow_html=True,
+    )
+else:
+    st.caption(
+        f"(Logo file '{LOGO_PATH}' not found — add 'Logo BC.png' to the repository root.)"
+    )
+
+# Animated line + welcome text
+intro_html = """
+<div class='intro-line-wrapper'>
+    <div class='intro-line'></div>
+</div>
+<div class='intro-text'>
+    <h2>Welcome to the Visit Value Index&trade; (VVI)</h2>
+    <p style="margin-top:0.4rem;font-style:italic;color:#555;text-align:center;">
+        predict. perform. prosper.
+    </p>
+</div>
+"""
+st.markdown(intro_html, unsafe_allow_html=True)
+st.markdown("</div>", unsafe_allow_html=True)
+
+st.divider()
 
 # ============================================================
 # VVI API Client
@@ -2011,7 +2121,7 @@ if st.session_state.get("assessment_ready", False):
         st.caption("Why this may be happening (possible primary drivers):")
         
         for cause in scenario['root_causes']:
-            st.markdown(f"• {cause.replace('$', r'\\$')}")
+            st.markdown(f"• {cause}")
     
     # ========================================
     # Prescriptive Actions
@@ -2027,19 +2137,19 @@ if st.session_state.get("assessment_ready", False):
     
     with st.expander("✅ Do Tomorrow (Non-negotiable staples)", expanded=True):
         for i, action in enumerate(actions.get("do_tomorrow", []), 1):
-            st.markdown(f"{i}. {action.replace('$', r'\\$')}")
+            st.markdown(f"{i}. {action}")
     
     with st.expander("🎯 Next 7 Days (Quick wins)"):
         for i, action in enumerate(actions.get("next_7_days", []), 1):
-            st.markdown(f"{i}. {action.replace('$', r'\\$')}")
+            st.markdown(f"{i}. {action}")
     
     with st.expander("🔧 Next 30-60 Days (High-impact structural changes)"):
         for i, action in enumerate(actions.get("next_30_60_days", []), 1):
-            st.markdown(f"{i}. {action.replace('$', r'\\$')}")
+            st.markdown(f"{i}. {action}")
     
     with st.expander("🏗️ Next 60-90 Days (Sustainability measures)"):
         for i, action in enumerate(actions.get("next_60_90_days", []), 1):
-            st.markdown(f"{i}. {action.replace('$', r'\\$')}")
+            st.markdown(f"{i}. {action}")
     
     # ========================================
     # Expected Impact
