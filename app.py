@@ -2083,12 +2083,12 @@ if st.session_state.get("assessment_ready", False):
     
     st.markdown(
         f"""
-        <div style="text-align:center; margin:1rem 0;">
-            <p style="font-size:18px; font-weight:600; color:#333; margin-bottom:4px;">
-                Scenario Classification
+        <div style="background:#fef9ed;padding:1.5rem;border-radius:8px;border:2px solid #b08c3e;margin:1.5rem 0;text-align:center;">
+            <p style="font-size:18px;font-weight:700;color:#b08c3e;margin-bottom:1rem;letter-spacing:0.5px;">
+                {scenario['name']}
             </p>
-            <p style="font-size:16px; font-weight:600; color:#b08c3e; margin-top:0.5rem;">
-                {scenario['id']}: {scenario['name']}
+            <p style="font-size:0.75rem;color:#666;font-style:italic;margin-top:0.5rem;margin-bottom:0;">
+                Visit Value Index™ | Bramhall Consulting, LLC | predict. perform. prosper. | {datetime.now().strftime('%B %d, %Y')}
             </p>
         </div>
         """,
@@ -2142,26 +2142,43 @@ if st.session_state.get("assessment_ready", False):
     
     if expected_impact:
         st.markdown("---")
-        st.subheader("📈 Expected Impact")
+        st.markdown("### 📈 Expected Impact of Improvement")
         
-        col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns(3)
         
         with col1:
-            st.metric(
-                "VVI Improvement Potential",
-                expected_impact.get("vvi_improvement", "N/A")
-            )
+            vvi_imp = expected_impact.get("vvi_improvement", "Not specified")
+            st.markdown(f"""
+            <div style="background:#f8f9fa;padding:1rem;border-radius:8px;text-align:center;border:1px solid #dee2e6;">
+                <div style="font-size:0.7rem;color:#6c757d;font-weight:600;text-transform:uppercase;margin-bottom:0.5rem;">VVI Improvement</div>
+                <div style="font-size:1.5rem;font-weight:700;color:#28a745;">{vvi_imp}</div>
+            </div>
+            """, unsafe_allow_html=True)
         
         with col2:
-            st.metric(
-                "Timeline",
-                expected_impact.get("timeline", "N/A")
-            )
+            timeline = expected_impact.get("timeline", "Not specified")
+            st.markdown(f"""
+            <div style="background:#f8f9fa;padding:1rem;border-radius:8px;text-align:center;border:1px solid #dee2e6;">
+                <div style="font-size:0.7rem;color:#6c757d;font-weight:600;text-transform:uppercase;margin-bottom:0.5rem;">Timeline</div>
+                <div style="font-size:1.5rem;font-weight:700;color:#0d6efd;">{timeline}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col3:
+            risks = expected_impact.get("key_risks", [])
+            risk_count = len(risks) if risks else 0
+            st.markdown(f"""
+            <div style="background:#f8f9fa;padding:1rem;border-radius:8px;text-align:center;border:1px solid #dee2e6;">
+                <div style="font-size:0.7rem;color:#6c757d;font-weight:600;text-transform:uppercase;margin-bottom:0.5rem;">Key Risks</div>
+                <div style="font-size:1.5rem;font-weight:700;color:#dc3545;">{risk_count} identified</div>
+            </div>
+            """, unsafe_allow_html=True)
         
         if expected_impact.get("key_risks"):
-            st.caption("**Key Risks to Monitor:**")
+            st.markdown("<br>", unsafe_allow_html=True)
+            st.markdown("**Key Risks to Monitor:**")
             for risk in expected_impact["key_risks"]:
-                st.markdown(f"- {risk}")
+                st.markdown(f"• {risk}")
     
     # ========================================
     # ========================================
