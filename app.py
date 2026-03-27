@@ -322,7 +322,7 @@ intro_css = """
 """
 st.markdown(intro_css, unsafe_allow_html=True)
 
-LOGO_PATH = "Logo BC.png"
+LOGO_PATH = "Logo Final.png"
 
 st.markdown("<div class='intro-container'>", unsafe_allow_html=True)
 
@@ -335,7 +335,7 @@ if os.path.exists(LOGO_PATH):
     )
 else:
     st.caption(
-        f"(Logo file '{LOGO_PATH}' not found — add 'Logo BC.png' to the repository root.)"
+        f"(Logo file '{LOGO_PATH}' not found — add 'Logo Final.png' to the repository root.)"
     )
 
 # Animated line + welcome text
@@ -1373,21 +1373,6 @@ if os.path.exists(LOGO_PATH):
         f'<img src="data:image/png;base64,{img_data}" class="intro-logo" />',
         unsafe_allow_html=True,
     )
-
-st.markdown(
-    """
-    <div style="text-align:center; margin: 1.5rem 0;">
-        <div class="intro-line" style="margin: 0 auto;"></div>
-        <h1 style="font-size:1.9rem; margin-top:1rem;">
-            Welcome to the Visit Value Index™ (VVI)
-        </h1>
-        <p style="font-style:italic; color:#555; font-size:1.02rem;">
-            The link between revenue performance and labor efficiency — quantified.
-        </p>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
 
 # Mode indicator
 mode_color = "#28a745" if st.session_state.get("api_mode") == "API" else "#ffc107"
