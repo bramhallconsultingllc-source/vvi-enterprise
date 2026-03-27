@@ -268,11 +268,12 @@ intro_css = """
 }
 /* Logo: desktop default */
 .intro-logo {
-    max-width: 220px !important;
+    max-width: 260px !important;
     width: 100% !important;
     height: auto !important;
     margin: 0 auto !important;
     display: block;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.08));
 }
 /* Mobile responsiveness — larger logo on phone screens */
 @media (max-width: 600px) {
@@ -293,13 +294,14 @@ intro_css = """
 .intro-line-wrapper {
     display: flex;
     justify-content: center;
-    margin: 1.2rem 0 0.8rem;
+    margin: 1.2rem 0 1rem;
 }
 .intro-line {
     width: 0;
-    height: 1.5px;
-    background: #b08c3e;
-    animation: lineGrow 1.6s ease-out forwards;
+    height: 2px;
+    background: linear-gradient(90deg, #b08c3e 0%, #d4af37 50%, #b08c3e 100%);
+    animation: lineGrow 2s ease-out forwards;
+    box-shadow: 0 1px 3px rgba(176, 140, 62, 0.3);
 }
 /* Text fade-in after the line draws */
 .intro-text {
@@ -312,7 +314,7 @@ intro_css = """
 /* Animations */
 @keyframes lineGrow {
     0%   { width: 0; }
-    100% { width: 340px; }
+    100% { width: 400px; }
 }
 @keyframes fadeInUp {
     0%   { opacity: 0; transform: translateY(6px); }
@@ -344,8 +346,13 @@ intro_html = """
     <div class='intro-line'></div>
 </div>
 <div class='intro-text'>
-    <h2>Welcome to the Visit Value Index&trade; (VVI)</h2>
-    <p style="margin-top:0.4rem;font-style:italic;color:#555;text-align:center;">
+    <h1 style="font-size: 2.4rem; font-weight: 700; margin: 0; color: #1a1a2e; letter-spacing: -0.5px;">
+        VISIT VALUE INDEX<span style="font-size: 1.4rem; vertical-align: super; font-weight: 400;">™</span>
+    </h1>
+    <p style="margin-top: 0.8rem; font-size: 1.05rem; color: #2c3e50; font-weight: 500; letter-spacing: 0.3px;">
+        The Link Between Revenue Performance and Labor Efficiency — Quantified
+    </p>
+    <p style="margin-top: 0.6rem; font-style: italic; color: #b08c3e; font-size: 1rem; font-weight: 500;">
         predict. perform. prosper.
     </p>
 </div>
@@ -1460,13 +1467,147 @@ st.markdown("""
         🏥 Clinic Portfolio Manager
     </h3>
     <p style="color: #a0aec0; margin: 0; font-size: 0.9rem;">
-        Add clinics to your portfolio and view their full assessment — Executive Summary, Root Causes, and Prescriptive Actions appear below.
+        Track multiple clinics, compare performance, and drive operational excellence across your portfolio.
     </p>
 </div>
 """, unsafe_allow_html=True)
 
-# --- Add Clinic Panel ---
-with st.expander("➕ Add a Clinic to Portfolio", expanded=len(st.session_state.portfolio) == 0):
+# ============================================================
+# Portfolio Dashboard — Show FIRST if clinics exist
+# ============================================================
+
+if st.session_state.portfolio:
+    # Show dashboard FIRST
+    st.markdown("---")
+
+    # --- Clinic Selector Dropdown ---
+    PORTFOLIO_VIEW = "📊 All Clinics — Portfolio View"
+    clinic_options = [PORTFOLIO_VIEW] + [c["name"] for c in st.session_state.portfolio]
+
+    RISK_EMOJI = {"Low": "🟢", "Medium": "🟡", "High": "🟠", "Critical": "🔴"}
+
+    def clinic_label(c):
+        em = RISK_EMOJI.get(c["risk"], "⚪")
+        return f"{em} {c['name']}  —  {c['scenario_id']}  |  VVI {c['vvi']}"
+
+    dropdown_labels = [PORTFOLIO_VIEW] + [clinic_label(c) for c in st.session_state.portfolio]
+
+    selected_label = st.selectbox(
+        "🏥 Select Clinic or Portfolio View",
+        options=dropdown_labels,
+        index=0,
+        key="portfolio_view_select"
+    )
+
+    # Determine which view to show
+    selected_clinic_name = None if selected_label == PORTFOLIO_VIEW else selected_label.split("—")[0].split(" ", 1)[1].strip()
+
+    if selected_label == PORTFOLIO_VIEW:
+        # Show portfolio overview metrics
+        st.markdown("<br>", unsafe_allow_html=True)
+        
+        avg_vvi = sum(c["vvi"] for c in st.session_state.portfolio) / len(st.session_state.portfolio)
+        avg_rf = sum(c["rf"] for c in st.session_state.portfolio) / len(st.session_state.portfolio)
+        avg_lf = sum(c["lf"] for c in st.session_state.portfolio) / len(st.session_state.portfolio)
+        critical_count = sum(1 for c in st.session_state.portfolio if c["risk"] in ["Critical", "High"])
+
+        col1, col2, col3, col4, col5 = st.columns(5)
+        col1.metric("📊 Clinics", len(st.session_state.portfolio))
+        col2.metric("🎯 Avg VVI", f"{avg_vvi:.1f}")
+        col3.metric("💰 Avg RF", f"{avg_rf:.1f}")
+        col4.metric("👥 Avg LF", f"{avg_lf:.1f}")
+        col5.metric("⚠️ High/Critical Risk", critical_count,
+                  delta_color="inverse" if critical_count > 0 else "normal",
+                  delta=f"-{critical_count}" if critical_count > 0 else "+0")
+
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        # --- Ranked Table ---
+        RISK_COLOR = {
+            "Low":      "#d4edda",
+            "Medium":   "#fff3cd",
+            "High":     "#ffe5b4",
+            "Critical": "#f8d7da",
+        }
+        RISK_TEXT = {
+            "Low":      "#155724",
+            "Medium":   "#856404",
+            "High":     "#7d4e00",
+            "Critical": "#721c24",
+        }
+
+        sorted_clinics = sorted(st.session_state.portfolio, key=lambda x: x["vvi"], reverse=True)
+
+        st.markdown("#### 🏆 Clinics Ranked by VVI Score")
+
+        # Header row
+        h0, h1, h2, h3, h4, h5, h6, h7 = st.columns([2.5, 1, 1, 1, 1.2, 1.2, 1.5, 1.5])
+        for h, label in zip(
+            [h0, h1, h2, h3, h4, h5, h6, h7],
+            ["Clinic", "VVI", "RF", "LF", "Rev/Visit", "Labor/Visit", "Scenario", "Risk"]
+        ):
+            h.markdown(f"<div style='font-size:0.72rem;font-weight:700;color:#6c757d;text-transform:uppercase;padding-bottom:4px;border-bottom:2px solid #dee2e6;'>{label}</div>", unsafe_allow_html=True)
+
+        for rank, c in enumerate(sorted_clinics, 1):
+            r_bg  = RISK_COLOR.get(c["risk"], "#f8f9fa")
+            r_tx  = RISK_TEXT.get(c["risk"], "#333")
+            em    = RISK_EMOJI.get(c["risk"], "⚪")
+
+            c0, c1, c2, c3, c4, c5, c6, c7 = st.columns([2.5, 1, 1, 1, 1.2, 1.2, 1.5, 1.5])
+
+            def cell(col, txt, bold=False, color="#212529", bg=None):
+                bg_style = f"background:{bg};border-radius:6px;padding:2px 6px;" if bg else ""
+                weight = "700" if bold else "400"
+                col.markdown(f"<div style='font-size:0.88rem;font-weight:{weight};color:{color};{bg_style}padding:6px 4px;'>{txt}</div>", unsafe_allow_html=True)
+
+            cell(c0, f"**#{rank} {c['name']}**", bold=True)
+            cell(c1, f"{c['vvi']}", bold=True)
+            cell(c2, f"{c['rf']}")
+            cell(c3, f"{c['lf']}")
+            cell(c4, f"${c['nrpv']:.0f}")
+            cell(c5, f"${c['lcv']:.0f}")
+            cell(c6, c["scenario_id"])
+            c7.markdown(f"<div style='background:{r_bg};color:{r_tx};border-radius:6px;padding:4px 8px;font-size:0.8rem;font-weight:700;display:inline-block;'>{em} {c['risk']}</div>", unsafe_allow_html=True)
+
+        # --- Export portfolio ---
+        st.markdown("<br>", unsafe_allow_html=True)
+        col_exp, col_clr = st.columns([3, 1])
+
+        portfolio_df = pd.DataFrame([{
+            "Clinic":        c["name"],
+            "Period":        c["period"],
+            "VVI":           c["vvi"],
+            "RF":            c["rf"],
+            "LF":            c["lf"],
+            "NRPV":          c["nrpv"],
+            "LCV":           c["lcv"],
+            "Scenario":      c["scenario_id"],
+            "Risk":          c["risk"]
+        } for c in st.session_state.portfolio])
+
+        with col_exp:
+            st.download_button(
+                label="📥 Export Portfolio to CSV",
+                data=portfolio_df.to_csv(index=False),
+                file_name=f"vvi_portfolio_{datetime.now().strftime('%Y%m%d')}.csv",
+                mime="text/csv",
+                use_container_width=True
+            )
+        with col_clr:
+            if st.button("🗑️ Clear Portfolio", use_container_width=True):
+                st.session_state.portfolio = []
+                st.rerun()
+
+# If NO clinics, show prominent onboarding
+if not st.session_state.portfolio:
+    st.info("👋 **Get Started:** Add your first clinic to begin tracking performance and generating assessments.")
+
+# --- Add Clinic Panel ---  
+# Expanded if no clinics, collapsed if clinics exist
+with st.expander(
+    "➕ Add Your First Clinic" if not st.session_state.portfolio else "➕ Add Another Clinic", 
+    expanded=(len(st.session_state.portfolio) == 0)
+):
 
     col_upload, col_name = st.columns([2, 1])
 
@@ -1678,6 +1819,7 @@ with st.expander("➕ Add a Clinic to Portfolio", expanded=len(st.session_state.
             st.session_state.rev_target_input = nc_rev_target
             st.session_state.lab_target_input = nc_labor_target
             st.session_state.period_input = nc_period
+            st.session_state.last_clinic_name = name  # Store for executive summary
             st.session_state.assessment_ready = True
             st.session_state.inputs_expanded = False
             
@@ -1888,12 +2030,34 @@ if st.session_state.portfolio:
             if st.button("🗑️ Clear Portfolio", use_container_width=True):
                 st.session_state.portfolio = []
                 st.rerun()
+    
+    # "Add Another Clinic" appears AFTER portfolio dashboard
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+# If NO clinics, show prominent onboarding
+if not st.session_state.portfolio:
+    st.info("👋 **Get Started:** Add your first clinic to begin tracking performance and generating assessments.")
 
-st.markdown("---")
+# --- Add Clinic Panel ---  
+# Expanded if no clinics, collapsed if clinics exist
+with st.expander(
+    "➕ Add Your First Clinic" if not st.session_state.portfolio else "➕ Add Another Clinic", 
+    expanded=(len(st.session_state.portfolio) == 0)
+):
 
-# ============================================================
-# Results Display (triggered by Add Clinic & Run Assessment)
-# ============================================================
+    col_upload, col_name = st.columns([2, 1])
+
+    with col_upload:
+        new_upload = st.file_uploader(
+            "Upload VVI Financial Summary (.xlsx or .csv)",
+            type=["xlsx", "xls", "csv"],
+            key="new_clinic_file",
+            help="Upload the VVI Clinic Financial Summary template. AI will extract all metrics automatically."
+        )
+
+    with col_name:
+        new_clinic_name = st.text_input(
+            "Clinic Name",
 
 if st.session_state.get("assessment_ready", False):
     
@@ -1944,6 +2108,83 @@ if st.session_state.get("assessment_ready", False):
         except Exception as e:
             st.error(f"Error calculating VVI: {str(e)}")
             st.stop()
+    
+    # ========================================
+    # EXECUTIVE SUMMARY HERO BOX
+    # ========================================
+    
+    # Generate executive summary text
+    clinic_name = st.session_state.get('last_clinic_name', 'This clinic')
+    scenario_name = scenario['name']
+    scenario_id = scenario['id']
+    vvi = scores['vvi']
+    risk = scenario['risk_level']
+    
+    # Build priority statement based on scenario
+    if 'Critical Labor' in scenario_name:
+        priority = f"IMMEDIATE PRIORITY: Emergency labor intervention required. Current labor costs are 15-20% above sustainable levels."
+    elif 'Critical Revenue' in scenario_name:
+        priority = f"IMMEDIATE PRIORITY: Revenue crisis intervention required. Revenue performance is 10-15% below benchmark levels."
+    elif 'Critical' in risk:
+        priority = f"IMMEDIATE PRIORITY: Dual-threat situation requiring coordinated revenue and labor interventions."
+    elif 'At Risk Labor' in scenario_name:
+        priority = f"KEY FOCUS: Labor cost drift correction needed. Costs trending 5-10% over target."
+    elif 'At Risk Revenue' in scenario_name:
+        priority = f"KEY FOCUS: Revenue optimization required. Performance 5-10% below benchmark."
+    elif 'Excellent' in scenario_name:
+        priority = f"PRIORITY: Sustain excellence and prevent operational drift."
+    else:
+        priority = f"FOCUS: Incremental optimization opportunities identified."
+    
+    # Get expected impact
+    exp_impact = expected_impact.get('vvi_improvement', 'Not specified')
+    timeline = expected_impact.get('timeline', 'Not specified')
+    
+    # Build recommended action from first "do tomorrow" item
+    first_action = actions.get('do_tomorrow', [''])[0] if actions.get('do_tomorrow') else ''
+    action_summary = first_action.split('.')[0][:150] + '...' if first_action else 'See detailed action plan below.'
+    
+    st.markdown(
+        f"""
+        <div style="
+            background: linear-gradient(135deg, #fef9ed 0%, #fff8e1 100%);
+            border: 3px solid #b08c3e;
+            border-radius: 12px;
+            padding: 2rem 2.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 32px rgba(176, 140, 62, 0.15);
+        ">
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <div style="font-size: 0.85rem; font-weight: 700; letter-spacing: 2px; color: #b08c3e; text-transform: uppercase; margin-bottom: 0.5rem;">
+                    📊 Executive Summary
+                </div>
+                <div style="height: 2px; width: 120px; background: #b08c3e; margin: 0 auto;"></div>
+            </div>
+            
+            <div style="font-size: 1.05rem; line-height: 1.8; color: #2c3e50;">
+                <p style="margin-bottom: 1.2rem;">
+                    <strong style="color: #1a1a2e;">{clinic_name}</strong> is classified as 
+                    <strong style="color: #b08c3e;">Scenario {scenario_id}: {scenario_name}</strong> 
+                    with a Visit Value Index of <strong style="font-size: 1.3rem; color: #b08c3e;">{vvi:.1f}</strong>
+                </p>
+                
+                <p style="margin-bottom: 1.2rem; padding-left: 1rem; border-left: 4px solid #b08c3e;">
+                    <strong>{priority}</strong>
+                </p>
+                
+                <p style="margin-bottom: 1.2rem;">
+                    <strong>RECOMMENDED ACTION:</strong> {action_summary}
+                </p>
+                
+                <p style="margin-bottom: 0;">
+                    <strong>EXPECTED OUTCOME:</strong> VVI improvement of {exp_impact} within {timeline} 
+                    if intervention executes successfully.
+                </p>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
     
     # ========================================
     # Executive Summary
@@ -2653,8 +2894,16 @@ if st.session_state.get("assessment_ready", False):
 
     # Generate and offer download
     clinic_display = result.get("clinic_name", period)
+    
+    # Combine scenario data with actions and expected_impact for Excel
+    complete_scenario = {
+        **scenario,
+        "actions": actions,
+        "expected_impact": expected_impact
+    }
+    
     excel_bytes = build_excel_report(
-        scenario_data = scenario,
+        scenario_data = complete_scenario,
         scores_data   = {
             "vvi": scores["vvi"], "rf": scores["rf"], "lf": scores["lf"],
             "rev_tier": result.get("revenue_tier",""),
