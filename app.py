@@ -2184,266 +2184,272 @@ if st.session_state.get("assessment_ready", False):
     # ========================================
     
     with tab1:
-    
-    st.markdown(
-        "<h2 style='text-align:center; margin-bottom:0.5rem;'>Executive Summary</h2>",
-        unsafe_allow_html=True,
-    )
-    
-    # Tier legend
-    with st.expander("📋 Scoring Tiers (0–100+)", expanded=False):
+        st.markdown(
+            "<h2 style='text-align:center; margin-bottom:0.5rem;'>Performance Metrics</h2>",
+            unsafe_allow_html=True,
+        )
+        
+        # Tier legend
+        with st.expander("📋 Scoring Tiers (0–100+)", expanded=False):
+            st.markdown(
+                """
+                <div style="margin:0.5rem 0; line-height:1.8;">
+                    <div><span style="font-size:1rem;">🟢</span> <b>Excellent</b>: ≥100 <span style="color:#555;">(Top performing)</span></div>
+                    <div><span style="font-size:1rem;">🟡</span> <b>Stable</b>: 95–99.9 <span style="color:#555;">(Healthy, within benchmark)</span></div>
+                    <div><span style="font-size:1rem;">🟠</span> <b>At Risk</b>: 90–94.9 <span style="color:#555;">(Performance drift emerging)</span></div>
+                    <div><span style="font-size:1rem;">🔴</span> <b>Critical</b>: <90 <span style="color:#555;">(Immediate corrective focus)</span></div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        
+        # Hero VVI card - McKinsey-caliber design
+        left_spacer, hero_col, right_spacer = st.columns([1, 2, 1])
+        
+        # Sophisticated tier colors with gradients
+        tier_design = {
+            "Excellent": {"bg": "#e8f5e9", "border": "#66bb6a", "accent": "#2e7d32"},
+            "Stable": {"bg": "#fff9c4", "border": "#fdd835", "accent": "#f9a825"},
+            "At Risk": {"bg": "#ffe0b2", "border": "#ff9800", "accent": "#ef6c00"},
+            "Critical": {"bg": "#ffebee", "border": "#e57373", "accent": "#c62828"}
+        }
+        
+        design = tier_design.get(tiers["vvi"], tier_design["Stable"])
+        
+        with hero_col:
+            st.markdown(
+                f"""
+                <div style="background:{design['bg']};padding:2rem;border-radius:16px;border-left:6px solid {design['border']};box-shadow:0 8px 32px rgba(0,0,0,0.08),0 2px 8px rgba(0,0,0,0.04);text-align:center;">
+                    <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#616161;margin-bottom:0.75rem;opacity:0.8;">
+                        Visit Value Index (VVI)
+                    </div>
+                    <div style="font-size:3.5rem;font-weight:800;color:{design['accent']};line-height:1;margin:0.5rem 0;letter-spacing:-0.02em;">
+                        {scores['vvi']:.1f}
+                    </div>
+                    <div style="font-size:0.95rem;color:#424242;margin:1rem 0 1.25rem 0;font-weight:500;opacity:0.9;">
+                        Overall performance vs. benchmark
+                    </div>
+                    <div style="display:inline-block;padding:0.5rem 1.5rem;background:rgba(255,255,255,0.9);border-radius:24px;border:2px solid {design['border']};box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+                        <span style="font-size:0.75rem;font-weight:700;color:#616161;letter-spacing:0.05em;text-transform:uppercase;">Tier:</span>
+                        <span style="font-size:0.95rem;font-weight:800;color:{design['accent']};margin-left:0.5rem;">{tiers['vvi']}</span>
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        
+        st.markdown("")
+        
+        # Driving factors heading
         st.markdown(
             """
-            <div style="margin:0.5rem 0; line-height:1.8;">
-                <div><span style="font-size:1rem;">🟢</span> <b>Excellent</b>: ≥100 <span style="color:#555;">(Top performing)</span></div>
-                <div><span style="font-size:1rem;">🟡</span> <b>Stable</b>: 95–99.9 <span style="color:#555;">(Healthy, within benchmark)</span></div>
-                <div><span style="font-size:1rem;">🟠</span> <b>At Risk</b>: 90–94.9 <span style="color:#555;">(Performance drift emerging)</span></div>
-                <div><span style="font-size:1rem;">🔴</span> <b>Critical</b>: <90 <span style="color:#555;">(Immediate corrective focus)</span></div>
+            <div style="text-align:center; margin:1rem 0;">
+                <p style="font-size:18px; font-weight:600; color:#333; margin-bottom:4px;">
+                    Driving factor sub-scores
+                </p>
+                <p style="font-size:14px; color:#666; margin-top:0;">
+                    These values indicate the underlying performance drivers behind your overall VVI.
+                </p>
             </div>
             """,
             unsafe_allow_html=True,
         )
-    
-    # Hero VVI card - McKinsey-caliber design
-    left_spacer, hero_col, right_spacer = st.columns([1, 2, 1])
-    
-    # Sophisticated tier colors with gradients
-    tier_design = {
-        "Excellent": {"bg": "#e8f5e9", "border": "#66bb6a", "accent": "#2e7d32"},
-        "Stable": {"bg": "#fff9c4", "border": "#fdd835", "accent": "#f9a825"},
-        "At Risk": {"bg": "#ffe0b2", "border": "#ff9800", "accent": "#ef6c00"},
-        "Critical": {"bg": "#ffebee", "border": "#e57373", "accent": "#c62828"}
-    }
-    
-    design = tier_design.get(tiers["vvi"], tier_design["Stable"])
-    
-    with hero_col:
+        
+        # RF / LF mini-cards - McKinsey design
+        c_rf, c_lf = st.columns(2)
+        
+        # Design configs for RF and LF
+        rf_design = tier_design.get(tiers["rf"], tier_design["Stable"])
+        lf_design = tier_design.get(tiers["lf"], tier_design["Stable"])
+        
+        with c_rf:
+            st.markdown(
+                f"""
+                <div style="background:{rf_design['bg']};padding:1.5rem;border-radius:14px;border-left:5px solid {rf_design['border']};box-shadow:0 6px 24px rgba(0,0,0,0.06),0 2px 6px rgba(0,0,0,0.03);">
+                    <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#757575;margin-bottom:0.75rem;opacity:0.85;">
+                        Revenue Factor (RF)
+                    </div>
+                    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:0.75rem;">
+                        <div style="font-size:2.25rem;font-weight:800;color:{rf_design['accent']};line-height:1;letter-spacing:-0.02em;">
+                            {scores['rf']:.1f}
+                        </div>
+                        <div style="padding:0.35rem 1rem;background:rgba(255,255,255,0.85);border-radius:20px;border:2px solid {rf_design['border']};font-size:0.75rem;font-weight:700;color:{rf_design['accent']};letter-spacing:0.03em;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+                            {tiers['rf']}
+                        </div>
+                    </div>
+                    <div style="font-size:0.8rem;color:#616161;font-weight:500;line-height:1.4;opacity:0.9;">
+                        Actual NRPV <span style="font-weight:700;color:{rf_design['accent']};">${metrics['nrpv']:.2f}</span><br/>
+                        vs. benchmark <span style="font-weight:600;opacity:0.7;">${rt:.2f}</span>
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        
+        with c_lf:
+            st.markdown(
+                f"""
+                <div style="background:{lf_design['bg']};padding:1.5rem;border-radius:14px;border-left:5px solid {lf_design['border']};box-shadow:0 6px 24px rgba(0,0,0,0.06),0 2px 6px rgba(0,0,0,0.03);">
+                    <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#757575;margin-bottom:0.75rem;opacity:0.85;">
+                        Labor Factor (LF)
+                    </div>
+                    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:0.75rem;">
+                        <div style="font-size:2.25rem;font-weight:800;color:{lf_design['accent']};line-height:1;letter-spacing:-0.02em;">
+                            {scores['lf']:.1f}
+                        </div>
+                        <div style="padding:0.35rem 1rem;background:rgba(255,255,255,0.85);border-radius:20px;border:2px solid {lf_design['border']};font-size:0.75rem;font-weight:700;color:{lf_design['accent']};letter-spacing:0.03em;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+                            {tiers['lf']}
+                        </div>
+                    </div>
+                    <div style="font-size:0.8rem;color:#616161;font-weight:500;line-height:1.4;opacity:0.9;">
+                        Benchmark LCV <span style="font-weight:600;opacity:0.7;">${lt:.2f}</span><br/>
+                        vs. actual <span style="font-weight:700;color:{lf_design['accent']};">${metrics['lcv']:.2f}</span>
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        
+        st.markdown('<hr style="margin:1.5rem 0;">', unsafe_allow_html=True)
+        
+        # Scenario Classification
         st.markdown(
             f"""
-            <div style="background:{design['bg']};padding:2rem;border-radius:16px;border-left:6px solid {design['border']};box-shadow:0 8px 32px rgba(0,0,0,0.08),0 2px 8px rgba(0,0,0,0.04);text-align:center;">
-                <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#616161;margin-bottom:0.75rem;opacity:0.8;">
-                    Visit Value Index (VVI)
-                </div>
-                <div style="font-size:3.5rem;font-weight:800;color:{design['accent']};line-height:1;margin:0.5rem 0;letter-spacing:-0.02em;">
-                    {scores['vvi']:.1f}
-                </div>
-                <div style="font-size:0.95rem;color:#424242;margin:1rem 0 1.25rem 0;font-weight:500;opacity:0.9;">
-                    Overall performance vs. benchmark
-                </div>
-                <div style="display:inline-block;padding:0.5rem 1.5rem;background:rgba(255,255,255,0.9);border-radius:24px;border:2px solid {design['border']};box-shadow:0 4px 12px rgba(0,0,0,0.06);">
-                    <span style="font-size:0.75rem;font-weight:700;color:#616161;letter-spacing:0.05em;text-transform:uppercase;">Tier:</span>
-                    <span style="font-size:0.95rem;font-weight:800;color:{design['accent']};margin-left:0.5rem;">{tiers['vvi']}</span>
-                </div>
+            <div style="background:#fef9ed;padding:1.5rem;border-radius:8px;border:2px solid #b08c3e;margin:1.5rem 0;text-align:center;">
+                <p style="font-size:18px;font-weight:700;color:#b08c3e;margin-bottom:1rem;letter-spacing:0.5px;">
+                    {scenario['name']}
+                </p>
+                <p style="font-size:0.75rem;color:#666;font-style:italic;margin-top:0.5rem;margin-bottom:0;">
+                    Visit Value Index™ | Bramhall Consulting, LLC | predict. perform. prosper. | {datetime.now().strftime('%B %d, %Y')}
+                </p>
             </div>
             """,
             unsafe_allow_html=True,
         )
+        
+        # Executive Narrative
+        if scenario.get('executive_narrative'):
+            st.info(f\"**Executive Summary:** {scenario['executive_narrative']}")
     
-    st.markdown("")
+    # ========================================
+    # TAB 2: Root Causes
+    # ========================================
     
-    # Driving factors heading
-    st.markdown(
-        """
-        <div style="text-align:center; margin:1rem 0;">
-            <p style="font-size:18px; font-weight:600; color:#333; margin-bottom:4px;">
-                Driving factor sub-scores
-            </p>
-            <p style="font-size:14px; color:#666; margin-top:0;">
-                These values indicate the underlying performance drivers behind your overall VVI.
-            </p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    with tab2:
+        
+        # Root Cause Analysis
+        if scenario.get('root_causes'):
+            st.markdown(
+                "<h3 style='margin-top:1rem;'>🔍 Root Cause Analysis</h3>",
+                unsafe_allow_html=True
+            )
+            st.caption("Why this may be happening (possible primary drivers):")
+            
+            for cause in scenario['root_causes']:
+                st.markdown(f"• {cause}")
     
-    # RF / LF mini-cards - McKinsey design
-    c_rf, c_lf = st.columns(2)
+    # ========================================
+    # TAB 3: Action Plan
+    # ========================================
     
-    # Design configs for RF and LF
-    rf_design = tier_design.get(tiers["rf"], tier_design["Stable"])
-    lf_design = tier_design.get(tiers["lf"], tier_design["Stable"])
-    
-    with c_rf:
+    with tab3:
         st.markdown(
-            f"""
-            <div style="background:{rf_design['bg']};padding:1.5rem;border-radius:14px;border-left:5px solid {rf_design['border']};box-shadow:0 6px 24px rgba(0,0,0,0.06),0 2px 6px rgba(0,0,0,0.03);">
-                <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#757575;margin-bottom:0.75rem;opacity:0.85;">
-                    Revenue Factor (RF)
-                </div>
-                <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:0.75rem;">
-                    <div style="font-size:2.25rem;font-weight:800;color:{rf_design['accent']};line-height:1;letter-spacing:-0.02em;">
-                        {scores['rf']:.1f}
-                    </div>
-                    <div style="padding:0.35rem 1rem;background:rgba(255,255,255,0.85);border-radius:20px;border:2px solid {rf_design['border']};font-size:0.75rem;font-weight:700;color:{rf_design['accent']};letter-spacing:0.03em;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
-                        {tiers['rf']}
-                    </div>
-                </div>
-                <div style="font-size:0.8rem;color:#616161;font-weight:500;line-height:1.4;opacity:0.9;">
-                    Actual NRPV <span style="font-weight:700;color:{rf_design['accent']};">${metrics['nrpv']:.2f}</span><br/>
-                    vs. benchmark <span style="font-weight:600;opacity:0.7;">${rt:.2f}</span>
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
+            "<h3 style='margin-top:0;'>📋 Prescriptive Actions</h3>",
+            unsafe_allow_html=True
         )
-    
-    with c_lf:
-        st.markdown(
-            f"""
-            <div style="background:{lf_design['bg']};padding:1.5rem;border-radius:14px;border-left:5px solid {lf_design['border']};box-shadow:0 6px 24px rgba(0,0,0,0.06),0 2px 6px rgba(0,0,0,0.03);">
-                <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#757575;margin-bottom:0.75rem;opacity:0.85;">
-                    Labor Factor (LF)
-                </div>
-                <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:0.75rem;">
-                    <div style="font-size:2.25rem;font-weight:800;color:{lf_design['accent']};line-height:1;letter-spacing:-0.02em;">
-                        {scores['lf']:.1f}
-                    </div>
-                    <div style="padding:0.35rem 1rem;background:rgba(255,255,255,0.85);border-radius:20px;border:2px solid {lf_design['border']};font-size:0.75rem;font-weight:700;color:{lf_design['accent']};letter-spacing:0.03em;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
-                        {tiers['lf']}
-                    </div>
-                </div>
-                <div style="font-size:0.8rem;color:#616161;font-weight:500;line-height:1.4;opacity:0.9;">
-                    Benchmark LCV <span style="font-weight:600;opacity:0.7;">${lt:.2f}</span><br/>
-                    vs. actual <span style="font-weight:700;color:{lf_design['accent']};">${metrics['lcv']:.2f}</span>
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
+        
+        st.caption(
+            "Time-phased action plan based on your scenario classification. "
+            "These are proven interventions from 500+ clinic assessments."
         )
-    
-    st.markdown('<hr style="margin:1.5rem 0;">', unsafe_allow_html=True)
-    
-    # ========================================
-    # Scenario Classification
-    # ========================================
-    
-    st.markdown(
-        f"""
-        <div style="background:#fef9ed;padding:1.5rem;border-radius:8px;border:2px solid #b08c3e;margin:1.5rem 0;text-align:center;">
-            <p style="font-size:18px;font-weight:700;color:#b08c3e;margin-bottom:1rem;letter-spacing:0.5px;">
-                {scenario['name']}
-            </p>
-            <p style="font-size:0.75rem;color:#666;font-style:italic;margin-top:0.5rem;margin-bottom:0;">
-                Visit Value Index™ | Bramhall Consulting, LLC | predict. perform. prosper. | {datetime.now().strftime('%B %d, %Y')}
-            </p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    
-    # Executive Narrative
-    if scenario.get('executive_narrative'):
-        st.info(f"**Executive Summary:** {scenario['executive_narrative']}")
-    
-    # Root Cause Analysis
-    if scenario.get('root_causes'):
-        st.markdown("---")
-        st.subheader("🔍 Root Cause Analysis")
-        st.caption("Why this may be happening (possible primary drivers):")
         
-        for cause in scenario['root_causes']:
-            st.markdown(f"• {cause}")
-    
-    # ========================================
-    # Prescriptive Actions
-    # ========================================
-    
-    st.markdown("---")
-    st.subheader("📋 Prescriptive Actions")
-    
-    st.caption(
-        "Time-phased action plan based on your scenario classification. "
-        "These are proven interventions from 500+ clinic assessments."
-    )
-    
-    with st.expander("✅ Do Tomorrow (Non-negotiable staples)", expanded=True):
-        for i, action in enumerate(actions.get("do_tomorrow", []), 1):
-            st.markdown(f"{i}. {action}")
-    
-    with st.expander("🎯 Next 7 Days (Quick wins)"):
-        for i, action in enumerate(actions.get("next_7_days", []), 1):
-            st.markdown(f"{i}. {action}")
-    
-    with st.expander("🔧 Next 30-60 Days (High-impact structural changes)"):
-        for i, action in enumerate(actions.get("next_30_60_days", []), 1):
-            st.markdown(f"{i}. {action}")
-    
-    with st.expander("🏗️ Next 60-90 Days (Sustainability measures)"):
-        for i, action in enumerate(actions.get("next_60_90_days", []), 1):
-            st.markdown(f"{i}. {action}")
-    
-    # ========================================
-    # Expected Impact
-    # ========================================
-    
-    if expected_impact:
-        st.markdown("---")
-        st.markdown("### 📈 Expected Impact of Improvement")
+        with st.expander("✅ Do Tomorrow (Non-negotiable staples)", expanded=True):
+            for i, action in enumerate(actions.get("do_tomorrow", []), 1):
+                st.markdown(f"{i}. {action}")
         
-        col1, col2, col3 = st.columns(3)
+        with st.expander("🎯 Next 7 Days (Quick wins)"):
+            for i, action in enumerate(actions.get("next_7_days", []), 1):
+                st.markdown(f"{i}. {action}")
         
-        with col1:
-            vvi_imp = expected_impact.get("vvi_improvement", "Not specified")
-            st.markdown(f"""
-            <div style="background:#f8f9fa;padding:1rem;border-radius:8px;text-align:center;border:1px solid #dee2e6;">
-                <div style="font-size:0.7rem;color:#6c757d;font-weight:600;text-transform:uppercase;margin-bottom:0.5rem;">VVI Improvement</div>
-                <div style="font-size:1.5rem;font-weight:700;color:#28a745;">{vvi_imp}</div>
-            </div>
-            """, unsafe_allow_html=True)
+        with st.expander("🔧 Next 30-60 Days (High-impact structural changes)"):
+            for i, action in enumerate(actions.get("next_30_60_days", []), 1):
+                st.markdown(f"{i}. {action}")
         
-        with col2:
-            timeline = expected_impact.get("timeline", "Not specified")
-            st.markdown(f"""
-            <div style="background:#f8f9fa;padding:1rem;border-radius:8px;text-align:center;border:1px solid #dee2e6;">
-                <div style="font-size:0.7rem;color:#6c757d;font-weight:600;text-transform:uppercase;margin-bottom:0.5rem;">Timeline</div>
-                <div style="font-size:1.5rem;font-weight:700;color:#0d6efd;">{timeline}</div>
-            </div>
-            """, unsafe_allow_html=True)
+        with st.expander("🏗️ Next 60-90 Days (Sustainability measures)"):
+            for i, action in enumerate(actions.get("next_60_90_days", []), 1):
+                st.markdown(f"{i}. {action}")
         
-        with col3:
-            risks = expected_impact.get("key_risks", [])
-            risk_count = len(risks) if risks else 0
-            st.markdown(f"""
-            <div style="background:#f8f9fa;padding:1rem;border-radius:8px;text-align:center;border:1px solid #dee2e6;">
-                <div style="font-size:0.7rem;color:#6c757d;font-weight:600;text-transform:uppercase;margin-bottom:0.5rem;">Key Risks</div>
-                <div style="font-size:1.5rem;font-weight:700;color:#dc3545;">{risk_count} identified</div>
-            </div>
-            """, unsafe_allow_html=True)
-        
-        if expected_impact.get("key_risks"):
+        # Expected Impact section
+        if expected_impact:
             st.markdown("<br>", unsafe_allow_html=True)
-            st.markdown("**Key Risks to Monitor:**")
-            for risk in expected_impact["key_risks"]:
-                st.markdown(f"• {risk}")
+            st.markdown("### 📈 Expected Impact of Improvement")
+            
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                vvi_imp = expected_impact.get("vvi_improvement", "Not specified")
+                st.markdown(f"""
+                <div style="background:#f8f9fa;padding:1rem;border-radius:8px;text-align:center;border:1px solid #dee2e6;">
+                    <div style="font-size:0.7rem;color:#6c757d;font-weight:600;text-transform:uppercase;margin-bottom:0.5rem;">VVI Improvement</div>
+                    <div style="font-size:1.5rem;font-weight:700;color:#28a745;">{vvi_imp}</div>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            with col2:
+                timeline = expected_impact.get("timeline", "Not specified")
+                st.markdown(f"""
+                <div style="background:#f8f9fa;padding:1rem;border-radius:8px;text-align:center;border:1px solid #dee2e6;">
+                    <div style="font-size:0.7rem;color:#6c757d;font-weight:600;text-transform:uppercase;margin-bottom:0.5rem;">Timeline</div>
+                    <div style="font-size:1.5rem;font-weight:700;color:#0d6efd;">{timeline}</div>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            with col3:
+                risks = expected_impact.get("key_risks", [])
+                risk_count = len(risks) if risks else 0
+                st.markdown(f"""
+                <div style="background:#f8f9fa;padding:1rem;border-radius:8px;text-align:center;border:1px solid #dee2e6;">
+                    <div style="font-size:0.7rem;color:#6c757d;font-weight:600;text-transform:uppercase;margin-bottom:0.5rem;">Key Risks</div>
+                    <div style="font-size:1.5rem;font-weight:700;color:#dc3545;">{risk_count} identified</div>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            if expected_impact.get("key_risks"):
+                st.markdown("<br>", unsafe_allow_html=True)
+                st.markdown("**Key Risks to Monitor:**")
+                for risk in expected_impact["key_risks"]:
+                    st.markdown(f"• {risk}")
     
     # ========================================
+    # TAB 4: AI Coach
     # ========================================
-    # AI Coach
-    # ========================================
 
-    st.markdown("---")
-    st.subheader("🤖 AI Coach")
-    st.caption(
-        "Ask a guided question about this clinic's scenario. "
-        "Powered by GPT-4o-mini — answers are grounded in the scenario analysis above."
-    )
-
-    coach_key_ok = bool(
-        (hasattr(st, "secrets") and st.secrets.get("OPENAI_API_KEY")) or
-        os.getenv("OPENAI_API_KEY")
-    )
-
-    if not coach_key_ok:
-        st.info(
-            "💡 **AI Coach requires an OpenAI API key.** "
-            "Add `OPENAI_API_KEY` to your Streamlit secrets to activate."
+    with tab4:
+        st.markdown(
+            "<h3 style='margin-top:0;'>🤖 AI Coach</h3>",
+            unsafe_allow_html=True
         )
-    else:
-        coach_q = st.selectbox(
-            "Select a question:",
-            AI_COACH_QUESTIONS,
-            key="coach_question_select"
+        st.caption(
+            "Ask a guided question about this clinic's scenario. "
+            "Powered by GPT-4o-mini — answers are grounded in the scenario analysis above."
         )
+
+        coach_key_ok = bool(
+            (hasattr(st, "secrets") and st.secrets.get("OPENAI_API_KEY")) or
+            os.getenv("OPENAI_API_KEY")
+        )
+
+        if not coach_key_ok:
+            st.info(
+                "💡 **AI Coach requires an OpenAI API key.** "
+                "Add `OPENAI_API_KEY` to your Streamlit secrets to activate."
+            )
+        else:
+            coach_q = st.selectbox(
+                "Select a question:",
+                AI_COACH_QUESTIONS,
+                key="coach_question_select"
+            )
         if st.button("💬 Ask AI Coach", type="primary"):
             with st.spinner("AI Coach thinking…"):
                 ok, answer = ai_coach_answer(
