@@ -2329,7 +2329,7 @@ if st.session_state.get("assessment_ready", False):
         
         # Executive Narrative
         if scenario.get('executive_narrative'):
-            st.info(f\"**Executive Summary:** {scenario['executive_narrative']}")
+            st.info(f"**Executive Summary:** {scenario['executive_narrative']}")
     
     # ========================================
     # TAB 2: Root Causes
@@ -2450,74 +2450,81 @@ if st.session_state.get("assessment_ready", False):
                 AI_COACH_QUESTIONS,
                 key="coach_question_select"
             )
-        if st.button("💬 Ask AI Coach", type="primary"):
-            with st.spinner("AI Coach thinking…"):
-                ok, answer = ai_coach_answer(
-                    question=coach_q,
-                    scenario_data=scenario,
-                    scores=scores,
-                )
-            if ok:
-                st.markdown(answer)
-            else:
-                st.warning(answer)
+            if st.button("💬 Ask AI Coach", type="primary"):
+                with st.spinner("AI Coach thinking…"):
+                    ok, answer = ai_coach_answer(
+                        question=coach_q,
+                        scenario_data=scenario,
+                        scores=scores,
+                    )
+                if ok:
+                    st.markdown(answer)
+                else:
+                    st.warning(answer)
 
-    # Save & Export
+    # ========================================
+    # TAB 5: Download Report
     # ========================================
 
-    st.markdown("---")
-    st.subheader("💾 Save & Export")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        run_name = st.text_input(
-            "Save this assessment as:",
-            value=f"Clinic {len(st.session_state.portfolio) + 1}"
+    with tab5:
+        st.markdown(
+            "<h3 style='margin-top:0;'>📥 Download Assessment Report</h3>",
+            unsafe_allow_html=True
         )
-        if st.button("💾 Save to Portfolio", type="primary"):
-            name = run_name.strip() or f"Clinic {len(st.session_state.portfolio) + 1}"
-            existing_names = [c["name"] for c in st.session_state.portfolio]
-            if name in existing_names:
-                name = f"{name} (2)"
-            st.session_state.portfolio.append({
-                "name":        name,
-                "period":      period,
-                "visits":      visits,
-                "net_revenue": net_rev,
-                "labor_cost":  labor,
-                "rev_target":  rt,
-                "labor_target":lt,
-                "vvi":         scores["vvi"],
-                "rf":          scores["rf"],
-                "lf":          scores["lf"],
-                "rev_tier":    result.get("revenue_tier", ""),
-                "lab_tier":    result.get("labor_tier", ""),
-                "scenario_id": scenario["id"],
-                "risk":        scenario["risk_level"],
-                "nrpv":        round(net_rev / visits, 2) if visits > 0 else 0,
-                "lcv":         round(labor / visits, 2) if visits > 0 else 0,
-                "file_name":   None,
-            })
-            st.success(f"✅ **{name}** saved to portfolio!")
+        st.caption("Export complete assessment with all metrics, actions, and expected impact to Excel.")
+        
+        # Save to Portfolio option
+        st.markdown("### 💾 Save to Portfolio (Optional)")
+        col1, col2 = st.columns(2)
 
-    with col2:
-        st.markdown("&nbsp;")
-        st.download_button(
-            label="📄 Download Raw Data (JSON)",
-            data=json.dumps(result, indent=2),
-            file_name=f"vvi_assessment_{period}.json",
-            mime="application/json"
+        with col1:
+            run_name = st.text_input(
+                "Save this assessment as:",
+                value=f"Clinic {len(st.session_state.portfolio) + 1}"
+            )
+            if st.button("💾 Save to Portfolio", type="secondary"):
+                name = run_name.strip() or f"Clinic {len(st.session_state.portfolio) + 1}"
+                existing_names = [c["name"] for c in st.session_state.portfolio]
+                if name in existing_names:
+                    name = f"{name} (2)"
+                st.session_state.portfolio.append({
+                    "name":        name,
+                    "period":      period,
+                    "visits":      visits,
+                    "net_revenue": net_rev,
+                    "labor_cost":  labor,
+                    "rev_target":  rt,
+                    "labor_target":lt,
+                    "vvi":         scores["vvi"],
+                    "rf":          scores["rf"],
+                    "lf":          scores["lf"],
+                    "rev_tier":    result.get("revenue_tier", ""),
+                    "lab_tier":    result.get("labor_tier", ""),
+                    "scenario_id": scenario["id"],
+                    "risk":        scenario["risk_level"],
+                    "nrpv":        round(net_rev / visits, 2) if visits > 0 else 0,
+                    "lcv":         round(labor / visits, 2) if visits > 0 else 0,
+                    "file_name":   None,
+                })
+                st.success(f"✅ **{name}** saved to portfolio!")
+
+        with col2:
+            st.markdown("&nbsp;")
+            st.download_button(
+                label="📄 Download Raw Data (JSON)",
+                data=json.dumps(result, indent=2),
+                file_name=f"vvi_assessment_{period}.json",
+                mime="application/json"
+            )
+
+        # Excel Report Download
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("### 📊 Download Assessment Report (Excel)")
+        st.caption(
+            "Generates a board-ready Excel report with your scores, "
+            "Executive Narrative, Root Cause Analysis, and Action Plan — "
+            "populated with this clinic's specific scenario content."
         )
-
-    # ── Excel Assessment Report Download ─────────────────────
-    st.markdown("---")
-    st.subheader("📊 Download Assessment Report (Excel)")
-    st.caption(
-        "Generates a board-ready Excel report with your scores, "
-        "Executive Narrative, Root Cause Analysis, and Action Plan — "
-        "populated with this clinic's specific scenario content."
-    )
 
     def build_excel_report(scenario_data: dict, scores_data: dict,
                            result_data: dict, clinic_name: str,
