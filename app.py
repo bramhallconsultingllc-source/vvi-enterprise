@@ -1920,17 +1920,9 @@ if st.session_state.get("assessment_ready", False):
     first_action = actions.get('do_tomorrow', [''])[0] if actions.get('do_tomorrow') else ''
     action_summary = first_action.split('.')[0][:150] + '...' if first_action else 'See detailed action plan below.'
     
-    # HTML escape dynamic content to prevent HTML breaking
-    import html
-    clinic_name_safe = html.escape(clinic_name)
-    scenario_name_safe = html.escape(scenario_name)
-    priority_safe = html.escape(priority)
-    action_summary_safe = html.escape(action_summary)
-    exp_impact_safe = html.escape(exp_impact)
-    timeline_safe = html.escape(timeline)
-    
+    # Create Executive Summary box with simpler HTML
     st.markdown(
-        f"""
+        """
         <div style="
             background: linear-gradient(135deg, #fef9ed 0%, #fff8e1 100%);
             border: 3px solid #b08c3e;
@@ -1938,38 +1930,35 @@ if st.session_state.get("assessment_ready", False):
             padding: 2rem 2.5rem;
             margin: 2rem 0;
             box-shadow: 0 8px 32px rgba(176, 140, 62, 0.15);
+            text-align: center;
         ">
-            <div style="text-align: center; margin-bottom: 1.5rem;">
-                <div style="font-size: 0.85rem; font-weight: 700; letter-spacing: 2px; color: #b08c3e; text-transform: uppercase; margin-bottom: 0.5rem;">
-                    📊 Executive Summary
-                </div>
-                <div style="height: 2px; width: 120px; background: #b08c3e; margin: 0 auto;"></div>
+            <div style="font-size: 0.85rem; font-weight: 700; letter-spacing: 2px; color: #b08c3e; text-transform: uppercase; margin-bottom: 0.5rem;">
+                📊 Executive Summary
             </div>
-            
-            <div style="font-size: 1.05rem; line-height: 1.8; color: #2c3e50;">
-                <p style="margin-bottom: 1.2rem;">
-                    <strong style="color: #1a1a2e;">{clinic_name_safe}</strong> is classified as 
-                    <strong style="color: #b08c3e;">Scenario {scenario_id}: {scenario_name_safe}</strong> 
-                    with a Visit Value Index of <strong style="font-size: 1.3rem; color: #b08c3e;">{vvi:.1f}</strong>
-                </p>
-                
-                <p style="margin-bottom: 1.2rem; padding-left: 1rem; border-left: 4px solid #b08c3e;">
-                    <strong>{priority_safe}</strong>
-                </p>
-                
-                <p style="margin-bottom: 1.2rem;">
-                    <strong>RECOMMENDED ACTION:</strong> {action_summary_safe}
-                </p>
-                
-                <p style="margin-bottom: 0;">
-                    <strong>EXPECTED OUTCOME:</strong> VVI improvement of {exp_impact_safe} within {timeline_safe} 
-                    if intervention executes successfully.
-                </p>
-            </div>
+            <div style="height: 2px; width: 120px; background: #b08c3e; margin: 0 auto 1.5rem auto;"></div>
         </div>
         """,
         unsafe_allow_html=True
     )
+    
+    # Use markdown for content (more reliable than nested HTML)
+    st.markdown(f"""
+    <div style="background: #fef9ed; border-left: 4px solid #b08c3e; padding: 1.5rem; margin: -1rem 0 2rem 0; border-radius: 0 0 8px 8px;">
+    
+    **{clinic_name}** is classified as **Scenario {scenario_id}: {scenario_name}** with a Visit Value Index of **{vvi:.1f}**
+    
+    ---
+    
+    **{priority}**
+    
+    ---
+    
+    **RECOMMENDED ACTION:** {action_summary}
+    
+    **EXPECTED OUTCOME:** VVI improvement of {exp_impact} within {timeline} if intervention executes successfully.
+    
+    </div>
+    """, unsafe_allow_html=True)
     
     # ========================================
     # TAB NAVIGATION
