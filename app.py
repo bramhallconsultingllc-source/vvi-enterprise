@@ -1829,213 +1829,6 @@ with st.expander(
         except Exception as e:
             st.error(f"Could not calculate scores: {e}")
 
-# ============================================================
-# Portfolio Dashboard — shown once 1+ clinics are added
-# ============================================================
-
-if st.session_state.portfolio:
-
-    st.markdown("---")
-
-    # --- Clinic Selector Dropdown ---
-    PORTFOLIO_VIEW = "📊 All Clinics — Portfolio View"
-    clinic_options = [PORTFOLIO_VIEW] + [c["name"] for c in st.session_state.portfolio]
-
-    RISK_EMOJI = {"Low": "🟢", "Medium": "🟡", "High": "🟠", "Critical": "🔴"}
-
-    def clinic_label(c):
-        em = RISK_EMOJI.get(c["risk"], "⚪")
-        return f"{em} {c['name']}  —  {c['scenario_id']}  |  VVI {c['vvi']}"
-
-    dropdown_labels = [PORTFOLIO_VIEW] + [clinic_label(c) for c in st.session_state.portfolio]
-
-    selected_label = st.selectbox(
-        "🏥 Select Clinic or Portfolio View",
-        options=dropdown_labels,
-        index=0,
-        key="clinic_selector"
-    )
-
-    selected_index = dropdown_labels.index(selected_label) - 1  # -1 = portfolio view
-
-    # --- Remove clinic button ---
-    if selected_index >= 0:
-        col_r1, col_r2 = st.columns([5, 1])
-        with col_r2:
-            if st.button("🗑️ Remove This Clinic", use_container_width=True):
-                st.session_state.portfolio.pop(selected_index)
-                st.rerun()
-
-    # ============================================================
-    # VIEW A: Individual Clinic Detail
-    # ============================================================
-
-    if selected_index >= 0:
-        clinic = st.session_state.portfolio[selected_index]
-
-        # Score cards
-        TIER_BG = {"Excellent":"#d4edda","Stable":"#fff3cd","At Risk":"#ffe5b4","Critical":"#f8d7da"}
-        TIER_TX = {"Excellent":"#155724","Stable":"#856404","At Risk":"#7d4e00","Critical":"#721c24"}
-
-        st.markdown(f"### 📍 {clinic['name']} — {clinic['period']}")
-
-        m1, m2, m3, m4, m5 = st.columns(5)
-        def metric_card(col, label, val, sub=""):
-            col.markdown(f"""
-            <div style="background:#f8f9fa;border-radius:10px;padding:14px 10px;text-align:center;border:1px solid #dee2e6;">
-                <div style="font-size:0.72rem;color:#6c757d;font-weight:600;text-transform:uppercase;letter-spacing:.5px;">{label}</div>
-                <div style="font-size:1.6rem;font-weight:800;color:#1a1a2e;margin:4px 0;">{val}</div>
-                <div style="font-size:0.72rem;color:#6c757d;">{sub}</div>
-            </div>""", unsafe_allow_html=True)
-
-        metric_card(m1, "VVI Score", f"{clinic['vvi']}", "Overall")
-        metric_card(m2, "Revenue Factor", f"{clinic['rf']}", "RF")
-        metric_card(m3, "Labor Factor", f"{clinic['lf']}", "LF")
-        metric_card(m4, "Rev / Visit", f"${clinic['nrpv']:.0f}", "NRPV")
-        metric_card(m5, "Labor / Visit", f"${clinic['lcv']:.0f}", "LCV")
-
-        st.markdown("<br>", unsafe_allow_html=True)
-
-        rev_bg  = TIER_BG.get(clinic["rev_tier"], "#f8f9fa")
-        lab_bg  = TIER_BG.get(clinic["lab_tier"], "#f8f9fa")
-        rev_tx  = TIER_TX.get(clinic["rev_tier"], "#333")
-        lab_tx  = TIER_TX.get(clinic["lab_tier"], "#333")
-
-        sc1, sc2, sc3 = st.columns(3)
-        sc1.markdown(f"""
-        <div style="background:{rev_bg};border-radius:10px;padding:14px;text-align:center;">
-            <div style="font-size:0.72rem;color:{rev_tx};font-weight:700;text-transform:uppercase;">Revenue Tier</div>
-            <div style="font-size:1.4rem;font-weight:800;color:{rev_tx};">{clinic['rev_tier']}</div>
-        </div>""", unsafe_allow_html=True)
-        sc2.markdown(f"""
-        <div style="background:{lab_bg};border-radius:10px;padding:14px;text-align:center;">
-            <div style="font-size:0.72rem;color:{lab_tx};font-weight:700;text-transform:uppercase;">Labor Tier</div>
-            <div style="font-size:1.4rem;font-weight:800;color:{lab_tx};">{clinic['lab_tier']}</div>
-        </div>""", unsafe_allow_html=True)
-        sc3.markdown(f"""
-        <div style="background:#e8eaf6;border-radius:10px;padding:14px;text-align:center;">
-            <div style="font-size:0.72rem;color:#3949ab;font-weight:700;text-transform:uppercase;">Scenario</div>
-            <div style="font-size:1.4rem;font-weight:800;color:#3949ab;">{clinic['scenario_id']}</div>
-        </div>""", unsafe_allow_html=True)
-
-        # Pull scenario detail from the SCENARIOS dict and display full analysis
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.info("💡 Click **Add Clinic & Run Assessment** above to view the full Executive Narrative, Root Cause Analysis, and Prescriptive Actions for this scenario.")
-
-    # ============================================================
-    # VIEW B: All Clinics — Portfolio View
-    # ============================================================
-
-    else:
-        st.markdown("### 📊 Portfolio Overview — All Clinics")
-
-        n = len(st.session_state.portfolio)
-        avg_vvi  = round(sum(c["vvi"] for c in st.session_state.portfolio) / n, 1)
-        avg_rf   = round(sum(c["rf"]  for c in st.session_state.portfolio) / n, 1)
-        avg_lf   = round(sum(c["lf"]  for c in st.session_state.portfolio) / n, 1)
-        critical_count = sum(1 for c in st.session_state.portfolio if c["risk"] in ["Critical","High"])
-
-        pm1, pm2, pm3, pm4, pm5 = st.columns(5)
-
-        def port_card(col, label, val, sub, color="#1a1a2e"):
-            col.markdown(f"""
-            <div style="background:#f8f9fa;border-radius:10px;padding:14px 10px;text-align:center;border:1px solid #dee2e6;">
-                <div style="font-size:0.72rem;color:#6c757d;font-weight:600;text-transform:uppercase;letter-spacing:.5px;">{label}</div>
-                <div style="font-size:1.6rem;font-weight:800;color:{color};margin:4px 0;">{val}</div>
-                <div style="font-size:0.72rem;color:#6c757d;">{sub}</div>
-            </div>""", unsafe_allow_html=True)
-
-        port_card(pm1, "Clinics in Portfolio", n, "total")
-        port_card(pm2, "Avg VVI Score", avg_vvi, "portfolio average")
-        port_card(pm3, "Avg Revenue Factor", avg_rf, "RF average")
-        port_card(pm4, "Avg Labor Factor", avg_lf, "LF average")
-        port_card(pm5, "High / Critical Risk", critical_count, "clinics needing attention",
-                  color="#dc3545" if critical_count > 0 else "#28a745")
-
-        st.markdown("<br>", unsafe_allow_html=True)
-
-        # --- Ranked Table ---
-        RISK_COLOR = {
-            "Low":      "#d4edda",
-            "Medium":   "#fff3cd",
-            "High":     "#ffe5b4",
-            "Critical": "#f8d7da",
-        }
-        RISK_TEXT = {
-            "Low":      "#155724",
-            "Medium":   "#856404",
-            "High":     "#7d4e00",
-            "Critical": "#721c24",
-        }
-
-        sorted_clinics = sorted(st.session_state.portfolio, key=lambda x: x["vvi"], reverse=True)
-
-        st.markdown("#### 🏆 Clinics Ranked by VVI Score")
-
-        # Header row
-        h0, h1, h2, h3, h4, h5, h6, h7 = st.columns([2.5, 1, 1, 1, 1.2, 1.2, 1.5, 1.5])
-        for h, label in zip(
-            [h0, h1, h2, h3, h4, h5, h6, h7],
-            ["Clinic", "VVI", "RF", "LF", "Rev/Visit", "Labor/Visit", "Scenario", "Risk"]
-        ):
-            h.markdown(f"<div style='font-size:0.72rem;font-weight:700;color:#6c757d;text-transform:uppercase;padding-bottom:4px;border-bottom:2px solid #dee2e6;'>{label}</div>", unsafe_allow_html=True)
-
-        for rank, c in enumerate(sorted_clinics, 1):
-            r_bg  = RISK_COLOR.get(c["risk"], "#f8f9fa")
-            r_tx  = RISK_TEXT.get(c["risk"], "#333")
-            em    = RISK_EMOJI.get(c["risk"], "⚪")
-
-            c0, c1, c2, c3, c4, c5, c6, c7 = st.columns([2.5, 1, 1, 1, 1.2, 1.2, 1.5, 1.5])
-
-            def cell(col, txt, bold=False, color="#212529", bg=None):
-                bg_style = f"background:{bg};border-radius:6px;padding:2px 6px;" if bg else ""
-                weight = "700" if bold else "400"
-                col.markdown(f"<div style='font-size:0.88rem;font-weight:{weight};color:{color};{bg_style}padding:6px 4px;'>{txt}</div>", unsafe_allow_html=True)
-
-            cell(c0, f"**#{rank} {c['name']}**", bold=True)
-            cell(c1, f"{c['vvi']}", bold=True)
-            cell(c2, f"{c['rf']}")
-            cell(c3, f"{c['lf']}")
-            cell(c4, f"${c['nrpv']:.0f}")
-            cell(c5, f"${c['lcv']:.0f}")
-            cell(c6, c["scenario_id"])
-            c7.markdown(f"<div style='background:{r_bg};color:{r_tx};border-radius:6px;padding:4px 8px;font-size:0.8rem;font-weight:700;display:inline-block;'>{em} {c['risk']}</div>", unsafe_allow_html=True)
-
-        # --- Export portfolio ---
-        st.markdown("<br>", unsafe_allow_html=True)
-        col_exp, col_clr = st.columns([3, 1])
-
-        portfolio_df = pd.DataFrame([{
-            "Clinic":        c["name"],
-            "Period":        c["period"],
-            "VVI":           c["vvi"],
-            "RF":            c["rf"],
-            "LF":            c["lf"],
-            "Rev/Visit":     c["nrpv"],
-            "Labor/Visit":   c["lcv"],
-            "Rev Tier":      c["rev_tier"],
-            "Labor Tier":    c["lab_tier"],
-            "Scenario":      c["scenario_id"],
-            "Risk":          c["risk"],
-        } for c in sorted_clinics])
-
-        with col_exp:
-            st.download_button(
-                label="📥 Export Portfolio to CSV",
-                data=portfolio_df.to_csv(index=False),
-                file_name=f"vvi_portfolio_{datetime.now().strftime('%Y%m%d')}.csv",
-                mime="text/csv",
-                use_container_width=True,
-                key="download_portfolio_csv_2"
-            )
-        with col_clr:
-            if st.button("🗑️ Clear Portfolio", use_container_width=True):
-                st.session_state.portfolio = []
-                st.rerun()
-    
-    # "Add Another Clinic" appears AFTER portfolio dashboard
-    st.markdown("<br>", unsafe_allow_html=True)
-    
 st.markdown("---")
 
 # ============================================================
@@ -2516,7 +2309,8 @@ if st.session_state.get("assessment_ready", False):
                 label="📄 Download Raw Data (JSON)",
                 data=json.dumps(result, indent=2),
                 file_name=f"vvi_assessment_{period}.json",
-                mime="application/json"
+                mime="application/json",
+                key="download_json_raw"
             )
 
         # Excel Report Download
@@ -2938,6 +2732,7 @@ if st.session_state.get("assessment_ready", False):
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         use_container_width=True,
         type="primary",
+        key="download_excel_report"
     )
     
     # New Assessment Button
