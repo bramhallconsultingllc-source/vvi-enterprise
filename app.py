@@ -1950,26 +1950,33 @@ if st.session_state.get("assessment_ready", False):
         unsafe_allow_html=True
     )
     
-    # Use markdown for content with executive narrative
-    content_parts = [
-        f"**{clinic_name}** is classified as **Scenario {scenario_id}: {scenario['name']}** with a Visit Value Index of **{vvi:.1f}**"
-    ]
-    
-    if executive_narrative:
-        content_parts.append(f"\n\n**SITUATION:** {executive_narrative}")
-    
-    content_parts.extend([
-        f"\n\n---\n\n**{priority}**",
-        f"\n\n---\n\n**RECOMMENDED ACTION:** {action_summary}",
-        f"\n\n**EXPECTED OUTCOME:** VVI improvement of {exp_impact} within {timeline} if intervention executes successfully."
-    ])
-    
+    # Build content text without markdown formatting issues
     st.markdown(
         f"""
-        <div style="background: #fef9ed; border-left: 4px solid #b08c3e; padding: 1.5rem; margin: -1rem 0 2rem 0; border-radius: 0 0 8px 8px;">
-        
-        {"".join(content_parts)}
-        
+        <div style="background: #fef9ed; border-left: 4px solid #b08c3e; padding: 1.5rem; margin: -1rem 0 2rem 0; border-radius: 0 0 8px 8px; text-align: left;">
+            <p style="margin-bottom: 1rem; font-size: 1rem; line-height: 1.6;">
+                <strong>{clinic_name}</strong> is classified as <strong>Scenario {scenario_id}: {scenario['name']}</strong> with a Visit Value Index of <strong>{vvi:.1f}</strong>
+            </p>
+            
+            <p style="margin-bottom: 1rem; font-size: 1rem; line-height: 1.6;">
+                <strong>SITUATION:</strong> {executive_narrative}
+            </p>
+            
+            <hr style="border: none; border-top: 1px solid #b08c3e; margin: 1rem 0;">
+            
+            <p style="margin-bottom: 1rem; font-size: 1rem; line-height: 1.6;">
+                <strong>{priority}</strong>
+            </p>
+            
+            <hr style="border: none; border-top: 1px solid #b08c3e; margin: 1rem 0;">
+            
+            <p style="margin-bottom: 1rem; font-size: 1rem; line-height: 1.6;">
+                <strong>RECOMMENDED ACTION:</strong> {action_summary}
+            </p>
+            
+            <p style="margin-bottom: 0; font-size: 1rem; line-height: 1.6;">
+                <strong>EXPECTED OUTCOME:</strong> VVI improvement of {exp_impact} within {timeline} if intervention executes successfully.
+            </p>
         </div>
         """, 
         unsafe_allow_html=True
