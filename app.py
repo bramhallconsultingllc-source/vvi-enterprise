@@ -1920,9 +1920,12 @@ if st.session_state.get("assessment_ready", False):
     first_action = actions.get('do_tomorrow', [''])[0] if actions.get('do_tomorrow') else ''
     action_summary = first_action.split('.')[0][:150] + '...' if first_action else 'See detailed action plan below.'
     
-    # Create Executive Summary box with simpler HTML
+    # Get executive narrative
+    executive_narrative = scenario.get('executive_narrative', '')
+    
+    # Create Executive Summary box with scenario name header
     st.markdown(
-        """
+        f"""
         <div style="
             background: linear-gradient(135deg, #fef9ed 0%, #fff8e1 100%);
             border: 3px solid #b08c3e;
@@ -1935,30 +1938,42 @@ if st.session_state.get("assessment_ready", False):
             <div style="font-size: 0.85rem; font-weight: 700; letter-spacing: 2px; color: #b08c3e; text-transform: uppercase; margin-bottom: 0.5rem;">
                 📊 Executive Summary
             </div>
-            <div style="height: 2px; width: 120px; background: #b08c3e; margin: 0 auto 1.5rem auto;"></div>
+            <div style="height: 2px; width: 120px; background: #b08c3e; margin: 0 auto 1rem auto;"></div>
+            <div style="font-size: 1.3rem; font-weight: 700; color: #b08c3e; margin-bottom: 1rem;">
+                {scenario['name']}
+            </div>
+            <div style="font-size: 0.75rem; color: #666; font-style: italic; margin-bottom: 1.5rem;">
+                Visit Value Index™ | Bramhall Consulting, LLC | predict. perform. prosper. | {datetime.now().strftime('%B %d, %Y')}
+            </div>
         </div>
         """,
         unsafe_allow_html=True
     )
     
-    # Use markdown for content (more reliable than nested HTML)
-    st.markdown(f"""
-    <div style="background: #fef9ed; border-left: 4px solid #b08c3e; padding: 1.5rem; margin: -1rem 0 2rem 0; border-radius: 0 0 8px 8px;">
+    # Use markdown for content with executive narrative
+    content_parts = [
+        f"**{clinic_name}** is classified as **Scenario {scenario_id}: {scenario['name']}** with a Visit Value Index of **{vvi:.1f}**"
+    ]
     
-    **{clinic_name}** is classified as **Scenario {scenario_id}: {scenario_name}** with a Visit Value Index of **{vvi:.1f}**
+    if executive_narrative:
+        content_parts.append(f"\n\n**SITUATION:** {executive_narrative}")
     
-    ---
+    content_parts.extend([
+        f"\n\n---\n\n**{priority}**",
+        f"\n\n---\n\n**RECOMMENDED ACTION:** {action_summary}",
+        f"\n\n**EXPECTED OUTCOME:** VVI improvement of {exp_impact} within {timeline} if intervention executes successfully."
+    ])
     
-    **{priority}**
-    
-    ---
-    
-    **RECOMMENDED ACTION:** {action_summary}
-    
-    **EXPECTED OUTCOME:** VVI improvement of {exp_impact} within {timeline} if intervention executes successfully.
-    
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        f"""
+        <div style="background: #fef9ed; border-left: 4px solid #b08c3e; padding: 1.5rem; margin: -1rem 0 2rem 0; border-radius: 0 0 8px 8px;">
+        
+        {"".join(content_parts)}
+        
+        </div>
+        """, 
+        unsafe_allow_html=True
+    )
     
     # ========================================
     # TAB NAVIGATION
@@ -2104,25 +2119,6 @@ if st.session_state.get("assessment_ready", False):
             )
         
         st.markdown('<hr style="margin:1.5rem 0;">', unsafe_allow_html=True)
-        
-        # Scenario Classification
-        st.markdown(
-            f"""
-            <div style="background:#fef9ed;padding:1.5rem;border-radius:8px;border:2px solid #b08c3e;margin:1.5rem 0;text-align:center;">
-                <p style="font-size:18px;font-weight:700;color:#b08c3e;margin-bottom:1rem;letter-spacing:0.5px;">
-                    {scenario['name']}
-                </p>
-                <p style="font-size:0.75rem;color:#666;font-style:italic;margin-top:0.5rem;margin-bottom:0;">
-                    Visit Value Index™ | Bramhall Consulting, LLC | predict. perform. prosper. | {datetime.now().strftime('%B %d, %Y')}
-                </p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-        
-        # Executive Narrative
-        if scenario.get('executive_narrative'):
-            st.info(f"**Executive Summary:** {scenario['executive_narrative']}")
     
     # ========================================
     # TAB 2: Root Causes
