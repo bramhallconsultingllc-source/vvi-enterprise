@@ -1923,6 +1923,16 @@ if st.session_state.get("assessment_ready", False):
     # Get executive narrative
     executive_narrative = scenario.get('executive_narrative', '')
     
+    # HTML escape all dynamic content
+    import html as html_lib
+    clinic_name_safe = html_lib.escape(str(clinic_name))
+    scenario_name_safe = html_lib.escape(str(scenario['name']))
+    executive_narrative_safe = html_lib.escape(str(executive_narrative))
+    priority_safe = html_lib.escape(str(priority))
+    action_summary_safe = html_lib.escape(str(action_summary))
+    exp_impact_safe = html_lib.escape(str(exp_impact))
+    timeline_safe = html_lib.escape(str(timeline))
+    
     # Create Executive Summary box with scenario name header
     st.markdown(
         f"""
@@ -1940,7 +1950,7 @@ if st.session_state.get("assessment_ready", False):
             </div>
             <div style="height: 2px; width: 120px; background: #b08c3e; margin: 0 auto 1rem auto;"></div>
             <div style="font-size: 1.3rem; font-weight: 700; color: #b08c3e; margin-bottom: 1rem;">
-                {scenario['name']}
+                {scenario_name_safe}
             </div>
             <div style="font-size: 0.75rem; color: #666; font-style: italic; margin-bottom: 1.5rem;">
                 Visit Value Index™ | Bramhall Consulting, LLC | predict. perform. prosper. | {datetime.now().strftime('%B %d, %Y')}
@@ -1950,32 +1960,32 @@ if st.session_state.get("assessment_ready", False):
         unsafe_allow_html=True
     )
     
-    # Build content text without markdown formatting issues
+    # Build content text with HTML escaping
     st.markdown(
         f"""
         <div style="background: #fef9ed; border-left: 4px solid #b08c3e; padding: 1.5rem; margin: -1rem 0 2rem 0; border-radius: 0 0 8px 8px; text-align: left;">
             <p style="margin-bottom: 1rem; font-size: 1rem; line-height: 1.6;">
-                <strong>{clinic_name}</strong> is classified as <strong>Scenario {scenario_id}: {scenario['name']}</strong> with a Visit Value Index of <strong>{vvi:.1f}</strong>
+                <strong>{clinic_name_safe}</strong> is classified as <strong>Scenario {scenario_id}: {scenario_name_safe}</strong> with a Visit Value Index of <strong>{vvi:.1f}</strong>
             </p>
             
             <p style="margin-bottom: 1rem; font-size: 1rem; line-height: 1.6;">
-                <strong>SITUATION:</strong> {executive_narrative}
-            </p>
-            
-            <hr style="border: none; border-top: 1px solid #b08c3e; margin: 1rem 0;">
-            
-            <p style="margin-bottom: 1rem; font-size: 1rem; line-height: 1.6;">
-                <strong>{priority}</strong>
+                <strong>SITUATION:</strong> {executive_narrative_safe}
             </p>
             
             <hr style="border: none; border-top: 1px solid #b08c3e; margin: 1rem 0;">
             
             <p style="margin-bottom: 1rem; font-size: 1rem; line-height: 1.6;">
-                <strong>RECOMMENDED ACTION:</strong> {action_summary}
+                <strong>{priority_safe}</strong>
+            </p>
+            
+            <hr style="border: none; border-top: 1px solid #b08c3e; margin: 1rem 0;">
+            
+            <p style="margin-bottom: 1rem; font-size: 1rem; line-height: 1.6;">
+                <strong>RECOMMENDED ACTION:</strong> {action_summary_safe}
             </p>
             
             <p style="margin-bottom: 0; font-size: 1rem; line-height: 1.6;">
-                <strong>EXPECTED OUTCOME:</strong> VVI improvement of {exp_impact} within {timeline} if intervention executes successfully.
+                <strong>EXPECTED OUTCOME:</strong> VVI improvement of {exp_impact_safe} within {timeline_safe} if intervention executes successfully.
             </p>
         </div>
         """, 
