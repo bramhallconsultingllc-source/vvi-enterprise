@@ -1920,6 +1920,15 @@ if st.session_state.get("assessment_ready", False):
     first_action = actions.get('do_tomorrow', [''])[0] if actions.get('do_tomorrow') else ''
     action_summary = first_action.split('.')[0][:150] + '...' if first_action else 'See detailed action plan below.'
     
+    # HTML escape dynamic content to prevent HTML breaking
+    import html
+    clinic_name_safe = html.escape(clinic_name)
+    scenario_name_safe = html.escape(scenario_name)
+    priority_safe = html.escape(priority)
+    action_summary_safe = html.escape(action_summary)
+    exp_impact_safe = html.escape(exp_impact)
+    timeline_safe = html.escape(timeline)
+    
     st.markdown(
         f"""
         <div style="
@@ -1939,21 +1948,21 @@ if st.session_state.get("assessment_ready", False):
             
             <div style="font-size: 1.05rem; line-height: 1.8; color: #2c3e50;">
                 <p style="margin-bottom: 1.2rem;">
-                    <strong style="color: #1a1a2e;">{clinic_name}</strong> is classified as 
-                    <strong style="color: #b08c3e;">Scenario {scenario_id}: {scenario_name}</strong> 
+                    <strong style="color: #1a1a2e;">{clinic_name_safe}</strong> is classified as 
+                    <strong style="color: #b08c3e;">Scenario {scenario_id}: {scenario_name_safe}</strong> 
                     with a Visit Value Index of <strong style="font-size: 1.3rem; color: #b08c3e;">{vvi:.1f}</strong>
                 </p>
                 
                 <p style="margin-bottom: 1.2rem; padding-left: 1rem; border-left: 4px solid #b08c3e;">
-                    <strong>{priority}</strong>
+                    <strong>{priority_safe}</strong>
                 </p>
                 
                 <p style="margin-bottom: 1.2rem;">
-                    <strong>RECOMMENDED ACTION:</strong> {action_summary}
+                    <strong>RECOMMENDED ACTION:</strong> {action_summary_safe}
                 </p>
                 
                 <p style="margin-bottom: 0;">
-                    <strong>EXPECTED OUTCOME:</strong> VVI improvement of {exp_impact} within {timeline} 
+                    <strong>EXPECTED OUTCOME:</strong> VVI improvement of {exp_impact_safe} within {timeline_safe} 
                     if intervention executes successfully.
                 </p>
             </div>
