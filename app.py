@@ -1591,7 +1591,8 @@ if st.session_state.portfolio:
                 data=portfolio_df.to_csv(index=False),
                 file_name=f"vvi_portfolio_{datetime.now().strftime('%Y%m%d')}.csv",
                 mime="text/csv",
-                use_container_width=True
+                use_container_width=True,
+                key="download_portfolio_csv_1"
             )
         with col_clr:
             if st.button("🗑️ Clear Portfolio", use_container_width=True):
@@ -2024,7 +2025,8 @@ if st.session_state.portfolio:
                 data=portfolio_df.to_csv(index=False),
                 file_name=f"vvi_portfolio_{datetime.now().strftime('%Y%m%d')}.csv",
                 mime="text/csv",
-                use_container_width=True
+                use_container_width=True,
+                key="download_portfolio_csv_2"
             )
         with col_clr:
             if st.button("🗑️ Clear Portfolio", use_container_width=True):
