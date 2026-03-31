@@ -1960,35 +1960,27 @@ if st.session_state.get("assessment_ready", False):
         unsafe_allow_html=True
     )
     
-    # Build content text with HTML escaping
+    # Build content text with NO indentation (prevents code blocks)
     st.markdown(
-        f"""
-        <div style="background: #fef9ed; border-left: 4px solid #b08c3e; padding: 1.5rem; margin: -1rem 0 2rem 0; border-radius: 0 0 8px 8px; text-align: left;">
-            <p style="margin-bottom: 1rem; font-size: 1rem; line-height: 1.6;">
-                <strong>{clinic_name_safe}</strong> is classified as <strong>Scenario {scenario_id}: {scenario_name_safe}</strong> with a Visit Value Index of <strong>{vvi:.1f}</strong>
-            </p>
-            
-            <p style="margin-bottom: 1rem; font-size: 1rem; line-height: 1.6;">
-                <strong>SITUATION:</strong> {executive_narrative_safe}
-            </p>
-            
-            <hr style="border: none; border-top: 1px solid #b08c3e; margin: 1rem 0;">
-            
-            <p style="margin-bottom: 1rem; font-size: 1rem; line-height: 1.6;">
-                <strong>{priority_safe}</strong>
-            </p>
-            
-            <hr style="border: none; border-top: 1px solid #b08c3e; margin: 1rem 0;">
-            
-            <p style="margin-bottom: 1rem; font-size: 1rem; line-height: 1.6;">
-                <strong>RECOMMENDED ACTION:</strong> {action_summary_safe}
-            </p>
-            
-            <p style="margin-bottom: 0; font-size: 1rem; line-height: 1.6;">
-                <strong>EXPECTED OUTCOME:</strong> VVI improvement of {exp_impact_safe} within {timeline_safe} if intervention executes successfully.
-            </p>
-        </div>
-        """, 
+        f"""<div style="background: #fef9ed; border-left: 4px solid #b08c3e; padding: 1.5rem; margin: -1rem 0 2rem 0; border-radius: 0 0 8px 8px; text-align: left;">
+<p style="margin-bottom: 1rem; font-size: 1rem; line-height: 1.6;">
+<strong>{clinic_name_safe}</strong> is classified as <strong>Scenario {scenario_id}: {scenario_name_safe}</strong> with a Visit Value Index of <strong>{vvi:.1f}</strong>
+</p>
+<p style="margin-bottom: 1rem; font-size: 1rem; line-height: 1.6;">
+<strong>SITUATION:</strong> {executive_narrative_safe}
+</p>
+<hr style="border: none; border-top: 1px solid #b08c3e; margin: 1rem 0;">
+<p style="margin-bottom: 1rem; font-size: 1rem; line-height: 1.6;">
+<strong>{priority_safe}</strong>
+</p>
+<hr style="border: none; border-top: 1px solid #b08c3e; margin: 1rem 0;">
+<p style="margin-bottom: 1rem; font-size: 1rem; line-height: 1.6;">
+<strong>RECOMMENDED ACTION:</strong> {action_summary_safe}
+</p>
+<p style="margin-bottom: 0; font-size: 1rem; line-height: 1.6;">
+<strong>EXPECTED OUTCOME:</strong> VVI improvement of {exp_impact_safe} within {timeline_safe} if intervention executes successfully.
+</p>
+</div>""", 
         unsafe_allow_html=True
     )
     
